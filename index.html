@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Dream Land Motel Business Control System"
+    >
+
+    <meta
+        name="theme-color"
+        content="#14532d"
+    >
+
+    <title>Dream Land Motel | Business Control</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
+        body {
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    rgba(20, 83, 45, 0.95),
+                    rgba(20, 83, 45, 0.95)
+                ),
+                #14532d;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+
+            color: #222;
+        }
+
+        button,
+        input {
+            font: inherit;
+        }
+
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+
+            background: #ffffff;
+
+            border-radius: 20px;
+
+            padding: 35px 28px 30px;
+
+            box-shadow:
+                0 18px 50px
+                rgba(0, 0, 0, 0.25);
+        }
+
+        .brand {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-icon {
+            width: 72px;
+            height: 72px;
+
+            margin: 0 auto 15px;
+
+            border-radius: 50%;
+
+            background: #d4af37;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 30px;
+            font-weight: 800;
+
+            color: #14532d;
+
+            user-select: none;
+        }
+
+        .brand h1 {
+            color: #14532d;
+
+            font-size: 25px;
+            line-height: 1.2;
+
+            margin-bottom: 7px;
+        }
+
+        .brand p {
+            color: #777;
+
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+
+            font-weight: 600;
+
+            color: #333;
+        }
+
+        input {
+            width: 100%;
+
+            height: 50px;
+
+            border:
+                1px solid #d7d7d7;
+
+            border-radius: 10px;
+
+            padding: 0 14px;
+
+            font-size: 16px;
+
+            outline: none;
+
+            background: #fff;
+
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        input::placeholder {
+            color: #999;
+        }
+
+        input:focus {
+            border-color: #2e7d32;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(46, 125, 50, 0.10);
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .password-wrapper input {
+            padding-right: 85px;
+        }
+
+        .show-password {
+            position: absolute;
+
+            right: 7px;
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            color: #2e7d32;
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            padding: 9px;
+
+            border-radius: 7px;
+        }
+
+        .show-password:hover {
+            background: #f1f7f2;
+        }
+
+        .show-password:focus-visible,
+        .forgot-password button:focus-visible,
+        .language button:focus-visible {
+            outline:
+                3px solid
+                rgba(46, 125, 50, 0.25);
+
+            outline-offset: 2px;
+        }
+
+        .login-button {
+            width: 100%;
+
+            min-height: 52px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            background: #14532d;
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+            transition:
+                background 0.2s ease,
+                transform 0.1s ease;
+
+            margin-top: 7px;
+        }
+
+        .login-button:hover {
+            background: #2e7d32;
+        }
+
+        .login-button:active {
+            transform: scale(0.99);
+        }
+
+        .login-button:disabled {
+            opacity: 0.65;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .forgot-password {
+            text-align: right;
+
+            margin-top: 10px;
+        }
+
+        .forgot-password button {
+            border: none;
+
+            background: transparent;
+
+            color: #2e7d32;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            padding: 5px 0;
+        }
+
+        .forgot-password button:hover {
+            text-decoration: underline;
+        }
+
+        .message {
+            display: none;
+
+            margin-top: 16px;
+
+            padding: 12px 14px;
+
+            border-radius: 9px;
+
+            font-size: 14px;
+
+            line-height: 1.4;
+
+            text-align: center;
+        }
+
+        .message.error {
+            display: block;
+
+            background: #fdecec;
+
+            color: #a12626;
+
+            border:
+                1px solid #f4caca;
+        }
+
+        .message.success {
+            display: block;
+
+            background: #edf8ef;
+
+            color: #246b2d;
+
+            border:
+                1px solid #cce8d0;
+        }
+
+        .footer {
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #999;
+
+            font-size: 12px;
+        }
+
+        .language {
+            text-align: center;
+
+            margin-top: 18px;
+        }
+
+        .language button {
+            border: none;
+
+            background: transparent;
+
+            color: #2e7d32;
+
+            font-size: 13px;
+
+            cursor: pointer;
+
+            font-weight: 600;
+
+            padding: 5px;
+        }
+
+        .sr-only {
+            position: absolute;
+
+            width: 1px;
+            height: 1px;
+
+            padding: 0;
+            margin: -1px;
+
+            overflow: hidden;
+
+            clip: rect(0, 0, 0, 0);
+
+            white-space: nowrap;
+
+            border: 0;
+        }
+
+        .loading {
+            pointer-events: none;
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .login-card {
+                padding:
+                    30px 20px 25px;
+
+                border-radius: 16px;
+            }
+
+            .brand {
+                margin-bottom: 26px;
+            }
+
+            .brand-icon {
+                width: 66px;
+                height: 66px;
+
+                font-size: 27px;
+            }
+
+            .brand h1 {
+                font-size: 22px;
+            }
+
+            .brand p {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 350px) {
+
+            body {
+                padding: 10px;
+            }
+
+            .login-card {
+                padding:
+                    25px 16px 22px;
+            }
+
+            input {
+                height: 48px;
+            }
+
+            .login-button {
+                min-height: 50px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+
+                transition:
+                    none !important;
+
+                animation:
+                    none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<main
+    class="login-card"
+    aria-labelledby="title"
+>
+
+    <!-- =====================================================
+         BRAND
+    ====================================================== -->
+
+    <section class="brand">
+
+        <div
+            class="brand-icon"
+            aria-hidden="true"
+        >
+            DL
+        </div>
+
+        <h1 id="title">
+            Dream Land Motel
+        </h1>
+
+        <p id="subtitle">
+            Business Control System
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOGIN FORM
+    ====================================================== -->
+
+    <form
+        id="loginForm"
+        novalidate
+    >
+
+        <div class="form-group">
+
+            <label
+                for="username"
+                id="usernameLabel"
+            >
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                name="username"
+                placeholder="Enter username"
+                autocomplete="username"
+                autocapitalize="none"
+                spellcheck="false"
+                maxlength="100"
+                required
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label
+                for="password"
+                id="passwordLabel"
+            >
+                Password
+            </label>
+
+            <div class="password-wrapper">
+
+                <input
+                    type="password"
+                    id="password"
+                    name="password"
+                    placeholder="Enter password"
+                    autocomplete="current-password"
+                    maxlength="256"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    id="showPassword"
+                    aria-controls="password"
+                    aria-pressed="false"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <button
+            type="submit"
+            class="login-button"
+            id="loginButton"
+        >
+            LOGIN
+        </button>
+
+
+        <div class="forgot-password">
+
+            <button
+                type="button"
+                id="forgotPasswordButton"
+            >
+                Forgot Password?
+            </button>
+
+        </div>
+
+
+        <div
+            id="message"
+            class="message"
+            role="alert"
+            aria-live="polite"
+        ></div>
+
+    </form>
+
+
+    <!-- =====================================================
+         LANGUAGE
+    ====================================================== -->
+
+    <div class="language">
+
+        <button
+            type="button"
+            id="languageButton"
+            aria-label="Change language"
+        >
+            Kinyarwanda
+        </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <div class="footer">
+        Dream Land Motel System 2026
+    </div>
+
+</main>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="auth.js"></script>
+
+
+<script>
+"use strict";
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        /*
+         * =====================================================
+         * ELEMENTS
+         * =====================================================
+         */
+
+        const loginForm =
+            document.getElementById("loginForm");
+
+        const usernameInput =
+            document.getElementById("username");
+
+        const passwordInput =
+            document.getElementById("password");
+
+        const loginButton =
+            document.getElementById("loginButton");
+
+        const message =
+            document.getElementById("message");
+
+        const showPassword =
+            document.getElementById("showPassword");
+
+        const languageButton =
+            document.getElementById("languageButton");
+
+        const forgotPasswordButton =
+            document.getElementById(
+                "forgotPasswordButton"
+            );
+
+
+        /*
+         * =====================================================
+         * TRANSLATIONS
+         * =====================================================
+         */
+
+        const translations = {
+
+            en: {
+
+                title:
+                    "Dream Land Motel",
+
+                subtitle:
+                    "Business Control System",
+
+                usernameLabel:
+                    "Username",
+
+                usernamePlaceholder:
+                    "Enter username",
+
+                passwordLabel:
+                    "Password",
+
+                passwordPlaceholder:
+                    "Enter password",
+
+                show:
+                    "Show",
+
+                hide:
+                    "Hide",
+
+                login:
+                    "LOGIN",
+
+                loggingIn:
+                    "LOGGING IN...",
+
+                forgot:
+                    "Forgot Password?",
+
+                language:
+                    "Kinyarwanda",
+
+                empty:
+                    "Please enter your username and password.",
+
+                invalid:
+                    "Invalid username or password.",
+
+                profileError:
+                    "Your account profile could not be loaded.",
+
+                inactive:
+                    "This account is inactive.",
+
+                success:
+                    "Login successful. Opening dashboard..."
+
+            },
+
+            rw: {
+
+                title:
+                    "Dream Land Motel",
+
+                subtitle:
+                    "Sisitemu yo gucunga ubucuruzi",
+
+                usernameLabel:
+                    "Username",
+
+                usernamePlaceholder:
+                    "Andika username",
+
+                passwordLabel:
+                    "Ijambo ry'ibanga",
+
+                passwordPlaceholder:
+                    "Andika ijambo ry'ibanga",
+
+                show:
+                    "Erekana",
+
+                hide:
+                    "Hisha",
+
+                login:
+                    "KWINJIRA",
+
+                loggingIn:
+                    "TURI KWINJIRA...",
+
+                forgot:
+                    "Wibagiwe password?",
+
+                language:
+                    "English",
+
+                empty:
+                    "Andika username n'ijambo ry'ibanga.",
+
+                invalid:
+                    "Username cyangwa ijambo ry'ibanga si byo.",
+
+                profileError:
+                    "Ntabwo umwirondoro wa konti yawe wabonetse.",
+
+                inactive:
+                    "Iyi konti ntabwo ikora.",
+
+                success:
+                    "Winjiye neza. Dashboard iri gufunguka..."
+
+            }
+
+        };
+
+
+        /*
+         * =====================================================
+         * LANGUAGE
+         * =====================================================
+         */
+
+        function getLanguage() {
+
+            const saved =
+                localStorage.getItem(
+                    "dreamland_language"
+                );
+
+            return saved === "rw"
+                ? "rw"
+                : "en";
+        }
+
+
+        let language =
+            getLanguage();
+
+
+        function t(key) {
+
+            return (
+                translations[language]?.[key]
+                ||
+                translations.en[key]
+                ||
+                key
+            );
+        }
+
+
+        function applyLanguage() {
+
+            document.documentElement.lang =
+                language === "rw"
+                    ? "rw"
+                    : "en";
+
+
+            document.getElementById(
+                "title"
+            ).textContent =
+                t("title");
+
+
+            document.getElementById(
+                "subtitle"
+            ).textContent =
+                t("subtitle");
+
+
+            document.getElementById(
+                "usernameLabel"
+            ).textContent =
+                t("usernameLabel");
+
+
+            document.getElementById(
+                "passwordLabel"
+            ).textContent =
+                t("passwordLabel");
+
+
+            usernameInput.placeholder =
+                t("usernamePlaceholder");
+
+
+            passwordInput.placeholder =
+                t("passwordPlaceholder");
+
+
+            forgotPasswordButton.textContent =
+                t("forgot");
+
+
+            languageButton.textContent =
+                t("language");
+
+
+            loginButton.textContent =
+                loginButton.disabled
+                    ? t("loggingIn")
+                    : t("login");
+
+
+            showPassword.textContent =
+                passwordInput.type === "password"
+                    ? t("show")
+                    : t("hide");
+
+        }
+
+
+        languageButton.addEventListener(
+            "click",
+            function () {
+
+                language =
+                    language === "en"
+                        ? "rw"
+                        : "en";
+
+
+                localStorage.setItem(
+                    "dreamland_language",
+                    language
+                );
+
+
+                applyLanguage();
+
+            }
+        );
+
+
+        /*
+         * =====================================================
+         * MESSAGE
+         * =====================================================
+         */
+
+        function showMessage(
+            text,
+            type = "error"
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                "message " + type;
+
+        }
+
+
+        function clearMessage() {
+
+            message.textContent =
+                "";
+
+            message.className =
+                "message";
+
+        }
+
+
+        /*
+         * =====================================================
+         * SHOW / HIDE PASSWORD
+         * =====================================================
+         */
+
+        showPassword.addEventListener(
+            "click",
+            function () {
+
+                const isHidden =
+                    passwordInput.type === "password";
+
+
+                passwordInput.type =
+                    isHidden
+                        ? "text"
+                        : "password";
+
+
+                showPassword.setAttribute(
+                    "aria-pressed",
+                    String(isHidden)
+                );
+
+
+                applyLanguage();
+
+
+                passwordInput.focus();
+
+            }
+        );
+
+
+        /*
+         * =====================================================
+         * FORGOT PASSWORD
+         * =====================================================
+         */
+
+        forgotPasswordButton.addEventListener(
+            "click",
+            function () {
+
+                clearMessage();
+
+                window.location.href =
+                    "recovery.html";
+
+            }
+        );
+
+
+        /*
+         * =====================================================
+         * LOGIN
+         * =====================================================
+         */
+
+        loginForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                clearMessage();
+
+
+                const username =
+                    usernameInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+
+                /*
+                 * Basic validation
+                 */
+
+                if (
+                    !username ||
+                    !password
+                ) {
+
+                    showMessage(
+                        t("empty"),
+                        "error"
+                    );
+
+
+                    if (!username) {
+
+                        usernameInput.focus();
+
+                    } else {
+
+                        passwordInput.focus();
+
+                    }
+
+                    return;
+                }
+
+
+                /*
+                 * Prevent duplicate submissions.
+                 */
+
+                loginButton.disabled =
+                    true;
+
+                loginButton.classList.add(
+                    "loading"
+                );
+
+                applyLanguage();
+
+
+                try {
+
+                    /*
+                     * =================================================
+                     * USERNAME LOGIN EDGE FUNCTION
+                     * =================================================
+                     *
+                     * The browser never needs the service-role key.
+                     * Only the publishable key is sent.
+                     */
+
+                    const response =
+                        await fetch(
+                            SUPABASE_URL +
+                            "/functions/v1/username-login",
+                            {
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json",
+
+                                    "apikey":
+                                        SUPABASE_PUBLISHABLE_KEY
+                                },
+
+                                body:
+                                    JSON.stringify({
+                                        username,
+                                        password
+                                    })
+                            }
+                        );
+
+
+                    let result = null;
+
+
+                    try {
+
+                        result =
+                            await response.json();
+
+                    } catch {
+
+                        result = null;
+
+                    }
+
+
+                    /*
+                     * Login function must return
+                     * both Supabase tokens.
+                     */
+
+                    if (
+                        !response.ok ||
+                        !result ||
+                        !result.access_token ||
+                        !result.refresh_token
+                    ) {
+
+                        throw new Error(
+                            "LOGIN_FAILED"
+                        );
+
+                    }
+
+
+                    /*
+                     * =================================================
+                     * SET SUPABASE SESSION
+                     * =================================================
+                     */
+
+                    const {
+                        error: sessionError
+                    } =
+                        await db.auth.setSession({
+
+                            access_token:
+                                result.access_token,
+
+                            refresh_token:
+                                result.refresh_token
+
+                        });
+
+
+                    if (sessionError) {
+
+                        throw new Error(
+                            "SESSION_FAILED"
+                        );
+
+                    }
+
+
+                    /*
+                     * =================================================
+                     * CENTRAL AUTHENTICATION CHECK
+                     * =================================================
+                     *
+                     * auth.js is now responsible for:
+                     *
+                     * - checking auth.uid()
+                     * - loading profiles
+                     * - matching profile.id to auth user
+                     * - checking active
+                     * - checking role
+                     * - saving the safe profile
+                     *
+                     * This prevents this page from having
+                     * a second copy of the authentication rules.
+                     */
+
+                    if (
+                        !window.DreamLandAuth ||
+                        typeof
+                            window.DreamLandAuth
+                                .getAuthenticatedProfile
+                            !== "function"
+                    ) {
+
+                        throw new Error(
+                            "AUTH_SYSTEM_UNAVAILABLE"
+                        );
+
+                    }
+
+
+                    const profile =
+                        await
+                            window.DreamLandAuth
+                                .getAuthenticatedProfile();
+
+
+                    if (!profile) {
+
+                        throw new Error(
+                            "PROFILE_NOT_FOUND"
+                        );
+
+                    }
+
+
+                    /*
+                     * =================================================
+                     * ROLE CHECK
+                     * =================================================
+                     *
+                     * getAuthenticatedProfile()
+                     * already validates the role.
+                     *
+                     * This extra check makes the login page
+                     * defensive if auth.js is changed later.
+                     */
+
+                    const allowedRoles = [
+                        "admin",
+                        "manager",
+                        "cashier"
+                    ];
+
+
+                    const normalizedRole =
+                        String(
+                            profile.role || ""
+                        ).toLowerCase();
+
+
+                    if (
+                        !allowedRoles.includes(
+                            normalizedRole
+                        )
+                    ) {
+
+                        await db.auth.signOut({
+                            scope: "local"
+                        });
+
+                        sessionStorage.removeItem(
+                            "dreamland_profile"
+                        );
+
+                        throw new Error(
+                            "INVALID_ROLE"
+                        );
+
+                    }
+
+
+                    /*
+                     * =================================================
+                     * SUCCESS
+                     * =================================================
+                     */
+
+                    showMessage(
+                        t("success"),
+                        "success"
+                    );
+
+
+                    /*
+                     * Give the user a very short
+                     * visual confirmation.
+                     */
+
+                    window.setTimeout(
+                        function () {
+
+                            window.location.href =
+                                "dashboard.html";
+
+                        },
+                        400
+                    );
+
+                } catch (error) {
+
+                    console.error(
+                        "DREAM LAND LOGIN ERROR:",
+                        error
+                    );
+
+
+                    /*
+                     * Always clean up a partial session.
+                     */
+
+                    try {
+
+                        await db.auth.signOut({
+                            scope: "local"
+                        });
+
+                    } catch {
+                        // Cleanup failure is ignored.
+                    }
+
+
+                    sessionStorage.removeItem(
+                        "dreamland_profile"
+                    );
+
+
+                    /*
+                     * Keep authentication failures
+                     * deliberately generic.
+                     */
+
+                    let errorMessage =
+                        t("invalid");
+
+
+                    if (
+                        error?.message ===
+                        "PROFILE_NOT_FOUND" ||
+                        error?.message ===
+                        "PROFILE_MISMATCH"
+                    ) {
+
+                        errorMessage =
+                            t("profileError");
+
+                    } else if (
+                        error?.message ===
+                        "ACCOUNT_INACTIVE"
+                    ) {
+
+                        errorMessage =
+                            t("inactive");
+
+                    }
+
+
+                    showMessage(
+                        errorMessage,
+                        "error"
+                    );
+
+
+                    loginButton.disabled =
+                        false;
+
+                    loginButton.classList.remove(
+                        "loading"
+                    );
+
+                    applyLanguage();
+
+                }
+
+            }
+        );
+
+
+        /*
+         * =====================================================
+         * INITIALIZATION
+         * =====================================================
+         */
+
+        applyLanguage();
+
+
+        /*
+         * =====================================================
+         * EXISTING SESSION CHECK
+         * =====================================================
+         *
+         * Important:
+         *
+         * We do NOT trust sessionStorage here.
+         *
+         * Supabase Auth is checked first, then auth.js
+         * verifies the profile before redirecting.
+         */
+
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await db.auth.getSession();
+
+
+            if (error) {
+
+                console.warn(
+                    "Existing session check error:",
+                    error
+                );
+
+                return;
+
+            }
+
+
+            if (
+                data?.session?.user
+            ) {
+
+                if (
+                    window.DreamLandAuth &&
+                    typeof
+                        window.DreamLandAuth
+                            .redirectAuthenticatedUser
+                        === "function"
+                ) {
+
+                    await
+                        window.DreamLandAuth
+                            .redirectAuthenticatedUser();
+
+                }
+
+            }
+
+        } catch (error) {
+
+            console.warn(
+                "Existing session check failed:",
+                error
+            );
+
+        }
+
+    }
+);
+</script>
+
+</body>
+</html>

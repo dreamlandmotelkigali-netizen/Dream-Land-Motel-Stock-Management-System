@@ -1,0 +1,3238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dream Land Motel | New Sale</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="page-header">
+
+    <div>
+        <h1 data-i18n="newSaleTitle">
+            Dream Land Motel — New Sale
+        </h1>
+
+        <div
+            class="page-user-info"
+            id="userInfo">
+        </div>
+    </div>
+
+    <div class="header-actions">
+
+        <a
+            href="dashboard.html"
+            class="btn btn-secondary"
+            data-i18n="backDashboard">
+            Dashboard
+        </a>
+
+        <button
+            type="button"
+            class="language-btn"
+            id="languageButton">
+            Kinyarwanda
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-secondary"
+            id="logoutButton"
+            data-i18n="logout">
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="container">
+
+    <div
+        id="messageBox"
+        class="message"
+        role="alert"
+        aria-live="polite">
+    </div>
+
+
+    <!-- SALE INFORMATION -->
+
+    <section class="card">
+
+        <h2 data-i18n="saleInformation">
+            Sale Information
+        </h2>
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label
+                    for="branchSelect"
+                    data-i18n="branch">
+                    Branch
+                </label>
+
+                <select id="branchSelect">
+
+                    <option
+                        value=""
+                        data-i18n="selectBranch">
+                        Select branch
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="serverSelect"
+                    data-i18n="server">
+                    Server
+                </label>
+
+                <select
+                    id="serverSelect"
+                    disabled>
+
+                    <option
+                        value=""
+                        data-i18n="selectServer">
+                        Select server
+                    </option>
+
+                </select>
+
+                <div
+                    class="stock-info"
+                    id="serverInfo">
+                    Select a branch and server.
+                </div>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label
+                    for="customerName"
+                    data-i18n="customerName">
+                    Customer Name
+                </label>
+
+                <input
+                    type="text"
+                    id="customerName"
+                    maxlength="150"
+                    autocomplete="off"
+                    placeholder="Optional">
+
+                <div class="stock-info">
+                    <span data-i18n="customerNameCreditHint">
+                        Customer name is required for credit or partial sales.
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ADD PRODUCT -->
+
+    <section class="card">
+
+        <h2 data-i18n="addProduct">
+            Add Product
+        </h2>
+
+        <div class="product-row">
+
+            <div class="field">
+
+                <label
+                    for="productSelect"
+                    data-i18n="product">
+                    Product
+                </label>
+
+                <select id="productSelect">
+
+                    <option
+                        value=""
+                        data-i18n="selectProduct">
+                        Select product
+                    </option>
+
+                </select>
+
+                <div
+                    class="stock-info"
+                    id="productStockInfo">
+                    Select a server and product.
+                </div>
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="quantityInput"
+                    data-i18n="quantity">
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="quantityInput"
+                    min="1"
+                    step="1"
+                    value="1"
+                    inputmode="numeric">
+
+            </div>
+
+
+            <button
+                class="btn btn-primary"
+                id="addToCartBtn"
+                type="button"
+                data-i18n="add">
+                Add
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- CART -->
+
+    <section class="card">
+
+        <h2 data-i18n="currentSale">
+            Current Sale
+        </h2>
+
+        <div class="table-responsive">
+
+            <table class="cart-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th data-i18n="product">
+                            Product
+                        </th>
+
+                        <th data-i18n="qty">
+                            Qty
+                        </th>
+
+                        <th data-i18n="unitPrice">
+                            Unit Price
+                        </th>
+
+                        <th data-i18n="total">
+                            Total
+                        </th>
+
+                        <th
+                            data-i18n="action"
+                            aria-label="Action">
+                            Action
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="cartBody">
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            class="empty-table"
+                            data-i18n="noProductsAdded">
+                            No products added.
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <div class="total-box">
+
+            <div data-i18n="saleTotal">
+                Sale Total
+            </div>
+
+            <strong id="saleTotal">
+                0 RWF
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- PAYMENT -->
+
+    <section class="card">
+
+        <h2 data-i18n="payment">
+            Payment
+        </h2>
+
+        <div class="grid">
+
+            <div class="field">
+
+                <label
+                    for="paymentStatus"
+                    data-i18n="paymentStatus">
+                    Payment Status
+                </label>
+
+                <select id="paymentStatus">
+
+                    <option
+                        value="paid"
+                        data-i18n="paid">
+                        Paid
+                    </option>
+
+                    <option
+                        value="partial"
+                        data-i18n="partial">
+                        Partial
+                    </option>
+
+                    <option
+                        value="credit"
+                        data-i18n="credit">
+                        Credit
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="paymentMethod"
+                    data-i18n="paymentMethod">
+                    Payment Method
+                </label>
+
+                <select id="paymentMethod">
+
+                    <option
+                        value="cash"
+                        data-i18n="cash">
+                        Cash
+                    </option>
+
+                    <option
+                        value="mobile_money"
+                        data-i18n="mobileMoney">
+                        Mobile Money
+                    </option>
+
+                    <option
+                        value="card"
+                        data-i18n="card">
+                        Card
+                    </option>
+
+                    <option
+                        value="bank"
+                        data-i18n="bank">
+                        Bank
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field full">
+
+                <label
+                    for="paymentAmount"
+                    data-i18n="paymentAmount">
+                    Payment Amount
+                </label>
+
+                <input
+                    type="number"
+                    id="paymentAmount"
+                    min="0"
+                    step="1"
+                    inputmode="numeric"
+                    placeholder="0">
+
+                <div class="stock-info">
+
+                    <span data-i18n="paymentHint">
+                        Paid = full amount, Credit = 0, Partial = amount received.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ACTIONS -->
+
+    <section class="card">
+
+        <div class="actions">
+
+            <button
+                class="btn btn-secondary"
+                type="button"
+                id="clearSaleBtn"
+                data-i18n="clearSale">
+                Clear Sale
+            </button>
+
+
+            <button
+                class="btn btn-gold"
+                type="button"
+                id="completeSaleBtn"
+                disabled
+                data-i18n="completeSale">
+                Complete Sale
+            </button>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- SUPABASE -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+
+    profile: null,
+
+    branches: [],
+
+    servers: [],
+
+    products: [],
+
+    cart: [],
+
+    stockError: false,
+
+    saving: false
+
+};
+
+
+/* =========================================================
+   DOM
+========================================================= */
+
+const branchSelect =
+    document.getElementById("branchSelect");
+
+const serverSelect =
+    document.getElementById("serverSelect");
+
+const productSelect =
+    document.getElementById("productSelect");
+
+const quantityInput =
+    document.getElementById("quantityInput");
+
+const customerName =
+    document.getElementById("customerName");
+
+const paymentStatus =
+    document.getElementById("paymentStatus");
+
+const paymentMethod =
+    document.getElementById("paymentMethod");
+
+const paymentAmount =
+    document.getElementById("paymentAmount");
+
+const cartBody =
+    document.getElementById("cartBody");
+
+const saleTotal =
+    document.getElementById("saleTotal");
+
+const completeSaleBtn =
+    document.getElementById("completeSaleBtn");
+
+const addToCartBtn =
+    document.getElementById("addToCartBtn");
+
+const clearSaleBtn =
+    document.getElementById("clearSaleBtn");
+
+const messageBox =
+    document.getElementById("messageBox");
+
+const serverInfo =
+    document.getElementById("serverInfo");
+
+const productStockInfo =
+    document.getElementById("productStockInfo");
+
+const userInfo =
+    document.getElementById("userInfo");
+
+const languageButton =
+    document.getElementById("languageButton");
+
+const logoutButton =
+    document.getElementById("logoutButton");
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const translations = {
+
+    en: {
+
+        newSaleTitle:
+            "Dream Land Motel — New Sale",
+
+        backDashboard:
+            "Dashboard",
+
+        logout:
+            "Logout",
+
+        saleInformation:
+            "Sale Information",
+
+        branch:
+            "Branch",
+
+        server:
+            "Server",
+
+        customerName:
+            "Customer Name",
+
+        customerNameCreditHint:
+            "Customer name is required for credit or partial sales.",
+
+        addProduct:
+            "Add Product",
+
+        product:
+            "Product",
+
+        quantity:
+            "Quantity",
+
+        add:
+            "Add",
+
+        currentSale:
+            "Current Sale",
+
+        qty:
+            "Qty",
+
+        unitPrice:
+            "Unit Price",
+
+        total:
+            "Total",
+
+        action:
+            "Action",
+
+        noProductsAdded:
+            "No products added.",
+
+        saleTotal:
+            "Sale Total",
+
+        payment:
+            "Payment",
+
+        paymentStatus:
+            "Payment Status",
+
+        paymentMethod:
+            "Payment Method",
+
+        paymentAmount:
+            "Payment Amount",
+
+        paymentHint:
+            "Paid = full amount, Credit = 0, Partial = amount received.",
+
+        paid:
+            "Paid",
+
+        partial:
+            "Partial",
+
+        credit:
+            "Credit",
+
+        cash:
+            "Cash",
+
+        mobileMoney:
+            "Mobile Money",
+
+        card:
+            "Card",
+
+        bank:
+            "Bank",
+
+        clearSale:
+            "Clear Sale",
+
+        completeSale:
+            "Complete Sale",
+
+        selectBranch:
+            "Select branch",
+
+        selectServer:
+            "Select server",
+
+        selectProduct:
+            "Select product",
+
+        selectBranchAndServer:
+            "Select a branch and server.",
+
+        selectServerAndProduct:
+            "Select a server and product.",
+
+        optional:
+            "Optional",
+
+        saving:
+            "Saving...",
+
+        saleSaved:
+            "Sale saved successfully.",
+
+        productAdded:
+            "Product added to sale.",
+
+        saleCleared:
+            "Sale cleared.",
+
+        stockUnavailable:
+            "Server stock is not available.",
+
+        notEnoughStock:
+            "Not enough server stock.",
+
+        branchRequired:
+            "Please select a branch.",
+
+        serverRequired:
+            "Please select a server.",
+
+        productRequired:
+            "Please select a product.",
+
+        quantityRequired:
+            "Quantity must be a whole number greater than zero.",
+
+        cartRequired:
+            "Add at least one product.",
+
+        customerRequired:
+            "Customer name is required for credit or partial sales.",
+
+        paidAmountInvalid:
+            "Paid amount must equal the full total.",
+
+        creditAmountInvalid:
+            "Credit sale must have a payment amount of 0.",
+
+        partialAmountInvalid:
+            "Partial payment must be greater than 0 and less than the total.",
+
+        invalidAmount:
+            "Please enter a valid payment amount.",
+
+        branchesError:
+            "Branches could not be loaded.",
+
+        serversError:
+            "Servers could not be loaded.",
+
+        productsError:
+            "Products could not be loaded.",
+
+        saleError:
+            "Sale could not be completed.",
+
+        serverStock:
+            "Server stock",
+
+        stockLoading:
+            "Checking stock...",
+
+        stockUnavailableShort:
+            "Stock unavailable.",
+
+        serverReady:
+            "Server selected.",
+
+        dashboardUser:
+            "Logged in as"
+
+    },
+
+
+    rw: {
+
+        newSaleTitle:
+            "Dream Land Motel — Igurisha Rishya",
+
+        backDashboard:
+            "Dashboard",
+
+        logout:
+            "Sohoka",
+
+        saleInformation:
+            "Amakuru y'Igurisha",
+
+        branch:
+            "Ishami",
+
+        server:
+            "Server",
+
+        customerName:
+            "Izina ry'umukiriya",
+
+        customerNameCreditHint:
+            "Izina ry'umukiriya rirakenewe ku ideni cyangwa kwishyura igice.",
+
+        addProduct:
+            "Ongeramo Igicuruzwa",
+
+        product:
+            "Igicuruzwa",
+
+        quantity:
+            "Umubare",
+
+        add:
+            "Ongeramo",
+
+        currentSale:
+            "Igurisha Ririho",
+
+        qty:
+            "Umubare",
+
+        unitPrice:
+            "Igiciro Kimwe",
+
+        total:
+            "Igiteranyo",
+
+        action:
+            "Igikorwa",
+
+        noProductsAdded:
+            "Nta bicuruzwa byongewe.",
+
+        saleTotal:
+            "Igiteranyo cy'Igurisha",
+
+        payment:
+            "Kwishyura",
+
+        paymentStatus:
+            "Uko Kwishyura Kumeze",
+
+        paymentMethod:
+            "Uburyo bwo Kwishyura",
+
+        paymentAmount:
+            "Amafaranga Yishyuwe",
+
+        paymentHint:
+            "Byishyuwe = amafaranga yose, Idéni = 0, Igice = amafaranga yakiriwe.",
+
+        paid:
+            "Byishyuwe",
+
+        partial:
+            "Igice",
+
+        credit:
+            "Ideni",
+
+        cash:
+            "Amafaranga",
+
+        mobileMoney:
+            "Mobile Money",
+
+        card:
+            "Ikarita",
+
+        bank:
+            "Banki",
+
+        clearSale:
+            "Siba Igurisha",
+
+        completeSale:
+            "Soza Igurisha",
+
+        selectBranch:
+            "Hitamo ishami",
+
+        selectServer:
+            "Hitamo server",
+
+        selectProduct:
+            "Hitamo igicuruzwa",
+
+        selectBranchAndServer:
+            "Hitamo ishami na server.",
+
+        selectServerAndProduct:
+            "Hitamo server n'igicuruzwa.",
+
+        optional:
+            "Si ngombwa",
+
+        saving:
+            "Birabikwa...",
+
+        saleSaved:
+            "Igurisha ryabitswe neza.",
+
+        productAdded:
+            "Igicuruzwa cyongewe ku igurisha.",
+
+        saleCleared:
+            "Igurisha ryasibwe.",
+
+        stockUnavailable:
+            "Stock ya server ntiyabashije kuboneka.",
+
+        notEnoughStock:
+            "Stock ya server ntihagije.",
+
+        branchRequired:
+            "Banza uhitemo ishami.",
+
+        serverRequired:
+            "Banza uhitemo server.",
+
+        productRequired:
+            "Banza uhitemo igicuruzwa.",
+
+        quantityRequired:
+            "Umubare ugomba kuba integer kandi urenze zero.",
+
+        cartRequired:
+            "Ongeramo nibura igicuruzwa kimwe.",
+
+        customerRequired:
+            "Izina ry'umukiriya rirakenewe ku ideni cyangwa kwishyura igice.",
+
+        paidAmountInvalid:
+            "Amafaranga yishyuwe agomba kungana n'igiteranyo cyose.",
+
+        creditAmountInvalid:
+            "Ideni rigomba kuba rifite payment ya 0.",
+
+        partialAmountInvalid:
+            "Partial payment igomba kuba iri hagati ya 0 n'igiteranyo cyose.",
+
+        invalidAmount:
+            "Andika amafaranga yishyuwe neza.",
+
+        branchesError:
+            "Amashami ntiyabashije gufunguka.",
+
+        serversError:
+            "Servers ntizabashije gufunguka.",
+
+        productsError:
+            "Ibicuruzwa ntibyabashije gufunguka.",
+
+        saleError:
+            "Igurisha ntiryabashije kubikwa.",
+
+        serverStock:
+            "Stock ya server",
+
+        stockLoading:
+            "Turimo kureba stock...",
+
+        stockUnavailableShort:
+            "Stock ntiyabashije kuboneka.",
+
+        serverReady:
+            "Server yatoranyijwe.",
+
+        dashboardUser:
+            "Winjiye nka"
+
+    }
+
+};
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function currentLanguage() {
+
+    if (
+        window.DreamLandI18n &&
+        typeof DreamLandI18n.getLanguage === "function"
+    ) {
+
+        const language =
+            DreamLandI18n.getLanguage();
+
+        if (
+            language === "rw" ||
+            language === "en"
+        ) {
+
+            return language;
+
+        }
+
+    }
+
+    return "en";
+
+}
+
+
+function tr(key) {
+
+    const lang =
+        currentLanguage();
+
+    return (
+        translations[lang]?.[key] ||
+        translations.en[key] ||
+        key
+    );
+
+}
+
+
+async function changeLanguage() {
+
+    const current =
+        currentLanguage();
+
+    const next =
+        current === "en"
+            ? "rw"
+            : "en";
+
+
+    if (
+        window.DreamLandI18n &&
+        typeof DreamLandI18n.setLanguage === "function"
+    ) {
+
+        await DreamLandI18n.setLanguage(next);
+
+    }
+
+    else {
+
+        localStorage.setItem(
+            "dreamland_language",
+            next
+        );
+
+        document.documentElement.lang =
+            next;
+
+    }
+
+
+    applyPageTranslations();
+
+}
+
+
+/* =========================================================
+   APPLY TRANSLATIONS
+========================================================= */
+
+function applyPageTranslations() {
+
+    const lang =
+        currentLanguage();
+
+
+    document.documentElement.lang =
+        lang === "rw"
+            ? "rw"
+            : "en";
+
+
+    document
+        .querySelectorAll("[data-i18n]")
+        .forEach(function (element) {
+
+            const key =
+                element.dataset.i18n;
+
+            const value =
+                tr(key);
+
+            if (value) {
+
+                element.textContent =
+                    value;
+
+            }
+
+        });
+
+
+    customerName.placeholder =
+        tr("optional");
+
+
+    languageButton.textContent =
+        lang === "en"
+            ? "Kinyarwanda"
+            : "English";
+
+
+    if (state.profile) {
+
+        userInfo.textContent =
+            `${tr("dashboardUser")}: ${
+                state.profile.username ||
+                state.profile.id
+            }`;
+
+    }
+
+
+    renderBranchOptions();
+    renderServerOptions();
+    renderProductOptions();
+    renderCart();
+
+
+    if (
+        !serverSelect.value
+    ) {
+
+        serverInfo.textContent =
+            branchSelect.value
+                ? tr("selectServer")
+                : tr("selectBranchAndServer");
+
+    }
+
+
+    if (
+        !serverSelect.value ||
+        !productSelect.value
+    ) {
+
+        productStockInfo.textContent =
+            tr("selectServerAndProduct");
+
+    }
+
+}
+
+
+/* =========================================================
+   LANGUAGE BUTTON
+========================================================= */
+
+languageButton.addEventListener(
+    "click",
+    changeLanguage
+);
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+logoutButton.addEventListener(
+    "click",
+    async function () {
+
+        logoutButton.disabled =
+            true;
+
+        await DreamLandAuth.signOut();
+
+    }
+);
+
+
+/* =========================================================
+   AUTH / INITIALIZATION
+========================================================= */
+
+async function initializePage() {
+
+    const authResult =
+        await DreamLandAuth.requireAuth();
+
+    if (!authResult) {
+
+        return;
+
+    }
+
+
+    state.profile =
+        authResult.profile;
+
+
+    if (
+        !DreamLandAuth.hasRole(
+            ["admin", "manager", "cashier"]
+        )
+    ) {
+
+        DreamLandAuth.showAccessRestricted();
+
+        return;
+
+    }
+
+
+    if (
+        state.profile.role !== "admin" &&
+        !state.profile.branch_id
+    ) {
+
+        showMessage(
+            currentLanguage() === "rw"
+                ? "Konti yawe nta shami yahawe."
+                : "Your account is not assigned to a branch.",
+            "error"
+        );
+
+        branchSelect.disabled =
+            true;
+
+        return;
+
+    }
+
+
+    applyPageTranslations();
+
+
+    await Promise.all([
+        loadBranches(),
+        loadProducts()
+    ]);
+
+
+    updatePaymentAmount();
+    updateCompleteButton();
+
+}
+
+
+/* =========================================================
+   LOAD BRANCHES
+========================================================= */
+
+async function loadBranches() {
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("branches")
+            .select("id,name")
+            .order("name");
+
+
+    if (error) {
+
+        console.error(
+            "LOAD BRANCHES:",
+            error
+        );
+
+        showMessage(
+            tr("branchesError"),
+            "error"
+        );
+
+        state.branches = [];
+
+        renderBranchOptions();
+
+        return;
+
+    }
+
+
+    state.branches =
+        data || [];
+
+
+    if (
+        state.profile.role !== "admin"
+    ) {
+
+        state.branches =
+            state.branches.filter(
+                function (branch) {
+
+                    return (
+                        branch.id ===
+                        state.profile.branch_id
+                    );
+
+                }
+            );
+
+    }
+
+
+    renderBranchOptions();
+
+
+    if (
+        state.profile.role !== "admin" &&
+        state.profile.branch_id
+    ) {
+
+        branchSelect.value =
+            state.profile.branch_id;
+
+        await loadServers(
+            state.profile.branch_id
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER BRANCHES
+========================================================= */
+
+function renderBranchOptions() {
+
+    branchSelect.innerHTML = "";
+
+
+    const first =
+        document.createElement("option");
+
+    first.value =
+        "";
+
+    first.textContent =
+        tr("selectBranch");
+
+    branchSelect.appendChild(
+        first
+    );
+
+
+    state.branches.forEach(
+        function (branch) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                branch.id;
+
+            option.textContent =
+                branch.name;
+
+            branchSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        state.profile &&
+        state.profile.role !== "admin" &&
+        state.profile.branch_id
+    ) {
+
+        branchSelect.value =
+            state.profile.branch_id;
+
+        branchSelect.disabled =
+            true;
+
+    }
+
+    else {
+
+        branchSelect.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =========================================================
+   BRANCH CHANGE
+========================================================= */
+
+branchSelect.addEventListener(
+    "change",
+    async function () {
+
+        const branchId =
+            this.value;
+
+
+        clearCurrentSaleState(
+            false
+        );
+
+
+        state.servers = [];
+
+
+        renderServerOptions();
+
+
+        serverSelect.disabled =
+            !branchId;
+
+
+        serverInfo.textContent =
+            branchId
+                ? tr("selectServer")
+                : tr("selectBranchAndServer");
+
+
+        productStockInfo.textContent =
+            tr("selectServerAndProduct");
+
+
+        if (!branchId) {
+
+            updateCompleteButton();
+
+            return;
+
+        }
+
+
+        await loadServers(
+            branchId
+        );
+
+
+        updateCompleteButton();
+
+    }
+);
+
+
+/* =========================================================
+   LOAD SERVERS
+========================================================= */
+
+async function loadServers(
+    branchId
+) {
+
+    state.servers = [];
+
+
+    serverSelect.disabled =
+        true;
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("servers")
+            .select(
+                "id,full_name,branch_id,active"
+            )
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "full_name"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "LOAD SERVERS:",
+            error
+        );
+
+        showMessage(
+            tr("serversError"),
+            "error"
+        );
+
+        renderServerOptions();
+
+        return;
+
+    }
+
+
+    state.servers =
+        data || [];
+
+
+    renderServerOptions();
+
+}
+
+
+/* =========================================================
+   RENDER SERVERS
+========================================================= */
+
+function renderServerOptions() {
+
+    const selectedServer =
+        serverSelect.value;
+
+
+    serverSelect.innerHTML = "";
+
+
+    const first =
+        document.createElement("option");
+
+    first.value =
+        "";
+
+    first.textContent =
+        tr("selectServer");
+
+    serverSelect.appendChild(
+        first
+    );
+
+
+    state.servers.forEach(
+        function (server) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                server.id;
+
+            option.textContent =
+                server.full_name;
+
+            serverSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        state.servers.some(
+            function (server) {
+
+                return (
+                    server.id ===
+                    selectedServer
+                );
+
+            }
+        )
+    ) {
+
+        serverSelect.value =
+            selectedServer;
+
+    }
+
+
+    serverSelect.disabled =
+        state.servers.length === 0 ||
+        !branchSelect.value;
+
+}
+
+
+/* =========================================================
+   SERVER CHANGE
+========================================================= */
+
+serverSelect.addEventListener(
+    "change",
+    async function () {
+
+        clearCartOnly();
+
+
+        if (!this.value) {
+
+            serverInfo.textContent =
+                tr("selectServer");
+
+            productStockInfo.textContent =
+                tr("selectServerAndProduct");
+
+            updateCompleteButton();
+
+            return;
+
+        }
+
+
+        const selectedServer =
+            state.servers.find(
+                function (server) {
+
+                    return (
+                        server.id ===
+                        this.value
+                    );
+
+                }.bind(this)
+            );
+
+
+        serverInfo.textContent =
+            selectedServer
+                ? `${tr("server")}: ${selectedServer.full_name}`
+                : tr("serverReady");
+
+
+        productStockInfo.textContent =
+            tr("selectServerAndProduct");
+
+
+        updateCompleteButton();
+
+
+        if (
+            productSelect.value
+        ) {
+
+            await updateSelectedProductStock();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("products")
+            .select(
+                "id,name,unit,selling_price,active"
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "LOAD PRODUCTS:",
+            error
+        );
+
+        showMessage(
+            tr("productsError"),
+            "error"
+        );
+
+        state.products = [];
+
+        renderProductOptions();
+
+        return;
+
+    }
+
+
+    state.products =
+        data || [];
+
+
+    renderProductOptions();
+
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProductOptions() {
+
+    const selectedProduct =
+        productSelect.value;
+
+
+    productSelect.innerHTML = "";
+
+
+    const first =
+        document.createElement("option");
+
+    first.value =
+        "";
+
+    first.textContent =
+        tr("selectProduct");
+
+    productSelect.appendChild(
+        first
+    );
+
+
+    state.products.forEach(
+        function (product) {
+
+            const option =
+                document.createElement("option");
+
+            option.value =
+                product.id;
+
+            option.textContent =
+                `${product.name} — ${formatMoney(
+                    product.selling_price
+                )} RWF`;
+
+            productSelect.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        state.products.some(
+            function (product) {
+
+                return (
+                    product.id ===
+                    selectedProduct
+                );
+
+            }
+        )
+    ) {
+
+        productSelect.value =
+            selectedProduct;
+
+    }
+
+}
+
+
+/* =========================================================
+   PRODUCT CHANGE
+========================================================= */
+
+productSelect.addEventListener(
+    "change",
+    async function () {
+
+        await updateSelectedProductStock();
+
+    }
+);
+
+
+/* =========================================================
+   GET SERVER STOCK
+========================================================= */
+
+async function getServerStock(
+    serverId,
+    productId
+) {
+
+    if (
+        !serverId ||
+        !productId
+    ) {
+
+        return 0;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("stock_movements")
+            .select(
+                "movement_type,quantity"
+            )
+            .eq(
+                "server_id",
+                serverId
+            )
+            .eq(
+                "product_id",
+                productId
+            );
+
+
+    if (error) {
+
+        console.error(
+            "GET SERVER STOCK:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    let stock = 0;
+
+
+    (data || []).forEach(
+        function (row) {
+
+            const quantity =
+                Number(
+                    row.quantity
+                );
+
+
+            if (
+                !Number.isFinite(quantity)
+            ) {
+
+                return;
+
+            }
+
+
+            switch (
+                row.movement_type
+            ) {
+
+                case "issue_to_server":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                case "sale":
+
+                case "waste":
+
+                case "return_from_server":
+
+                    stock -=
+                        quantity;
+
+                    break;
+
+
+                case "adjustment":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                default:
+
+                    break;
+
+            }
+
+        }
+    );
+
+
+    return Math.max(
+        0,
+        stock
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE SELECTED PRODUCT STOCK
+========================================================= */
+
+async function updateSelectedProductStock() {
+
+    const serverId =
+        serverSelect.value;
+
+    const productId =
+        productSelect.value;
+
+
+    if (
+        !serverId ||
+        !productId
+    ) {
+
+        productStockInfo.textContent =
+            tr("selectServerAndProduct");
+
+        return;
+
+    }
+
+
+    productStockInfo.textContent =
+        tr("stockLoading");
+
+
+    try {
+
+        state.stockError =
+            false;
+
+
+        const stock =
+            await getServerStock(
+                serverId,
+                productId
+            );
+
+
+        productStockInfo.textContent =
+            `${tr("serverStock")}: ${stock}`;
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "UPDATE PRODUCT STOCK:",
+            error
+        );
+
+        state.stockError =
+            true;
+
+        productStockInfo.textContent =
+            tr("stockUnavailable");
+
+    }
+
+}
+
+
+/* =========================================================
+   ADD TO CART
+========================================================= */
+
+addToCartBtn.addEventListener(
+    "click",
+    addToCart
+);
+
+
+async function addToCart() {
+
+    const serverId =
+        serverSelect.value;
+
+    const productId =
+        productSelect.value;
+
+    const quantity =
+        Number(
+            quantityInput.value
+        );
+
+
+    if (!serverId) {
+
+        showMessage(
+            tr("serverRequired"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!productId) {
+
+        showMessage(
+            tr("productRequired"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isInteger(quantity) ||
+        quantity <= 0
+    ) {
+
+        showMessage(
+            tr("quantityRequired"),
+            "error"
+        );
+
+        quantityInput.focus();
+
+        return;
+
+    }
+
+
+    addToCartBtn.disabled =
+        true;
+
+
+    try {
+
+        const serverStock =
+            await getServerStock(
+                serverId,
+                productId
+            );
+
+
+        state.stockError =
+            false;
+
+
+        const existing =
+            state.cart.find(
+                function (item) {
+
+                    return (
+                        item.product_id ===
+                        productId
+                    );
+
+                }
+            );
+
+
+        const alreadyInCart =
+            existing
+                ? existing.quantity
+                : 0;
+
+
+        if (
+            alreadyInCart +
+            quantity >
+            serverStock
+        ) {
+
+            showMessage(
+                `${tr("notEnoughStock")} Available: ${serverStock}.`,
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const product =
+            state.products.find(
+                function (item) {
+
+                    return (
+                        item.id ===
+                        productId
+                    );
+
+                }
+            );
+
+
+        if (!product) {
+
+            showMessage(
+                tr("productsError"),
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const unitPrice =
+            Number(
+                product.selling_price
+            );
+
+
+        if (
+            !Number.isFinite(unitPrice) ||
+            unitPrice < 0
+        ) {
+
+            showMessage(
+                tr("saleError"),
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        if (existing) {
+
+            existing.quantity +=
+                quantity;
+
+        }
+
+        else {
+
+            state.cart.push({
+
+                product_id:
+                    product.id,
+
+                product_name:
+                    product.name,
+
+                quantity:
+                    quantity,
+
+                unit_price:
+                    unitPrice
+
+            });
+
+        }
+
+
+        quantityInput.value =
+            1;
+
+
+        renderCart();
+
+
+        showMessage(
+            tr("productAdded"),
+            "success"
+        );
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "ADD TO CART STOCK ERROR:",
+            error
+        );
+
+        showMessage(
+            tr("stockUnavailable"),
+            "error"
+        );
+
+    }
+
+    finally {
+
+        addToCartBtn.disabled =
+            false;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER CART
+========================================================= */
+
+function renderCart() {
+
+    if (!state.cart.length) {
+
+        cartBody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="empty-table">
+
+                    ${escapeHtml(
+                        tr("noProductsAdded")
+                    )}
+
+                </td>
+
+            </tr>
+
+        `;
+
+
+        saleTotal.textContent =
+            "0 RWF";
+
+
+        updatePaymentAmount();
+        updateCompleteButton();
+
+        return;
+
+    }
+
+
+    cartBody.innerHTML = "";
+
+
+    let total = 0;
+
+
+    state.cart.forEach(
+        function (item, index) {
+
+            const lineTotal =
+                Number(item.quantity) *
+                Number(item.unit_price);
+
+
+            total +=
+                lineTotal;
+
+
+            const row =
+                document.createElement("tr");
+
+
+            const productCell =
+                document.createElement("td");
+
+            productCell.textContent =
+                item.product_name;
+
+
+            const qtyCell =
+                document.createElement("td");
+
+            qtyCell.textContent =
+                item.quantity;
+
+
+            const priceCell =
+                document.createElement("td");
+
+            priceCell.textContent =
+                `${formatMoney(
+                    item.unit_price
+                )} RWF`;
+
+
+            const totalCell =
+                document.createElement("td");
+
+            totalCell.textContent =
+                `${formatMoney(
+                    lineTotal
+                )} RWF`;
+
+
+            const actionCell =
+                document.createElement("td");
+
+
+            const removeButton =
+                document.createElement("button");
+
+            removeButton.type =
+                "button";
+
+            removeButton.className =
+                "btn btn-danger";
+
+            removeButton.textContent =
+                "×";
+
+            removeButton.setAttribute(
+                "aria-label",
+                `${tr("remove")} ${item.product_name}`
+            );
+
+
+            removeButton.addEventListener(
+                "click",
+                function () {
+
+                    removeFromCart(index);
+
+                }
+            );
+
+
+            actionCell.appendChild(
+                removeButton
+            );
+
+
+            row.appendChild(
+                productCell
+            );
+
+            row.appendChild(
+                qtyCell
+            );
+
+            row.appendChild(
+                priceCell
+            );
+
+            row.appendChild(
+                totalCell
+            );
+
+            row.appendChild(
+                actionCell
+            );
+
+
+            cartBody.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    saleTotal.textContent =
+        `${formatMoney(total)} RWF`;
+
+
+    updatePaymentAmount();
+    updateCompleteButton();
+
+}
+
+
+/* =========================================================
+   REMOVE CART ITEM
+========================================================= */
+
+function removeFromCart(
+    index
+) {
+
+    if (
+        index < 0 ||
+        index >= state.cart.length
+    ) {
+
+        return;
+
+    }
+
+
+    state.cart.splice(
+        index,
+        1
+    );
+
+
+    renderCart();
+
+}
+
+
+/* =========================================================
+   CLEAR CART ONLY
+========================================================= */
+
+function clearCartOnly() {
+
+    state.cart = [];
+
+    renderCart();
+
+}
+
+
+/* =========================================================
+   CLEAR SALE STATE
+========================================================= */
+
+function clearCurrentSaleState(
+    showMessageAfter = false
+) {
+
+    state.cart = [];
+
+
+    customerName.value =
+        "";
+
+
+    paymentStatus.value =
+        "paid";
+
+
+    paymentMethod.value =
+        "cash";
+
+
+    paymentAmount.value =
+        0;
+
+
+    quantityInput.value =
+        1;
+
+
+    productSelect.value =
+        "";
+
+
+    productStockInfo.textContent =
+        tr("selectServerAndProduct");
+
+
+    renderCart();
+
+
+    if (showMessageAfter) {
+
+        showMessage(
+            tr("saleCleared"),
+            "success"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   CART TOTAL
+========================================================= */
+
+function getCartTotal() {
+
+    return state.cart.reduce(
+        function (sum, item) {
+
+            const quantity =
+                Number(
+                    item.quantity
+                );
+
+            const price =
+                Number(
+                    item.unit_price
+                );
+
+
+            if (
+                !Number.isFinite(quantity) ||
+                !Number.isFinite(price)
+            ) {
+
+                return sum;
+
+            }
+
+
+            return (
+                sum +
+                (
+                    quantity *
+                    price
+                )
+            );
+
+        },
+        0
+    );
+
+}
+
+
+/* =========================================================
+   PAYMENT STATUS
+========================================================= */
+
+paymentStatus.addEventListener(
+    "change",
+    function () {
+
+        updatePaymentAmount();
+
+    }
+);
+
+
+/* =========================================================
+   PAYMENT AMOUNT
+========================================================= */
+
+function updatePaymentAmount() {
+
+    const status =
+        paymentStatus.value;
+
+    const total =
+        getCartTotal();
+
+
+    if (
+        status === "paid"
+    ) {
+
+        paymentAmount.value =
+            total;
+
+        paymentAmount.readOnly =
+            true;
+
+    }
+
+    else if (
+        status === "credit"
+    ) {
+
+        paymentAmount.value =
+            0;
+
+        paymentAmount.readOnly =
+            true;
+
+    }
+
+    else {
+
+        paymentAmount.readOnly =
+            false;
+
+
+        const currentAmount =
+            Number(
+                paymentAmount.value
+            );
+
+
+        if (
+            !Number.isFinite(
+                currentAmount
+            ) ||
+            currentAmount >= total
+        ) {
+
+            paymentAmount.value =
+                "";
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   COMPLETE BUTTON
+========================================================= */
+
+function updateCompleteButton() {
+
+    completeSaleBtn.disabled =
+        state.saving ||
+        !branchSelect.value ||
+        !serverSelect.value ||
+        state.cart.length === 0;
+
+}
+
+
+/* =========================================================
+   COMPLETE SALE
+========================================================= */
+
+completeSaleBtn.addEventListener(
+    "click",
+    completeSale
+);
+
+
+async function completeSale() {
+
+    if (state.saving) {
+
+        return;
+
+    }
+
+
+    const branchId =
+        branchSelect.value;
+
+    const serverId =
+        serverSelect.value;
+
+    const customer =
+        customerName.value.trim();
+
+    const status =
+        paymentStatus.value;
+
+    const method =
+        paymentMethod.value;
+
+    const amount =
+        Number(
+            paymentAmount.value
+        );
+
+    const total =
+        getCartTotal();
+
+
+    /* -----------------------------------------------------
+       BASIC VALIDATION
+    ----------------------------------------------------- */
+
+    if (!branchId) {
+
+        showMessage(
+            tr("branchRequired"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!serverId) {
+
+        showMessage(
+            tr("serverRequired"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!state.cart.length) {
+
+        showMessage(
+            tr("cartRequired"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(total) ||
+        total <= 0
+    ) {
+
+        showMessage(
+            tr("saleError"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(amount) ||
+        amount < 0
+    ) {
+
+        showMessage(
+            tr("invalidAmount"),
+            "error"
+        );
+
+        paymentAmount.focus();
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       CUSTOMER VALIDATION
+    ----------------------------------------------------- */
+
+    if (
+        (
+            status === "credit" ||
+            status === "partial"
+        ) &&
+        !customer
+    ) {
+
+        showMessage(
+            tr("customerRequired"),
+            "error"
+        );
+
+        customerName.focus();
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       PAYMENT VALIDATION
+    ----------------------------------------------------- */
+
+    if (
+        status === "paid" &&
+        amount !== total
+    ) {
+
+        showMessage(
+            tr("paidAmountInvalid"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        status === "credit" &&
+        amount !== 0
+    ) {
+
+        showMessage(
+            tr("creditAmountInvalid"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        status === "partial" &&
+        (
+            amount <= 0 ||
+            amount >= total
+        )
+    ) {
+
+        showMessage(
+            tr("partialAmountInvalid"),
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    /* -----------------------------------------------------
+       LOCK UI
+    ----------------------------------------------------- */
+
+    state.saving =
+        true;
+
+
+    completeSaleBtn.disabled =
+        true;
+
+    completeSaleBtn.textContent =
+        tr("saving");
+
+
+    try {
+
+        const items =
+            state.cart.map(
+                function (item) {
+
+                    return {
+
+                        product_id:
+                            item.product_id,
+
+                        quantity:
+                            Number(
+                                item.quantity
+                            )
+
+                    };
+
+                }
+            );
+
+
+        /*
+         * IMPORTANT:
+         *
+         * create_pos_sale_transaction()
+         * is the authoritative backend.
+         *
+         * The backend verifies:
+         * - authenticated user
+         * - branch access
+         * - server belongs to branch
+         * - server stock
+         * - authoritative selling price
+         * - payment rules
+         * - customer name for credit/partial
+         * - sale + sale_items + payment
+         * - customer debt
+         * - stock movements
+         * - audit log
+         */
+
+        const {
+            data,
+            error
+        } =
+            await db.rpc(
+                "create_pos_sale_transaction",
+                {
+
+                    p_branch_id:
+                        branchId,
+
+                    p_server_id:
+                        serverId,
+
+                    p_customer_name:
+                        customer || null,
+
+                    p_payment_status:
+                        status,
+
+                    p_payment_method:
+                        method,
+
+                    p_payment_amount:
+                        amount,
+
+                    p_items:
+                        items
+
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "CREATE SALE ERROR:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        const result =
+            Array.isArray(data)
+                ? data[0]
+                : data;
+
+
+        if (!result) {
+
+            throw new Error(
+                "No sale result returned."
+            );
+
+        }
+
+
+        const saleNumber =
+            result.sale_number ||
+            result.id ||
+            "";
+
+
+        /* -------------------------------------------------
+           SUCCESS
+        ------------------------------------------------- */
+
+        showMessage(
+            `${tr("saleSaved")} ${saleNumber}`,
+            "success"
+        );
+
+
+        /* -------------------------------------------------
+           RESET
+        ------------------------------------------------- */
+
+        state.cart = [];
+
+
+        customerName.value =
+            "";
+
+
+        paymentStatus.value =
+            "paid";
+
+
+        paymentMethod.value =
+            "cash";
+
+
+        productSelect.value =
+            "";
+
+
+        quantityInput.value =
+            1;
+
+
+        paymentAmount.value =
+            0;
+
+
+        productStockInfo.textContent =
+            tr("selectServerAndProduct");
+
+
+        renderCart();
+
+
+        /*
+         * Refresh server stock display
+         * when a server remains selected.
+         */
+
+        if (
+            serverSelect.value &&
+            productSelect.value
+        ) {
+
+            await updateSelectedProductStock();
+
+        }
+
+
+    }
+
+    catch (error) {
+
+        console.error(
+            "SALE ERROR:",
+            error
+        );
+
+
+        showMessage(
+            friendlySaleError(
+                error
+            ),
+            "error"
+        );
+
+    }
+
+    finally {
+
+        state.saving =
+            false;
+
+
+        completeSaleBtn.textContent =
+            tr("completeSale");
+
+
+        updateCompleteButton();
+
+    }
+
+}
+
+
+/* =========================================================
+   FRIENDLY SALE ERROR
+========================================================= */
+
+function friendlySaleError(
+    error
+) {
+
+    const message =
+        String(
+            error?.message || ""
+        );
+
+
+    if (
+        message.includes(
+            "Insufficient server stock"
+        )
+    ) {
+
+        return tr("notEnoughStock");
+
+    }
+
+
+    if (
+        message.includes(
+            "Server does not belong to branch"
+        )
+    ) {
+
+        return currentLanguage() === "rw"
+            ? "Server ntabwo iri muri iri shami."
+            : "Server does not belong to this branch.";
+
+    }
+
+
+    if (
+        message.includes(
+            "Server not found"
+        )
+    ) {
+
+        return currentLanguage() === "rw"
+            ? "Server ntiyabonetse."
+            : "Server was not found.";
+
+    }
+
+
+    if (
+        message.includes(
+            "Customer name is required"
+        )
+    ) {
+
+        return tr("customerRequired");
+
+    }
+
+
+    if (
+        message.includes(
+            "Branch access denied"
+        )
+    ) {
+
+        return currentLanguage() === "rw"
+            ? "Ntabwo wemerewe gukora igurisha kuri iri shami."
+            : "You are not allowed to make sales for this branch.";
+
+    }
+
+
+    if (
+        message.includes(
+            "Payment amount"
+        )
+    ) {
+
+        return currentLanguage() === "rw"
+            ? "Amafaranga yishyuwe ntabwo ahuye n'uko kwishyura kwatoranyijwe."
+            : "The payment amount does not match the selected payment status.";
+
+    }
+
+
+    return (
+        message ||
+        tr("saleError")
+    );
+
+}
+
+
+/* =========================================================
+   CLEAR SALE
+========================================================= */
+
+clearSaleBtn.addEventListener(
+    "click",
+    function () {
+
+        clearCurrentSaleState(
+            true
+        );
+
+    }
+);
+
+
+/* =========================================================
+   MESSAGE
+========================================================= */
+
+function showMessage(
+    message,
+    type = "error"
+) {
+
+    messageBox.textContent =
+        message;
+
+    messageBox.className =
+        `message ${type}`;
+
+
+    window.scrollTo({
+
+        top: 0,
+
+        behavior: "smooth"
+
+    });
+
+
+    if (
+        type === "success"
+    ) {
+
+        window.setTimeout(
+            function () {
+
+                messageBox.className =
+                    "message";
+
+            },
+            3000
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   MONEY
+========================================================= */
+
+function formatMoney(
+    value
+) {
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return "0";
+
+    }
+
+
+    return number.toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LANGUAGE EVENT FROM SHARED i18n
+========================================================= */
+
+window.addEventListener(
+    "dreamland:language-changed",
+    function () {
+
+        applyPageTranslations();
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        await initializePage();
+
+    }
+);
+
+</script>
+
+</body>
+</html>

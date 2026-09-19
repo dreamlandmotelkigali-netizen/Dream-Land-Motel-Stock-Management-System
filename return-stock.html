@@ -1,0 +1,2893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dream Land Motel | Return Stock</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="page-header">
+    <div class="container">
+
+        <div class="page-header-top">
+
+            <div>
+                <h1 id="pageTitle">Return Stock</h1>
+
+                <p id="pageSubtitle">
+                    Return unused products from Server back to Main Stock.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="language-btn"
+                id="languageBtn"
+            >
+                Kinyarwanda
+            </button>
+
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <div class="topbar">
+
+        <a
+            href="dashboard.html"
+            class="back-btn"
+            id="dashboardLink"
+        >
+            ← Dashboard
+        </a>
+
+        <span
+            class="user-info"
+            id="userInfo"
+        ></span>
+
+    </div>
+
+
+    <div
+        id="message"
+        class="message"
+        role="alert"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- =====================================================
+         RETURN FORM
+    ====================================================== -->
+
+    <section class="card">
+
+        <h2 id="returnProductTitle">
+            Return Product
+        </h2>
+
+
+        <!-- Branch -->
+
+        <div class="form-group">
+
+            <label
+                for="branch"
+                id="branchLabel"
+            >
+                Branch
+            </label>
+
+            <select id="branch">
+                <option value="">
+                    Select branch
+                </option>
+            </select>
+
+        </div>
+
+
+        <!-- Server -->
+
+        <div class="form-group">
+
+            <label
+                for="server"
+                id="serverLabel"
+            >
+                Server
+            </label>
+
+            <select
+                id="server"
+                disabled
+            >
+                <option value="">
+                    Select server
+                </option>
+            </select>
+
+        </div>
+
+
+        <!-- Product -->
+
+        <div class="form-group">
+
+            <label
+                for="product"
+                id="productLabel"
+            >
+                Product
+            </label>
+
+            <select
+                id="product"
+                disabled
+            >
+                <option value="">
+                    Select product
+                </option>
+            </select>
+
+            <div
+                class="hint"
+                id="productHint"
+            >
+                All active products are listed. Products with zero server stock will show 0.
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STOCK SUMMARY
+        ================================================== -->
+
+        <div class="stock-grid">
+
+            <div class="stock-box">
+
+                <strong id="serverStockLabel">
+                    Server Stock
+                </strong>
+
+                <div
+                    class="stock-number"
+                    id="serverStock"
+                >
+                    0
+                </div>
+
+            </div>
+
+
+            <div class="stock-box return-stock">
+
+                <strong id="mainStockLabel">
+                    Main Stock
+                </strong>
+
+                <div
+                    class="stock-number"
+                    id="mainStock"
+                >
+                    0
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Quantity -->
+
+        <div class="form-group">
+
+            <label
+                for="quantity"
+                id="quantityLabel"
+            >
+                Quantity to Return
+            </label>
+
+            <input
+                type="number"
+                id="quantity"
+                min="0.01"
+                step="0.01"
+                inputmode="decimal"
+                placeholder="Enter quantity"
+            >
+
+        </div>
+
+
+        <!-- Reason -->
+
+        <div class="form-group">
+
+            <label
+                for="reason"
+                id="reasonLabel"
+            >
+                Reason / Note
+            </label>
+
+            <textarea
+                id="reason"
+                placeholder="Example: Unused stock returned to main stock"
+            ></textarea>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="btn"
+            id="returnBtn"
+            disabled
+        >
+            🔄 Return to Main Stock
+        </button>
+
+    </section>
+
+
+    <!-- =====================================================
+         RECENT RETURNS
+    ====================================================== -->
+
+    <section class="card">
+
+        <h2 id="recentReturnsTitle">
+            Recent Returns
+        </h2>
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th id="dateHeader">
+                            Date
+                        </th>
+
+                        <th id="branchHeader">
+                            Branch
+                        </th>
+
+                        <th id="serverHeader">
+                            Server
+                        </th>
+
+                        <th id="productHeader">
+                            Product
+                        </th>
+
+                        <th id="quantityHeader">
+                            Quantity
+                        </th>
+
+                        <th id="reasonHeader">
+                            Reason
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="returnsBody">
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            class="empty"
+                            id="loadingReturns"
+                        >
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<!-- =====================================================
+     SUPABASE
+====================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
+
+
+<script>
+"use strict";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+
+    profile: null,
+
+    language: "en",
+
+    branches: [],
+
+    servers: [],
+
+    products: [],
+
+    selectedServerStock: 0,
+
+    selectedMainStock: 0,
+
+    isSubmitting: false,
+
+    stockAvailable: true
+
+};
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const translations = {
+
+    en: {
+
+        pageTitle: "Return Stock",
+
+        pageSubtitle:
+            "Return unused products from Server back to Main Stock.",
+
+        dashboard:
+            "← Dashboard",
+
+        returnProduct:
+            "Return Product",
+
+        branch:
+            "Branch",
+
+        selectBranch:
+            "Select branch",
+
+        server:
+            "Server",
+
+        selectServer:
+            "Select server",
+
+        product:
+            "Product",
+
+        selectProduct:
+            "Select product",
+
+        productHint:
+            "All active products are listed. Products with zero server stock will show 0.",
+
+        serverStock:
+            "Server Stock",
+
+        mainStock:
+            "Main Stock",
+
+        quantity:
+            "Quantity to Return",
+
+        quantityPlaceholder:
+            "Enter quantity",
+
+        reason:
+            "Reason / Note",
+
+        reasonPlaceholder:
+            "Example: Unused stock returned to main stock",
+
+        returnButton:
+            "🔄 Return to Main Stock",
+
+        returning:
+            "Returning...",
+
+        recentReturns:
+            "Recent Returns",
+
+        date:
+            "Date",
+
+        quantityHeader:
+            "Quantity",
+
+        reasonHeader:
+            "Reason",
+
+        loading:
+            "Loading...",
+
+        noReturns:
+            "No returns yet.",
+
+        failedBranches:
+            "Failed to load branches: ",
+
+        failedServers:
+            "Failed to load servers: ",
+
+        failedProducts:
+            "Failed to load products: ",
+
+        failedStock:
+            "Failed to calculate stock: ",
+
+        stockUnavailable:
+            "Stock unavailable",
+
+        pleaseBranch:
+            "Please select a branch.",
+
+        pleaseServer:
+            "Please select a server.",
+
+        pleaseProduct:
+            "Please select a product.",
+
+        validQuantity:
+            "Enter a valid quantity.",
+
+        moreThanStock:
+            "You cannot return more than the server stock",
+
+        success:
+            "Success! Product returned to Main Stock.",
+
+        failed:
+            "Return failed: ",
+
+        failedReturns:
+            "Failed to load returns.",
+
+        accessRestricted:
+            "You do not have permission to access this branch.",
+
+        noBranch:
+            "Your account is not assigned to a branch.",
+
+        authenticationFailed:
+            "Authentication failed.",
+
+        initializationFailed:
+            "Failed to initialize page.",
+
+        noServers:
+            "No active servers found for this branch.",
+
+        noProducts:
+            "No active products found.",
+
+        defaultReason:
+            "Unused stock returned to main stock"
+
+    },
+
+
+    rw: {
+
+        pageTitle:
+            "Garura muri Main Stock",
+
+        pageSubtitle:
+            "Garura ibicuruzwa bitakoreshejwe na Server ubisubize muri Main Stock.",
+
+        dashboard:
+            "← Dashboard",
+
+        returnProduct:
+            "Garura Igicuruzwa",
+
+        branch:
+            "Branch",
+
+        selectBranch:
+            "Hitamo Branch",
+
+        server:
+            "Server",
+
+        selectServer:
+            "Hitamo Server",
+
+        product:
+            "Igicuruzwa",
+
+        selectProduct:
+            "Hitamo igicuruzwa",
+
+        productHint:
+            "Ibicuruzwa byose bikora biragaragara. Ibidafite stock kuri Server bizagaragaza 0.",
+
+        serverStock:
+            "Stock ya Server",
+
+        mainStock:
+            "Main Stock",
+
+        quantity:
+            "Ingano igarurwa",
+
+        quantityPlaceholder:
+            "Andika ingano",
+
+        reason:
+            "Impamvu / Icyitonderwa",
+
+        reasonPlaceholder:
+            "Urugero: Stock itakoreshejwe yagaruwe muri Main Stock",
+
+        returnButton:
+            "🔄 Garura muri Main Stock",
+
+        returning:
+            "Biragarurwa...",
+
+        recentReturns:
+            "Amagarura aheruka",
+
+        date:
+            "Itariki",
+
+        quantityHeader:
+            "Ingano",
+
+        reasonHeader:
+            "Impamvu",
+
+        loading:
+            "Birimo gutegurwa...",
+
+        noReturns:
+            "Nta magarura arahari.",
+
+        failedBranches:
+            "Kubona branches byanze: ",
+
+        failedServers:
+            "Kubona servers byanze: ",
+
+        failedProducts:
+            "Kubona ibicuruzwa byanze: ",
+
+        failedStock:
+            "Kubara stock byanze: ",
+
+        stockUnavailable:
+            "Stock ntiboneka",
+
+        pleaseBranch:
+            "Banza uhitemo Branch.",
+
+        pleaseServer:
+            "Banza uhitemo Server.",
+
+        pleaseProduct:
+            "Banza uhitemo igicuruzwa.",
+
+        validQuantity:
+            "Andika ingano yemewe.",
+
+        moreThanStock:
+            "Ntushobora kugarura ibirenze stock ya Server",
+
+        success:
+            "Byagenze neza! Igicuruzwa cyagaruwe muri Main Stock.",
+
+        failed:
+            "Kugarura byanze: ",
+
+        failedReturns:
+            "Kubona amagarura byanze.",
+
+        accessRestricted:
+            "Ntabwo ufite uburenganzira bwo gukoresha iyi Branch.",
+
+        noBranch:
+            "Konti yawe ntabwo ihujwe na Branch.",
+
+        authenticationFailed:
+            "Kwemeza konti byanze.",
+
+        initializationFailed:
+            "Gutegura page byanze.",
+
+        noServers:
+            "Nta Server ikora ibonetse kuri iyi Branch.",
+
+        noProducts:
+            "Nta bicuruzwa bikora bibonetse.",
+
+        defaultReason:
+            "Stock itakoreshejwe yagaruwe muri Main Stock"
+
+    }
+
+};
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function getLanguage() {
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof DreamLandI18n.getLanguage === "function"
+        ) {
+
+            const language =
+                DreamLandI18n.getLanguage();
+
+            return language === "rw"
+                ? "rw"
+                : "en";
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Shared i18n unavailable:",
+            error
+        );
+    }
+
+
+    const stored =
+        localStorage.getItem(
+            "dreamland_language"
+        );
+
+    return stored === "rw"
+        ? "rw"
+        : "en";
+}
+
+
+function setLanguage(language) {
+
+    state.language =
+        language === "rw"
+            ? "rw"
+            : "en";
+
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof DreamLandI18n.setLanguage === "function"
+        ) {
+
+            DreamLandI18n.setLanguage(
+                state.language
+            );
+
+        } else {
+
+            localStorage.setItem(
+                "dreamland_language",
+                state.language
+            );
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Could not update shared language:",
+            error
+        );
+
+        localStorage.setItem(
+            "dreamland_language",
+            state.language
+        );
+    }
+
+
+    document.documentElement.lang =
+        state.language === "rw"
+            ? "rw"
+            : "en";
+
+
+    applyLanguage();
+}
+
+
+function t(key) {
+
+    return (
+        translations[state.language]?.[key] ??
+        translations.en[key] ??
+        key
+    );
+}
+
+
+/* =========================================================
+   APPLY LANGUAGE
+========================================================= */
+
+function applyLanguage() {
+
+    const elements = {
+
+        pageTitle:
+            document.getElementById("pageTitle"),
+
+        pageSubtitle:
+            document.getElementById("pageSubtitle"),
+
+        dashboardLink:
+            document.getElementById("dashboardLink"),
+
+        returnProductTitle:
+            document.getElementById("returnProductTitle"),
+
+        branchLabel:
+            document.getElementById("branchLabel"),
+
+        serverLabel:
+            document.getElementById("serverLabel"),
+
+        productLabel:
+            document.getElementById("productLabel"),
+
+        productHint:
+            document.getElementById("productHint"),
+
+        serverStockLabel:
+            document.getElementById("serverStockLabel"),
+
+        mainStockLabel:
+            document.getElementById("mainStockLabel"),
+
+        quantityLabel:
+            document.getElementById("quantityLabel"),
+
+        reasonLabel:
+            document.getElementById("reasonLabel"),
+
+        recentReturnsTitle:
+            document.getElementById("recentReturnsTitle"),
+
+        dateHeader:
+            document.getElementById("dateHeader"),
+
+        branchHeader:
+            document.getElementById("branchHeader"),
+
+        serverHeader:
+            document.getElementById("serverHeader"),
+
+        productHeader:
+            document.getElementById("productHeader"),
+
+        quantityHeader:
+            document.getElementById("quantityHeader"),
+
+        reasonHeader:
+            document.getElementById("reasonHeader"),
+
+        languageBtn:
+            document.getElementById("languageBtn")
+    };
+
+
+    elements.pageTitle.textContent =
+        t("pageTitle");
+
+    elements.pageSubtitle.textContent =
+        t("pageSubtitle");
+
+    elements.dashboardLink.textContent =
+        t("dashboard");
+
+    elements.returnProductTitle.textContent =
+        t("returnProduct");
+
+    elements.branchLabel.textContent =
+        t("branch");
+
+    elements.serverLabel.textContent =
+        t("server");
+
+    elements.productLabel.textContent =
+        t("product");
+
+    elements.productHint.textContent =
+        t("productHint");
+
+    elements.serverStockLabel.textContent =
+        t("serverStock");
+
+    elements.mainStockLabel.textContent =
+        t("mainStock");
+
+    elements.quantityLabel.textContent =
+        t("quantity");
+
+    elements.reasonLabel.textContent =
+        t("reason");
+
+    elements.recentReturnsTitle.textContent =
+        t("recentReturns");
+
+    elements.dateHeader.textContent =
+        t("date");
+
+    elements.branchHeader.textContent =
+        t("branch");
+
+    elements.serverHeader.textContent =
+        t("server");
+
+    elements.productHeader.textContent =
+        t("product");
+
+    elements.quantityHeader.textContent =
+        t("quantityHeader");
+
+    elements.reasonHeader.textContent =
+        t("reasonHeader");
+
+
+    elements.languageBtn.textContent =
+        state.language === "en"
+            ? "Kinyarwanda"
+            : "English";
+
+
+    document.getElementById(
+        "quantity"
+    ).placeholder =
+        t("quantityPlaceholder");
+
+
+    document.getElementById(
+        "reason"
+    ).placeholder =
+        t("reasonPlaceholder");
+
+
+    updateReturnButtonText();
+
+    updateSelectPlaceholders();
+}
+
+
+/* =========================================================
+   LANGUAGE BUTTON
+========================================================= */
+
+document
+    .getElementById("languageBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            setLanguage(
+                state.language === "en"
+                    ? "rw"
+                    : "en"
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function escapeHtml(value) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+        return "";
+    }
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+function formatNumber(value) {
+
+    const number =
+        Number(value || 0);
+
+    return number.toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+}
+
+
+function showMessage(
+    text,
+    type = "info"
+) {
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    box.textContent =
+        text || "";
+
+    box.className =
+        "message " + type;
+}
+
+
+function clearMessage() {
+
+    const box =
+        document.getElementById(
+            "message"
+        );
+
+    box.textContent =
+        "";
+
+    box.className =
+        "message";
+}
+
+
+function updateReturnButtonText() {
+
+    const button =
+        document.getElementById(
+            "returnBtn"
+        );
+
+    button.textContent =
+        state.isSubmitting
+            ? t("returning")
+            : t("returnButton");
+}
+
+
+/* =========================================================
+   SELECT PLACEHOLDERS
+========================================================= */
+
+function updateSelectPlaceholders() {
+
+    const branch =
+        document.getElementById("branch");
+
+    const server =
+        document.getElementById("server");
+
+    const product =
+        document.getElementById("product");
+
+
+    if (
+        branch &&
+        !branch.value &&
+        branch.options.length
+    ) {
+
+        branch.options[0].textContent =
+            t("selectBranch");
+    }
+
+
+    if (
+        server &&
+        !server.value &&
+        server.options.length
+    ) {
+
+        server.options[0].textContent =
+            t("selectServer");
+    }
+
+
+    if (
+        product &&
+        !product.value &&
+        product.options.length
+    ) {
+
+        product.options[0].textContent =
+            t("selectProduct");
+    }
+}
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+async function requireCurrentUser() {
+
+    const authResult =
+        await DreamLandAuth.requireAuth();
+
+    if (!authResult) {
+        return null;
+    }
+
+
+    state.profile =
+        authResult.profile;
+
+
+    if (!state.profile) {
+
+        showMessage(
+            t("authenticationFailed"),
+            "error"
+        );
+
+        return null;
+    }
+
+
+    document.getElementById(
+        "userInfo"
+    ).textContent =
+        `${state.profile.username || ""} • ${state.profile.role || ""}`;
+
+
+    return state.profile;
+}
+
+
+/* =========================================================
+   BRANCH ACCESS
+========================================================= */
+
+function profileCanAccessBranch(
+    branchId
+) {
+
+    if (!state.profile) {
+        return false;
+    }
+
+
+    const role =
+        String(
+            state.profile.role || ""
+        ).toLowerCase();
+
+
+    if (role === "admin") {
+        return true;
+    }
+
+
+    return (
+        String(
+            state.profile.branch_id || ""
+        ) ===
+        String(branchId)
+    );
+}
+
+
+/* =========================================================
+   LOAD BRANCHES
+========================================================= */
+
+async function loadBranches() {
+
+    const branchSelect =
+        document.getElementById(
+            "branch"
+        );
+
+
+    branchSelect.innerHTML =
+        "";
+
+
+    const { data, error } =
+        await db
+            .from("branches")
+            .select(
+                "id,name,location,phone,active"
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Load branches error:",
+            error
+        );
+
+        showMessage(
+            t("failedBranches") +
+            error.message,
+            "error"
+        );
+
+        return false;
+    }
+
+
+    state.branches =
+        (data || []).filter(
+            branch =>
+                profileCanAccessBranch(
+                    branch.id
+                )
+        );
+
+
+    if (
+        state.profile.role !== "admin" &&
+        state.branches.length === 0
+    ) {
+
+        branchSelect.disabled =
+            true;
+
+        showMessage(
+            t("noBranch"),
+            "error"
+        );
+
+        return false;
+    }
+
+
+    const placeholder =
+        document.createElement(
+            "option"
+        );
+
+    placeholder.value =
+        "";
+
+    placeholder.textContent =
+        t("selectBranch");
+
+    branchSelect.appendChild(
+        placeholder
+    );
+
+
+    state.branches.forEach(
+        branch => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                branch.id;
+
+            option.textContent =
+                branch.name;
+
+            branchSelect.appendChild(
+                option
+            );
+        }
+    );
+
+
+    if (
+        state.profile.role !== "admin"
+    ) {
+
+        const ownBranch =
+            state.branches.find(
+                branch =>
+                    String(branch.id) ===
+                    String(
+                        state.profile.branch_id
+                    )
+            );
+
+
+        if (!ownBranch) {
+
+            branchSelect.disabled =
+                true;
+
+            showMessage(
+                t("noBranch"),
+                "error"
+            );
+
+            return false;
+        }
+
+
+        branchSelect.value =
+            ownBranch.id;
+
+        branchSelect.disabled =
+            true;
+
+
+        const loaded =
+            await loadServers(
+                ownBranch.id
+            );
+
+        if (!loaded) {
+            return false;
+        }
+
+    } else {
+
+        branchSelect.disabled =
+            false;
+    }
+
+
+    updateSelectPlaceholders();
+
+    return true;
+}
+
+
+/* =========================================================
+   LOAD SERVERS
+========================================================= */
+
+async function loadServers(
+    branchId
+) {
+
+    const serverSelect =
+        document.getElementById(
+            "server"
+        );
+
+    const productSelect =
+        document.getElementById(
+            "product"
+        );
+
+
+    serverSelect.innerHTML =
+        "";
+
+    productSelect.innerHTML =
+        "";
+
+
+    state.servers =
+        [];
+
+    state.selectedServerStock =
+        0;
+
+    state.selectedMainStock =
+        0;
+
+    state.stockAvailable =
+        true;
+
+
+    document.getElementById(
+        "serverStock"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mainStock"
+    ).textContent =
+        "0";
+
+
+    const serverPlaceholder =
+        document.createElement(
+            "option"
+        );
+
+    serverPlaceholder.value =
+        "";
+
+    serverPlaceholder.textContent =
+        t("selectServer");
+
+    serverSelect.appendChild(
+        serverPlaceholder
+    );
+
+
+    const productPlaceholder =
+        document.createElement(
+            "option"
+        );
+
+    productPlaceholder.value =
+        "";
+
+    productPlaceholder.textContent =
+        t("selectProduct");
+
+    productSelect.appendChild(
+        productPlaceholder
+    );
+
+
+    serverSelect.disabled =
+        true;
+
+    productSelect.disabled =
+        true;
+
+
+    updateReturnButton();
+
+
+    if (!branchId) {
+        return true;
+    }
+
+
+    if (
+        !profileCanAccessBranch(
+            branchId
+        )
+    ) {
+
+        showMessage(
+            t("accessRestricted"),
+            "error"
+        );
+
+        return false;
+    }
+
+
+    const { data, error } =
+        await db
+            .from("servers")
+            .select(
+                "id,full_name,branch_id,active"
+            )
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "full_name"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Load servers error:",
+            error
+        );
+
+        showMessage(
+            t("failedServers") +
+            error.message,
+            "error"
+        );
+
+        return false;
+    }
+
+
+    state.servers =
+        data || [];
+
+
+    state.servers.forEach(
+        server => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                server.id;
+
+            option.textContent =
+                server.full_name;
+
+            serverSelect.appendChild(
+                option
+            );
+        }
+    );
+
+
+    serverSelect.disabled =
+        state.servers.length === 0;
+
+
+    updateSelectPlaceholders();
+
+
+    if (
+        state.servers.length === 0
+    ) {
+
+        showMessage(
+            t("noServers"),
+            "info"
+        );
+    }
+
+
+    return true;
+}
+
+
+/* =========================================================
+   LOAD ACTIVE PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+
+    const { data, error } =
+        await db
+            .from("products")
+            .select(`
+                id,
+                name,
+                category,
+                unit,
+                purchase_price,
+                selling_price,
+                minimum_stock,
+                active
+            `)
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name"
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Load products error:",
+            error
+        );
+
+        showMessage(
+            t("failedProducts") +
+            error.message,
+            "error"
+        );
+
+        return false;
+    }
+
+
+    state.products =
+        data || [];
+
+
+    if (
+        state.products.length === 0
+    ) {
+
+        showMessage(
+            t("noProducts"),
+            "info"
+        );
+
+        return false;
+    }
+
+
+    return true;
+}
+
+
+/* =========================================================
+   SERVER STOCK CALCULATION
+========================================================= */
+
+async function calculateServerStocks(
+    branchId,
+    serverId
+) {
+
+    if (
+        !branchId ||
+        !serverId
+    ) {
+        return {};
+    }
+
+
+    if (
+        !profileCanAccessBranch(
+            branchId
+        )
+    ) {
+
+        throw new Error(
+            t("accessRestricted")
+        );
+    }
+
+
+    /*
+        This query is only for display.
+
+        The database RPC remains authoritative
+        when the actual return is submitted.
+    */
+
+    const { data, error } =
+        await db
+            .from("stock_movements")
+            .select(`
+                id,
+                branch_id,
+                product_id,
+                movement_type,
+                quantity,
+                server_id,
+                from_location,
+                to_location,
+                created_at
+            `)
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "server_id",
+                serverId
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    const stockMap = {};
+
+
+    (data || []).forEach(
+        movement => {
+
+            const productId =
+                movement.product_id;
+
+
+            const quantity =
+                Number(
+                    movement.quantity || 0
+                );
+
+
+            if (
+                !stockMap[productId]
+            ) {
+
+                stockMap[productId] =
+                    0;
+            }
+
+
+            switch (
+                movement.movement_type
+            ) {
+
+                case "issue_to_server":
+
+                    stockMap[productId] +=
+                        quantity;
+
+                    break;
+
+
+                case "sale":
+
+                    stockMap[productId] -=
+                        quantity;
+
+                    break;
+
+
+                case "waste":
+
+                    stockMap[productId] -=
+                        quantity;
+
+                    break;
+
+
+                case "return_from_server":
+
+                    stockMap[productId] -=
+                        quantity;
+
+                    break;
+
+
+                default:
+                    break;
+            }
+        }
+    );
+
+
+    return stockMap;
+}
+
+
+/* =========================================================
+   MAIN STOCK CALCULATION
+========================================================= */
+
+async function calculateMainStock(
+    branchId,
+    productId
+) {
+
+    if (
+        !branchId ||
+        !productId
+    ) {
+        return 0;
+    }
+
+
+    if (
+        !profileCanAccessBranch(
+            branchId
+        )
+    ) {
+
+        throw new Error(
+            t("accessRestricted")
+        );
+    }
+
+
+    const { data, error } =
+        await db
+            .from("stock_movements")
+            .select(`
+                movement_type,
+                quantity,
+                product_id
+            `)
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "product_id",
+                productId
+            );
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    let stock =
+        0;
+
+
+    (data || []).forEach(
+        movement => {
+
+            const quantity =
+                Number(
+                    movement.quantity || 0
+                );
+
+
+            switch (
+                movement.movement_type
+            ) {
+
+                case "purchase":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                case "issue_to_server":
+
+                    stock -=
+                        quantity;
+
+                    break;
+
+
+                case "return_from_server":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                case "waste":
+
+                    stock -=
+                        quantity;
+
+                    break;
+
+
+                case "adjustment":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                default:
+                    break;
+            }
+        }
+    );
+
+
+    return Math.max(
+        0,
+        stock
+    );
+}
+
+
+/* =========================================================
+   LOAD PRODUCTS FOR SELECTED SERVER
+========================================================= */
+
+async function loadServerProducts(
+    branchId,
+    serverId
+) {
+
+    const productSelect =
+        document.getElementById(
+            "product"
+        );
+
+
+    productSelect.innerHTML =
+        "";
+
+
+    const placeholder =
+        document.createElement(
+            "option"
+        );
+
+    placeholder.value =
+        "";
+
+    placeholder.textContent =
+        t("selectProduct");
+
+    productSelect.appendChild(
+        placeholder
+    );
+
+
+    document.getElementById(
+        "serverStock"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mainStock"
+    ).textContent =
+        "0";
+
+
+    state.selectedServerStock =
+        0;
+
+    state.selectedMainStock =
+        0;
+
+    state.stockAvailable =
+        true;
+
+
+    productSelect.disabled =
+        true;
+
+
+    updateReturnButton();
+
+
+    if (
+        !branchId ||
+        !serverId
+    ) {
+        return;
+    }
+
+
+    if (
+        !profileCanAccessBranch(
+            branchId
+        )
+    ) {
+
+        showMessage(
+            t("accessRestricted"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const serverStockMap =
+            await calculateServerStocks(
+                branchId,
+                serverId
+            );
+
+
+        state.products.forEach(
+            product => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                const serverStock =
+                    Number(
+                        serverStockMap[
+                            product.id
+                        ] || 0
+                    );
+
+
+                option.value =
+                    product.id;
+
+
+                option.textContent =
+                    `${product.name} — ${product.unit} — Server: ${formatNumber(serverStock)}`;
+
+
+                productSelect.appendChild(
+                    option
+                );
+            }
+        );
+
+
+        productSelect.disabled =
+            state.products.length === 0;
+
+
+    } catch (error) {
+
+        console.error(
+            "Calculate server stock error:",
+            error
+        );
+
+        state.stockAvailable =
+            false;
+
+        productSelect.disabled =
+            true;
+
+
+        showMessage(
+            t("failedStock") +
+            error.message,
+            "error"
+        );
+    }
+
+
+    updateSelectPlaceholders();
+}
+
+
+/* =========================================================
+   UPDATE SELECTED PRODUCT STOCK
+========================================================= */
+
+async function updateSelectedProduct() {
+
+    clearMessage();
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const serverId =
+        document.getElementById(
+            "server"
+        ).value;
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const quantityInput =
+        document.getElementById(
+            "quantity"
+        );
+
+
+    quantityInput.value =
+        "";
+
+
+    state.selectedServerStock =
+        0;
+
+    state.selectedMainStock =
+        0;
+
+    state.stockAvailable =
+        true;
+
+
+    document.getElementById(
+        "serverStock"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "mainStock"
+    ).textContent =
+        "0";
+
+
+    if (
+        !branchId ||
+        !serverId ||
+        !productId
+    ) {
+
+        updateReturnButton();
+
+        return;
+    }
+
+
+    try {
+
+        const serverStockMap =
+            await calculateServerStocks(
+                branchId,
+                serverId
+            );
+
+
+        state.selectedServerStock =
+            Math.max(
+                0,
+                Number(
+                    serverStockMap[
+                        productId
+                    ] || 0
+                )
+            );
+
+
+        state.selectedMainStock =
+            await calculateMainStock(
+                branchId,
+                productId
+            );
+
+
+        document.getElementById(
+            "serverStock"
+        ).textContent =
+            formatNumber(
+                state.selectedServerStock
+            );
+
+
+        document.getElementById(
+            "mainStock"
+        ).textContent =
+            formatNumber(
+                state.selectedMainStock
+            );
+
+
+        quantityInput.max =
+            state.selectedServerStock > 0
+                ? String(
+                    state.selectedServerStock
+                )
+                : "0";
+
+
+        updateReturnButton();
+
+
+    } catch (error) {
+
+        console.error(
+            "Selected product stock error:",
+            error
+        );
+
+        state.stockAvailable =
+            false;
+
+
+        document.getElementById(
+            "serverStock"
+        ).textContent =
+            "—";
+
+
+        document.getElementById(
+            "mainStock"
+        ).textContent =
+            "—";
+
+
+        showMessage(
+            t("failedStock") +
+            error.message,
+            "error"
+        );
+
+
+        updateReturnButton();
+    }
+}
+
+
+/* =========================================================
+   RETURN BUTTON
+========================================================= */
+
+function updateReturnButton() {
+
+    const button =
+        document.getElementById(
+            "returnBtn"
+        );
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        );
+
+
+    button.disabled =
+        state.isSubmitting ||
+        !state.stockAvailable ||
+        !productId ||
+        !Number.isFinite(quantity) ||
+        quantity <= 0 ||
+        quantity > state.selectedServerStock;
+
+
+    updateReturnButtonText();
+}
+
+
+/* =========================================================
+   RETURN STOCK
+========================================================= */
+
+async function returnStock() {
+
+    clearMessage();
+
+
+    if (state.isSubmitting) {
+        return;
+    }
+
+
+    /*
+        Re-check authentication immediately
+        before performing the transaction.
+    */
+
+    const authResult =
+        await DreamLandAuth.requireAuth();
+
+    if (!authResult) {
+        return;
+    }
+
+
+    state.profile =
+        authResult.profile;
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const serverId =
+        document.getElementById(
+            "server"
+        ).value;
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        );
+
+
+    const reason =
+        document.getElementById(
+            "reason"
+        ).value.trim();
+
+
+    /* =====================================================
+       VALIDATION
+    ====================================================== */
+
+    if (!branchId) {
+
+        showMessage(
+            t("pleaseBranch"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        !profileCanAccessBranch(
+            branchId
+        )
+    ) {
+
+        showMessage(
+            t("accessRestricted"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!serverId) {
+
+        showMessage(
+            t("pleaseServer"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (!productId) {
+
+        showMessage(
+            t("pleaseProduct"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        !state.stockAvailable
+    ) {
+
+        showMessage(
+            t("failedStock") +
+            t("stockUnavailable"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        !Number.isFinite(quantity) ||
+        quantity <= 0
+    ) {
+
+        showMessage(
+            t("validQuantity"),
+            "error"
+        );
+
+        return;
+    }
+
+
+    if (
+        quantity >
+        state.selectedServerStock
+    ) {
+
+        showMessage(
+            `${t("moreThanStock")} (${formatNumber(state.selectedServerStock)}).`,
+            "error"
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       SUBMIT
+    ====================================================== */
+
+    state.isSubmitting =
+        true;
+
+    updateReturnButton();
+
+
+    try {
+
+        /*
+            IMPORTANT:
+
+            Never insert directly into stock_movements.
+
+            The secure database RPC performs:
+
+            - authentication
+            - branch authorization
+            - server authorization
+            - product validation
+            - stock validation
+            - advisory locking
+            - stock movement
+            - performed_by
+            - audit logging
+        */
+
+        const { data, error } =
+            await db.rpc(
+                "create_stock_return_transaction",
+                {
+                    p_branch_id:
+                        branchId,
+
+                    p_server_id:
+                        serverId,
+
+                    p_product_id:
+                        productId,
+
+                    p_quantity:
+                        quantity,
+
+                    p_reason:
+                        reason ||
+                        t("defaultReason")
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        console.log(
+            "Stock return transaction:",
+            data
+        );
+
+
+        showMessage(
+            t("success"),
+            "success"
+        );
+
+
+        /*
+            Clear form fields but keep
+            branch and server selected.
+        */
+
+        document.getElementById(
+            "quantity"
+        ).value =
+            "";
+
+
+        document.getElementById(
+            "reason"
+        ).value =
+            "";
+
+
+        /*
+            Refresh stock information.
+        */
+
+        await loadServerProducts(
+            branchId,
+            serverId
+        );
+
+
+        /*
+            Restore the product selection
+            so the user can continue working.
+        */
+
+        const productSelect =
+            document.getElementById(
+                "product"
+            );
+
+
+        const productStillExists =
+            Array.from(
+                productSelect.options
+            ).some(
+                option =>
+                    option.value ===
+                    productId
+            );
+
+
+        if (productStillExists) {
+
+            productSelect.value =
+                productId;
+
+            await updateSelectedProduct();
+
+        }
+
+
+        /*
+            Refresh return history.
+        */
+
+        await loadReturns();
+
+
+    } catch (error) {
+
+        console.error(
+            "Return stock error:",
+            error
+        );
+
+
+        let message =
+            error?.message ||
+            String(error);
+
+
+        const lowerMessage =
+            message.toLowerCase();
+
+
+        if (
+            lowerMessage.includes(
+                "insufficient"
+            )
+        ) {
+
+            message =
+                state.language === "en"
+                    ? "There is not enough stock on this Server to complete the return."
+                    : "Stock iri kuri iyi Server ntihagije kugira ngo iyi return ikorwe.";
+        }
+
+
+        showMessage(
+            t("failed") +
+            message,
+            "error"
+        );
+
+
+    } finally {
+
+        state.isSubmitting =
+            false;
+
+        updateReturnButton();
+    }
+}
+
+
+/* =========================================================
+   LOAD RETURN HISTORY
+========================================================= */
+
+async function loadReturns() {
+
+    const body =
+        document.getElementById(
+            "returnsBody"
+        );
+
+
+    body.innerHTML =
+        `<tr>
+            <td colspan="6" class="empty">
+                ${escapeHtml(
+                    t("loading")
+                )}
+            </td>
+        </tr>`;
+
+
+    /*
+        RLS remains authoritative here.
+
+        Admin may see allowed branches.
+        Manager/Cashier should only receive
+        rows permitted by their branch policies.
+    */
+
+    const { data, error } =
+        await db
+            .from("stock_movements")
+            .select(`
+                id,
+                quantity,
+                reason,
+                created_at,
+                movement_type,
+                branch_id,
+                server_id,
+                product_id,
+                branches (
+                    name
+                ),
+                servers (
+                    full_name
+                ),
+                products (
+                    name,
+                    unit
+                )
+            `)
+            .eq(
+                "movement_type",
+                "return_from_server"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            )
+            .limit(50);
+
+
+    if (error) {
+
+        console.error(
+            "Load return history error:",
+            error
+        );
+
+
+        body.innerHTML =
+            `<tr>
+                <td colspan="6" class="empty">
+                    ${escapeHtml(
+                        t("failedReturns")
+                    )}
+                </td>
+            </tr>`;
+
+
+        return false;
+    }
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        body.innerHTML =
+            `<tr>
+                <td colspan="6" class="empty">
+                    ${escapeHtml(
+                        t("noReturns")
+                    )}
+                </td>
+            </tr>`;
+
+
+        return true;
+    }
+
+
+    body.innerHTML =
+        "";
+
+
+    data.forEach(
+        row => {
+
+            const tr =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const date =
+                row.created_at
+                    ? new Date(
+                        row.created_at
+                    ).toLocaleString(
+                        state.language === "rw"
+                            ? "rw-RW"
+                            : "en-RW",
+                        {
+                            timeZone:
+                                "Africa/Kigali"
+                        }
+                    )
+                    : "-";
+
+
+            const branch =
+                row.branches?.name ||
+                "-";
+
+
+            const server =
+                row.servers?.full_name ||
+                "-";
+
+
+            const product =
+                row.products?.name ||
+                "-";
+
+
+            const unit =
+                row.products?.unit ||
+                "";
+
+
+            const quantity =
+                formatNumber(
+                    row.quantity
+                );
+
+
+            const reason =
+                row.reason ||
+                "-";
+
+
+            tr.innerHTML = `
+                <td>
+                    ${escapeHtml(date)}
+                </td>
+
+                <td>
+                    ${escapeHtml(branch)}
+                </td>
+
+                <td>
+                    ${escapeHtml(server)}
+                </td>
+
+                <td>
+                    ${escapeHtml(product)}
+                </td>
+
+                <td>
+                    ${escapeHtml(quantity)}
+                    ${escapeHtml(unit)}
+                </td>
+
+                <td>
+                    ${escapeHtml(reason)}
+                </td>
+            `;
+
+
+            body.appendChild(
+                tr
+            );
+        }
+    );
+
+
+    return true;
+}
+
+
+/* =========================================================
+   EVENTS
+========================================================= */
+
+document
+    .getElementById("branch")
+    .addEventListener(
+        "change",
+        async event => {
+
+            clearMessage();
+
+
+            const branchId =
+                event.target.value;
+
+
+            await loadServers(
+                branchId
+            );
+        }
+    );
+
+
+document
+    .getElementById("server")
+    .addEventListener(
+        "change",
+        async event => {
+
+            clearMessage();
+
+
+            const branchId =
+                document.getElementById(
+                    "branch"
+                ).value;
+
+
+            const serverId =
+                event.target.value;
+
+
+            await loadServerProducts(
+                branchId,
+                serverId
+            );
+        }
+    );
+
+
+document
+    .getElementById("product")
+    .addEventListener(
+        "change",
+        updateSelectedProduct
+    );
+
+
+document
+    .getElementById("quantity")
+    .addEventListener(
+        "input",
+        updateReturnButton
+    );
+
+
+document
+    .getElementById("returnBtn")
+    .addEventListener(
+        "click",
+        returnStock
+    );
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+async function init() {
+
+    try {
+
+        state.language =
+            getLanguage();
+
+
+        document.documentElement.lang =
+            state.language === "rw"
+                ? "rw"
+                : "en";
+
+
+        applyLanguage();
+
+
+        /*
+            Authentication FIRST.
+        */
+
+        const profile =
+            await requireCurrentUser();
+
+
+        if (!profile) {
+            return;
+        }
+
+
+        /*
+            Products are loaded only after
+            authentication.
+        */
+
+        const productsLoaded =
+            await loadProducts();
+
+
+        if (!productsLoaded) {
+            return;
+        }
+
+
+        /*
+            Branches and servers.
+        */
+
+        const branchesLoaded =
+            await loadBranches();
+
+
+        if (!branchesLoaded) {
+            return;
+        }
+
+
+        /*
+            Return history.
+        */
+
+        await loadReturns();
+
+
+    } catch (error) {
+
+        console.error(
+            "Return Stock initialization error:",
+            error
+        );
+
+
+        showMessage(
+            error?.message ||
+            t("initializationFailed"),
+            "error"
+        );
+    }
+}
+
+
+init();
+
+</script>
+
+</body>
+</html>

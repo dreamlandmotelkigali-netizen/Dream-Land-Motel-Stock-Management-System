@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dream Land Motel | Debts</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel supplier and customer debt management"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="app-header">
+
+        <div class="header-inner">
+
+            <a
+                href="dashboard.html"
+                class="brand"
+            >
+
+                <img
+                    src="images/logo1.png"
+                    alt="Dream Land Motel"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+
+                    <strong>
+                        Dream Land Motel
+                    </strong>
+
+                    <span data-i18n="businessSystem">
+                        Business Control System
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <div class="header-actions">
+
+                <div id="languageSwitcher"></div>
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="btn btn-danger"
+                    data-i18n="logout"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+    <main class="page-container">
+
+        <!-- PAGE HEADING -->
+        <section class="page-heading">
+
+            <div>
+
+                <h1 data-i18n="debts">
+                    Debts
+                </h1>
+
+                <p data-i18n="debtManagement">
+                    Track supplier and customer debts.
+                </p>
+
+            </div>
+
+
+            <a
+                href="dashboard.html"
+                class="btn btn-secondary"
+                data-i18n="backToDashboard"
+            >
+                Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             FILTERS
+        ========================== -->
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2 data-i18n="filters">
+                        Filters
+                    </h2>
+
+                </div>
+
+                <button
+                    type="button"
+                    id="refreshBtn"
+                    class="btn btn-secondary"
+                    data-i18n="refresh"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <!-- BRANCH -->
+                <div class="form-group">
+
+                    <label
+                        for="branchSelect"
+                        data-i18n="branch"
+                    >
+                        Branch
+                    </label>
+
+                    <select id="branchSelect">
+
+                        <option value="">
+                            All branches
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DEBT TYPE -->
+                <div class="form-group">
+
+                    <label
+                        for="debtType"
+                        data-i18n="debtType"
+                    >
+                        Debt Type
+                    </label>
+
+                    <select id="debtType">
+
+                        <option
+                            value="all"
+                            data-i18n="allDebts"
+                        >
+                            All Debts
+                        </option>
+
+                        <option
+                            value="supplier"
+                            data-i18n="supplierDebts"
+                        >
+                            Supplier Debts
+                        </option>
+
+                        <option
+                            value="customer"
+                            data-i18n="customerDebts"
+                        >
+                            Customer Debts
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- STATUS -->
+                <div class="form-group">
+
+                    <label
+                        for="statusFilter"
+                        data-i18n="status"
+                    >
+                        Status
+                    </label>
+
+                    <select id="statusFilter">
+
+                        <option
+                            value="all"
+                            data-i18n="allStatuses"
+                        >
+                            All Statuses
+                        </option>
+
+                        <option
+                            value="open"
+                            data-i18n="open"
+                        >
+                            Open
+                        </option>
+
+                        <option
+                            value="partial"
+                            data-i18n="partial"
+                        >
+                            Partial
+                        </option>
+
+                        <option
+                            value="paid"
+                            data-i18n="paid"
+                        >
+                            Paid
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SEARCH -->
+                <div class="form-group">
+
+                    <label
+                        for="searchInput"
+                        data-i18n="search"
+                    >
+                        Search
+                    </label>
+
+                    <input
+                        type="search"
+                        id="searchInput"
+                        placeholder="Search supplier or customer..."
+                        data-i18n-placeholder="searchDebts"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="totalDebt"
+                >
+                    Total Debt
+                </span>
+
+                <strong
+                    id="totalDebt"
+                    class="stat-value"
+                >
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="totalPaid"
+                >
+                    Total Paid
+                </span>
+
+                <strong
+                    id="totalPaid"
+                    class="stat-value"
+                >
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="remainingDebt"
+                >
+                    Remaining Debt
+                </span>
+
+                <strong
+                    id="remainingDebt"
+                    class="stat-value"
+                >
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="debtRecords"
+                >
+                    Debt Records
+                </span>
+
+                <strong
+                    id="debtCount"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             DEBTS TABLE
+        ========================== -->
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+
+                    <h2 data-i18n="debtRecords">
+                        Debt Records
+                    </h2>
+
+                    <p class="muted">
+                        <span data-i18n="debtRecordsDescription">
+                            Supplier and customer debt records.
+                        </span>
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="message"
+                class="alert hidden"
+                role="alert"
+            ></div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th data-i18n="type">
+                                Type
+                            </th>
+
+                            <th data-i18n="branch">
+                                Branch
+                            </th>
+
+                            <th data-i18n="name">
+                                Name
+                            </th>
+
+                            <th data-i18n="reference">
+                                Reference
+                            </th>
+
+                            <th data-i18n="originalAmount">
+                                Original
+                            </th>
+
+                            <th data-i18n="amountPaid">
+                                Paid
+                            </th>
+
+                            <th data-i18n="balance">
+                                Balance
+                            </th>
+
+                            <th data-i18n="status">
+                                Status
+                            </th>
+
+                            <th data-i18n="date">
+                                Date
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="debtsTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="9"
+                                class="empty-state"
+                                data-i18n="loading"
+                            >
+                                Loading...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="app-footer">
+
+        <span>
+            Dream Land Motel
+        </span>
+
+        <span>•</span>
+
+        <span data-i18n="businessControlSystem">
+            Business Control System
+        </span>
+
+    </footer>
+
+
+    <!-- =========================
+         SUPABASE
+    ========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="i18n.js"></script>
+
+    <script src="auth.js"></script>
+
+
+    <!-- =========================
+         PAGE SCRIPT
+    ========================== -->
+    <script>
+
+        const BRANCHES = {
+
+            kabuga: {
+                id: "92f52581-efaa-4462-b807-24e7e00438eb",
+                name: "Kabuga"
+            },
+
+            bisenga: {
+                id: "e1269a07-97b8-43b8-bf65-0d838212a0ac",
+                name: "Bisenga"
+            }
+
+        };
+
+
+        let profile = null;
+
+        let supplierDebts = [];
+
+        let customerDebts = [];
+
+        let allDebts = [];
+
+
+        /* =========================================
+           DOM
+        ========================================== */
+
+        const branchSelect =
+            document.getElementById(
+                "branchSelect"
+            );
+
+        const debtType =
+            document.getElementById(
+                "debtType"
+            );
+
+        const statusFilter =
+            document.getElementById(
+                "statusFilter"
+            );
+
+        const searchInput =
+            document.getElementById(
+                "searchInput"
+            );
+
+        const debtsTableBody =
+            document.getElementById(
+                "debtsTableBody"
+            );
+
+        const totalDebt =
+            document.getElementById(
+                "totalDebt"
+            );
+
+        const totalPaid =
+            document.getElementById(
+                "totalPaid"
+            );
+
+        const remainingDebt =
+            document.getElementById(
+                "remainingDebt"
+            );
+
+        const debtCount =
+            document.getElementById(
+                "debtCount"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        const refreshBtn =
+            document.getElementById(
+                "refreshBtn"
+            );
+
+        const logoutBtn =
+            document.getElementById(
+                "logoutBtn"
+            );
+
+
+        /* =========================================
+           HELPERS
+        ========================================== */
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+
+        }
+
+
+        function t(key, fallback) {
+
+            try {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n.t === "function"
+                ) {
+
+                    const result =
+                        window.DreamLandI18n.t(key);
+
+                    if (
+                        result &&
+                        result !== key
+                    ) {
+
+                        return result;
+
+                    }
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Translation error:",
+                    error
+                );
+
+            }
+
+            return fallback;
+
+        }
+
+
+        function formatMoney(value) {
+
+            const number =
+                Number(value) || 0;
+
+            return `${number.toLocaleString(
+                undefined,
+                {
+                    maximumFractionDigits: 2
+                }
+            )} RWF`;
+
+        }
+
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "-";
+            }
+
+            const date =
+                new Date(value);
+
+            if (
+                Number.isNaN(
+                    date.getTime()
+                )
+            ) {
+
+                return "-";
+
+            }
+
+            return date.toLocaleString();
+
+        }
+
+
+        function showMessage(
+            text,
+            type = "info"
+        ) {
+
+            message.textContent = text;
+
+            message.className =
+                `alert alert-${type}`;
+
+        }
+
+
+        function hideMessage() {
+
+            message.textContent = "";
+
+            message.className =
+                "alert hidden";
+
+        }
+
+
+        /* =========================================
+           BRANCH FILTER
+        ========================================== */
+
+        function populateBranches() {
+
+            branchSelect.innerHTML = "";
+
+            if (
+                profile.role === "admin"
+            ) {
+
+                branchSelect.innerHTML = `
+                    <option value="">
+                        ${escapeHtml(
+                            t(
+                                "allBranches",
+                                "All branches"
+                            )
+                        )}
+                    </option>
+
+                    <option value="${BRANCHES.kabuga.id}">
+                        Kabuga
+                    </option>
+
+                    <option value="${BRANCHES.bisenga.id}">
+                        Bisenga
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            if (
+                profile.branch_id ===
+                BRANCHES.kabuga.id
+            ) {
+
+                branchSelect.innerHTML = `
+                    <option value="${BRANCHES.kabuga.id}">
+                        Kabuga
+                    </option>
+                `;
+
+            } else if (
+                profile.branch_id ===
+                BRANCHES.bisenga.id
+            ) {
+
+                branchSelect.innerHTML = `
+                    <option value="${BRANCHES.bisenga.id}">
+                        Bisenga
+                    </option>
+                `;
+
+            } else {
+
+                branchSelect.innerHTML = `
+                    <option value="">
+                        ${escapeHtml(
+                            t(
+                                "noBranchAssigned",
+                                "No branch assigned"
+                            )
+                        )}
+                    </option>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           LOAD SUPPLIER DEBTS
+        ========================================== */
+
+        async function loadSupplierDebts() {
+
+            let query =
+                db
+                    .from("supplier_debts")
+                    .select(`
+                        id,
+                        branch_id,
+                        supplier_name,
+                        purchase_id,
+                        original_amount,
+                        amount_paid,
+                        balance,
+                        status,
+                        created_at,
+                        branches (
+                            name
+                        )
+                    `)
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            if (
+                profile.role !== "admin"
+            ) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        profile.branch_id
+                    );
+
+            } else if (
+                branchSelect.value
+            ) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        branchSelect.value
+                    );
+
+            }
+
+
+            const {
+                data,
+                error
+            } = await query;
+
+
+            if (error) {
+
+                console.error(
+                    "Supplier debts error:",
+                    error
+                );
+
+                throw error;
+
+            }
+
+
+            return (data || []).map(
+                debt => ({
+
+                    id: debt.id,
+
+                    type: "supplier",
+
+                    branch_id:
+                        debt.branch_id,
+
+                    branch:
+                        debt.branches?.name ||
+                        "-",
+
+                    name:
+                        debt.supplier_name,
+
+                    reference:
+                        debt.purchase_id ||
+                        "-",
+
+                    original_amount:
+                        Number(
+                            debt.original_amount
+                        ) || 0,
+
+                    amount_paid:
+                        Number(
+                            debt.amount_paid
+                        ) || 0,
+
+                    balance:
+                        Number(
+                            debt.balance
+                        ) || 0,
+
+                    status:
+                        debt.status,
+
+                    created_at:
+                        debt.created_at
+
+                })
+            );
+
+        }
+
+
+        /* =========================================
+           LOAD CUSTOMER DEBTS
+        ========================================== */
+
+        async function loadCustomerDebts() {
+
+            let query =
+                db
+                    .from("customer_debts")
+                    .select(`
+                        id,
+                        branch_id,
+                        customer_name,
+                        sale_id,
+                        original_amount,
+                        amount_paid,
+                        balance,
+                        status,
+                        created_at,
+                        branches (
+                            name
+                        )
+                    `)
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+
+            if (
+                profile.role !== "admin"
+            ) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        profile.branch_id
+                    );
+
+            } else if (
+                branchSelect.value
+            ) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        branchSelect.value
+                    );
+
+            }
+
+
+            const {
+                data,
+                error
+            } = await query;
+
+
+            if (error) {
+
+                console.error(
+                    "Customer debts error:",
+                    error
+                );
+
+                throw error;
+
+            }
+
+
+            return (data || []).map(
+                debt => ({
+
+                    id: debt.id,
+
+                    type: "customer",
+
+                    branch_id:
+                        debt.branch_id,
+
+                    branch:
+                        debt.branches?.name ||
+                        "-",
+
+                    name:
+                        debt.customer_name,
+
+                    reference:
+                        debt.sale_id ||
+                        "-",
+
+                    original_amount:
+                        Number(
+                            debt.original_amount
+                        ) || 0,
+
+                    amount_paid:
+                        Number(
+                            debt.amount_paid
+                        ) || 0,
+
+                    balance:
+                        Number(
+                            debt.balance
+                        ) || 0,
+
+                    status:
+                        debt.status,
+
+                    created_at:
+                        debt.created_at
+
+                })
+            );
+
+        }
+
+
+        /* =========================================
+           LOAD ALL
+        ========================================== */
+
+        async function loadDebts() {
+
+            hideMessage();
+
+
+            debtsTableBody.innerHTML = `
+                <tr>
+                    <td
+                        colspan="9"
+                        class="empty-state"
+                    >
+                        ${escapeHtml(
+                            t(
+                                "loading",
+                                "Loading..."
+                            )
+                        )}
+                    </td>
+                </tr>
+            `;
+
+
+            try {
+
+                const [
+                    suppliers,
+                    customers
+                ] = await Promise.all([
+                    loadSupplierDebts(),
+                    loadCustomerDebts()
+                ]);
+
+
+                supplierDebts =
+                    suppliers;
+
+                customerDebts =
+                    customers;
+
+                allDebts =
+                    [
+                        ...supplierDebts,
+                        ...customerDebts
+                    ];
+
+
+                renderDebts();
+
+            } catch (error) {
+
+                console.error(
+                    "Load debts error:",
+                    error
+                );
+
+                showMessage(
+                    error.message ||
+                    t(
+                        "loadError",
+                        "Could not load debt records."
+                    ),
+                    "error"
+                );
+
+
+                debtsTableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="9"
+                            class="empty-state error-text"
+                        >
+                            ${escapeHtml(
+                                t(
+                                    "loadError",
+                                    "Could not load records."
+                                )
+                            )}
+                        </td>
+                    </tr>
+                `;
+
+            }
+
+        }
+
+
+        /* =========================================
+           FILTER
+        ========================================== */
+
+        function getFilteredDebts() {
+
+            const selectedType =
+                debtType.value;
+
+            const selectedStatus =
+                statusFilter.value;
+
+            const search =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+
+            return allDebts.filter(
+                debt => {
+
+                    if (
+                        selectedType !== "all" &&
+                        debt.type !== selectedType
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    if (
+                        selectedStatus !== "all" &&
+                        debt.status !== selectedStatus
+                    ) {
+
+                        return false;
+
+                    }
+
+
+                    if (search) {
+
+                        const searchable = [
+                            debt.name,
+                            debt.reference,
+                            debt.branch,
+                            debt.status,
+                            debt.type
+                        ]
+                            .join(" ")
+                            .toLowerCase();
+
+
+                        if (
+                            !searchable.includes(
+                                search
+                            )
+                        ) {
+
+                            return false;
+
+                        }
+
+                    }
+
+
+                    return true;
+
+                }
+            );
+
+        }
+
+
+        /* =========================================
+           RENDER
+        ========================================== */
+
+        function renderDebts() {
+
+            const filtered =
+                getFilteredDebts();
+
+
+            let originalTotal = 0;
+
+            let paidTotal = 0;
+
+            let balanceTotal = 0;
+
+
+            filtered.forEach(
+                debt => {
+
+                    originalTotal +=
+                        debt.original_amount;
+
+                    paidTotal +=
+                        debt.amount_paid;
+
+                    balanceTotal +=
+                        debt.balance;
+
+                }
+            );
+
+
+            totalDebt.textContent =
+                formatMoney(originalTotal);
+
+            totalPaid.textContent =
+                formatMoney(paidTotal);
+
+            remainingDebt.textContent =
+                formatMoney(balanceTotal);
+
+            debtCount.textContent =
+                filtered.length;
+
+
+            if (
+                filtered.length === 0
+            ) {
+
+                debtsTableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="9"
+                            class="empty-state"
+                        >
+                            ${escapeHtml(
+                                t(
+                                    "noRecords",
+                                    "No records found."
+                                )
+                            )}
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            debtsTableBody.innerHTML =
+                filtered.map(
+                    debt => {
+
+                        const typeLabel =
+                            debt.type === "supplier"
+                                ? t(
+                                    "supplier",
+                                    "Supplier"
+                                )
+                                : t(
+                                    "customer",
+                                    "Customer"
+                                );
+
+
+                        return `
+                            <tr>
+
+                                <td>
+                                    <span class="badge">
+                                        ${escapeHtml(
+                                            typeLabel
+                                        )}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        debt.branch
+                                    )}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ${escapeHtml(
+                                            debt.name
+                                        )}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    <small>
+                                        ${escapeHtml(
+                                            debt.reference
+                                        )}
+                                    </small>
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        formatMoney(
+                                            debt.original_amount
+                                        )
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        formatMoney(
+                                            debt.amount_paid
+                                        )
+                                    )}
+                                </td>
+
+                                <td>
+                                    <strong>
+                                        ${escapeHtml(
+                                            formatMoney(
+                                                debt.balance
+                                            )
+                                        )}
+                                    </strong>
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        debt.status
+                                    )}
+                                </td>
+
+                                <td>
+                                    ${escapeHtml(
+                                        formatDate(
+                                            debt.created_at
+                                        )
+                                    )}
+                                </td>
+
+                            </tr>
+                        `;
+
+                    }
+                ).join("");
+
+        }
+
+
+        /* =========================================
+           EVENTS
+        ========================================== */
+
+        branchSelect.addEventListener(
+            "change",
+            loadDebts
+        );
+
+
+        debtType.addEventListener(
+            "change",
+            renderDebts
+        );
+
+
+        statusFilter.addEventListener(
+            "change",
+            renderDebts
+        );
+
+
+        searchInput.addEventListener(
+            "input",
+            renderDebts
+        );
+
+
+        refreshBtn.addEventListener(
+            "click",
+            loadDebts
+        );
+
+
+        logoutBtn.addEventListener(
+            "click",
+            async () => {
+
+                await DreamLandAuth.signOut();
+
+            }
+        );
+
+
+        document.addEventListener(
+            "languageChanged",
+            () => {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n
+                        .applyTranslations ===
+                        "function"
+                ) {
+
+                    window.DreamLandI18n
+                        .applyTranslations();
+
+                }
+
+                renderDebts();
+
+            }
+        );
+
+
+        /* =========================================
+           INIT
+        ========================================== */
+
+        async function init() {
+
+            const authResult =
+                await DreamLandAuth.requireAuth();
+
+            if (!authResult) {
+                return;
+            }
+
+
+            profile =
+                authResult.profile;
+
+
+            if (
+                !profile ||
+                !profile.active
+            ) {
+
+                await DreamLandAuth.signOut();
+
+                return;
+
+            }
+
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n
+                    .createLanguageSwitcher ===
+                    "function"
+            ) {
+
+                window.DreamLandI18n
+                    .createLanguageSwitcher(
+                        document.getElementById(
+                            "languageSwitcher"
+                        )
+                    );
+
+            }
+
+
+            populateBranches();
+
+
+            await loadDebts();
+
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n
+                    .applyTranslations ===
+                    "function"
+            ) {
+
+                window.DreamLandI18n
+                    .applyTranslations();
+
+            }
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            init
+        );
+
+    </script>
+
+</body>
+</html>

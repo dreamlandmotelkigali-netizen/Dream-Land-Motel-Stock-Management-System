@@ -1,0 +1,3129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Stock In | Dream Land Motel System</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel Business Control System - Stock In"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="site-header">
+
+    <div class="header-inner">
+
+        <div>
+            <h2>Dream Land Motel</h2>
+
+            <div data-i18n="systemTitle">
+                Business Control System
+            </div>
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                type="button"
+                data-language="en"
+                class="language-btn"
+            >
+                English
+            </button>
+
+            <button
+                type="button"
+                data-language="rw"
+                class="language-btn"
+            >
+                Kinyarwanda
+            </button>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="page-container">
+
+    <a
+        href="dashboard.html"
+        class="back-link"
+    >
+        ←
+        <span data-i18n="backDashboard">
+            Back to Dashboard
+        </span>
+    </a>
+
+
+    <!-- =====================================================
+         PAGE HEADER
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="page-header-row">
+
+            <div>
+
+                <h1 data-i18n="stockInTitle">
+                    Stock In
+                </h1>
+
+                <p
+                    class="muted"
+                    data-i18n="stockInSubtitle"
+                >
+                    Record purchased products and add them to stock.
+                </p>
+
+            </div>
+
+
+            <div class="role-badge">
+
+                <span id="userRole">
+                    -
+                </span>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PURCHASE FORM
+    ====================================================== -->
+
+    <section class="card">
+
+        <h2 data-i18n="purchaseInformation">
+            Purchase Information
+        </h2>
+
+
+        <div class="form-grid">
+
+
+            <!-- DATE -->
+
+            <div class="form-group">
+
+                <label
+                    for="purchaseDate"
+                    data-i18n="purchaseDate"
+                >
+                    Purchase Date
+                </label>
+
+                <input
+                    type="datetime-local"
+                    id="purchaseDate"
+                >
+
+            </div>
+
+
+            <!-- BRANCH -->
+
+            <div class="form-group">
+
+                <label
+                    for="branch"
+                    data-i18n="branch"
+                >
+                    Branch
+                </label>
+
+                <select id="branch"></select>
+
+            </div>
+
+
+            <!-- SUPPLIER -->
+
+            <div class="form-group">
+
+                <label
+                    for="supplier"
+                    data-i18n="supplierName"
+                >
+                    Supplier Name
+                </label>
+
+                <input
+                    type="text"
+                    id="supplier"
+                    placeholder="Supplier name"
+                    data-i18n-placeholder="supplierPlaceholder"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- INVOICE -->
+
+            <div class="form-group">
+
+                <label
+                    for="invoice"
+                    data-i18n="invoiceReference"
+                >
+                    Invoice / Reference
+                </label>
+
+                <input
+                    type="text"
+                    id="invoice"
+                    placeholder="Invoice number"
+                    data-i18n-placeholder="invoicePlaceholder"
+                    autocomplete="off"
+                >
+
+            </div>
+
+
+            <!-- PRODUCT -->
+
+            <div class="form-group">
+
+                <label
+                    for="product"
+                    data-i18n="product"
+                >
+                    Product
+                </label>
+
+                <select id="product">
+
+                    <option
+                        value=""
+                        data-i18n="selectProduct"
+                    >
+                        Select Product
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- UNIT -->
+
+            <div class="form-group">
+
+                <label
+                    for="unit"
+                    data-i18n="unit"
+                >
+                    Unit
+                </label>
+
+                <select id="unit">
+
+                    <option
+                        value=""
+                        data-i18n="selectUnit"
+                    >
+                        Select Unit
+                    </option>
+
+                    <option value="Bottle">
+                        Bottle
+                    </option>
+
+                    <option value="Piece">
+                        Piece
+                    </option>
+
+                    <option value="Kilogram">
+                        Kilogram
+                    </option>
+
+                    <option value="Litre">
+                        Litre
+                    </option>
+
+                    <option value="Crate">
+                        Crate
+                    </option>
+
+                    <option value="Box">
+                        Box
+                    </option>
+
+                    <option value="Pack">
+                        Pack
+                    </option>
+
+                    <option value="Other">
+                        Other
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- QUANTITY -->
+
+            <div class="form-group">
+
+                <label
+                    for="quantity"
+                    data-i18n="quantity"
+                >
+                    Quantity
+                </label>
+
+                <input
+                    type="number"
+                    id="quantity"
+                    min="0"
+                    step="0.01"
+                    placeholder="0"
+                >
+
+            </div>
+
+
+            <!-- PURCHASE PRICE -->
+
+            <div class="form-group">
+
+                <label
+                    for="price"
+                    data-i18n="purchasePriceUnit"
+                >
+                    Purchase Price / Unit (RWF)
+                </label>
+
+                <input
+                    type="number"
+                    id="price"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+
+            </div>
+
+
+            <!-- PAYMENT STATUS -->
+
+            <div class="form-group">
+
+                <label
+                    for="paymentStatus"
+                    data-i18n="paymentStatus"
+                >
+                    Payment Status
+                </label>
+
+                <select id="paymentStatus">
+
+                    <option
+                        value="paid"
+                        data-i18n="paid"
+                    >
+                        Paid
+                    </option>
+
+                    <option
+                        value="partial"
+                        data-i18n="partialPaid"
+                    >
+                        Partially Paid
+                    </option>
+
+                    <option
+                        value="credit"
+                        data-i18n="credit"
+                    >
+                        Credit
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- AMOUNT PAID -->
+
+            <div class="form-group">
+
+                <label
+                    for="amountPaid"
+                    data-i18n="amountPaid"
+                >
+                    Amount Paid (RWF)
+                </label>
+
+                <input
+                    type="number"
+                    id="amountPaid"
+                    min="0"
+                    step="1"
+                    placeholder="0"
+                >
+
+            </div>
+
+
+            <!-- NOTES -->
+
+            <div class="form-group full-width">
+
+                <label
+                    for="notes"
+                    data-i18n="notes"
+                >
+                    Notes
+                </label>
+
+                <textarea
+                    id="notes"
+                    placeholder="Optional notes..."
+                    data-i18n-placeholder="notesPlaceholder"
+                ></textarea>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SUMMARY
+        ================================================== -->
+
+        <div class="summary-box">
+
+            <div class="summary-row">
+
+                <span data-i18n="quantity">
+                    Quantity
+                </span>
+
+                <strong id="summaryQuantity">
+                    0
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span data-i18n="unitPrice">
+                    Unit Price
+                </span>
+
+                <strong id="summaryPrice">
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row total">
+
+                <span data-i18n="totalPurchase">
+                    Total Purchase
+                </span>
+
+                <strong id="summaryTotal">
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row">
+
+                <span data-i18n="amountPaid">
+                    Amount Paid
+                </span>
+
+                <strong id="summaryPaid">
+                    0 RWF
+                </strong>
+
+            </div>
+
+
+            <div class="summary-row debt">
+
+                <span data-i18n="supplierDebt">
+                    Supplier Debt
+                </span>
+
+                <strong id="summaryDebt">
+                    0 RWF
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+        ================================================== -->
+
+        <div class="button-row">
+
+            <button
+                type="button"
+                id="saveBtn"
+                class="btn-primary"
+            >
+                +
+                <span data-i18n="savePurchase">
+                    Save Purchase & Add to Stock
+                </span>
+            </button>
+
+
+            <button
+                type="button"
+                id="clearBtn"
+                class="btn-secondary"
+            >
+                <span data-i18n="clear">
+                    Clear
+                </span>
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PURCHASE HISTORY
+    ====================================================== -->
+
+    <section class="card">
+
+        <div class="section-header">
+
+            <div>
+
+                <h2 data-i18n="recentPurchases">
+                    Recent Purchases
+                </h2>
+
+                <p
+                    class="muted"
+                    data-i18n="recentPurchasesSubtitle"
+                >
+                    Latest stock purchases for your accessible branches.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="table-responsive">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th data-i18n="date">
+                            Date
+                        </th>
+
+                        <th data-i18n="branch">
+                            Branch
+                        </th>
+
+                        <th data-i18n="supplier">
+                            Supplier
+                        </th>
+
+                        <th data-i18n="product">
+                            Product
+                        </th>
+
+                        <th data-i18n="quantity">
+                            Quantity
+                        </th>
+
+                        <th data-i18n="total">
+                            Total
+                        </th>
+
+                        <th data-i18n="payment">
+                            Payment
+                        </th>
+
+                        <th data-i18n="debt">
+                            Debt
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="historyBody">
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            class="empty-state"
+                            data-i18n="loading"
+                        >
+                            Loading...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer class="site-footer">
+    Dream Land Motel System 2026
+</footer>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================== -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   CONSTANTS
+========================================================= */
+
+const KABUGA_ID =
+    "92f52581-efaa-4462-b807-24e7e00438eb";
+
+const BISENGA_ID =
+    "e1269a07-97b8-43b8-bf65-0d838212a0ac";
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+const state = {
+
+    profile: null,
+
+    products: [],
+
+    branches: [],
+
+    purchaseHistory: [],
+
+    saving: false
+
+};
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const translations = {
+
+    en: {
+
+        systemTitle:
+            "Business Control System",
+
+        backDashboard:
+            "Back to Dashboard",
+
+        stockInTitle:
+            "Stock In",
+
+        stockInSubtitle:
+            "Record purchased products and add them to stock.",
+
+        purchaseInformation:
+            "Purchase Information",
+
+        purchaseDate:
+            "Purchase Date",
+
+        branch:
+            "Branch",
+
+        supplierName:
+            "Supplier Name",
+
+        supplierPlaceholder:
+            "Supplier name",
+
+        invoiceReference:
+            "Invoice / Reference",
+
+        invoicePlaceholder:
+            "Invoice number",
+
+        product:
+            "Product",
+
+        selectProduct:
+            "Select Product",
+
+        unit:
+            "Unit",
+
+        selectUnit:
+            "Select Unit",
+
+        quantity:
+            "Quantity",
+
+        purchasePriceUnit:
+            "Purchase Price / Unit (RWF)",
+
+        paymentStatus:
+            "Payment Status",
+
+        paid:
+            "Paid",
+
+        partialPaid:
+            "Partially Paid",
+
+        credit:
+            "Credit",
+
+        amountPaid:
+            "Amount Paid (RWF)",
+
+        notes:
+            "Notes",
+
+        notesPlaceholder:
+            "Optional notes...",
+
+        unitPrice:
+            "Unit Price",
+
+        totalPurchase:
+            "Total Purchase",
+
+        supplierDebt:
+            "Supplier Debt",
+
+        savePurchase:
+            "Save Purchase & Add to Stock",
+
+        clear:
+            "Clear",
+
+        recentPurchases:
+            "Recent Purchases",
+
+        recentPurchasesSubtitle:
+            "Latest stock purchases for your accessible branches.",
+
+        date:
+            "Date",
+
+        supplier:
+            "Supplier",
+
+        total:
+            "Total",
+
+        payment:
+            "Payment",
+
+        debt:
+            "Debt",
+
+        loading:
+            "Loading...",
+
+        noPurchases:
+            "No purchases found.",
+
+        saving:
+            "Saving...",
+
+        purchaseSaved:
+            "Purchase saved successfully!",
+
+        saveFailed:
+            "Purchase failed.",
+
+        restricted:
+            "Access Restricted.",
+
+        branchRequired:
+            "Please select a branch.",
+
+        supplierRequired:
+            "Please enter supplier name.",
+
+        productRequired:
+            "Please select a product.",
+
+        unitRequired:
+            "Please select unit.",
+
+        quantityRequired:
+            "Quantity must be greater than zero.",
+
+        priceRequired:
+            "Purchase price must be greater than zero.",
+
+        paidTooMuch:
+            "Amount paid cannot be greater than total purchase.",
+
+        paidStatusError:
+            "A paid purchase must be fully paid.",
+
+        partialStatusError:
+            "Partial payment must be greater than zero and less than the total.",
+
+        creditStatusError:
+            "A credit purchase must have zero amount paid.",
+
+        errorLoading:
+            "Unable to load purchase history.",
+
+        admin:
+            "Admin",
+
+        manager:
+            "Manager",
+
+        cashier:
+            "Cashier"
+
+    },
+
+
+    rw: {
+
+        systemTitle:
+            "Sisitemu yo Kugenzura Ubucuruzi",
+
+        backDashboard:
+            "Subira kuri Dashboard",
+
+        stockInTitle:
+            "Kwinjiza Stock",
+
+        stockInSubtitle:
+            "Andika ibicuruzwa uranguriye ubishyire muri stock.",
+
+        purchaseInformation:
+            "Amakuru yo Kurangura",
+
+        purchaseDate:
+            "Itariki yo Kurangura",
+
+        branch:
+            "Branch",
+
+        supplierName:
+            "Izina ry'Umucuruzi",
+
+        supplierPlaceholder:
+            "Izina ry'umucuruzi",
+
+        invoiceReference:
+            "Invoice / Reference",
+
+        invoicePlaceholder:
+            "Nomero ya invoice",
+
+        product:
+            "Product",
+
+        selectProduct:
+            "Hitamo Product",
+
+        unit:
+            "Unit",
+
+        selectUnit:
+            "Hitamo Unit",
+
+        quantity:
+            "Umubare",
+
+        purchasePriceUnit:
+            "Igiciro cyo Kurangura / Unit (RWF)",
+
+        paymentStatus:
+            "Uko Yishyuwe",
+
+        paid:
+            "Yishyuwe",
+
+        partialPaid:
+            "Yishyuwe Igice",
+
+        credit:
+            "Umwenda",
+
+        amountPaid:
+            "Amafaranga Yishyuwe (RWF)",
+
+        notes:
+            "Notes",
+
+        notesPlaceholder:
+            "Andika ibisobanuro niba bihari...",
+
+        unitPrice:
+            "Igiciro kuri Unit",
+
+        totalPurchase:
+            "Amafaranga Yose",
+
+        supplierDebt:
+            "Umwenda w'Umucuruzi",
+
+        savePurchase:
+            "Bika Kurangura & Shyira muri Stock",
+
+        clear:
+            "Siba",
+
+        recentPurchases:
+            "Ibyaranguwe Vuba",
+
+        recentPurchasesSubtitle:
+            "Ibyaranguwe bya vuba kuri branches wemerewe kubona.",
+
+        date:
+            "Itariki",
+
+        supplier:
+            "Umucuruzi",
+
+        total:
+            "Yose",
+
+        payment:
+            "Kwishyura",
+
+        debt:
+            "Umwenda",
+
+        loading:
+            "Birimo gutegurwa...",
+
+        noPurchases:
+            "Nta byo kurangura byabonetse.",
+
+        saving:
+            "Birabikwa...",
+
+        purchaseSaved:
+            "Kurangura kwabitswe neza!",
+
+        saveFailed:
+            "Kurangura ntikwabitswe.",
+
+        restricted:
+            "Ntabwo wemerewe gukoresha iyi page.",
+
+        branchRequired:
+            "Hitamo branch.",
+
+        supplierRequired:
+            "Andika izina ry'umucuruzi.",
+
+        productRequired:
+            "Hitamo product.",
+
+        unitRequired:
+            "Hitamo unit.",
+
+        quantityRequired:
+            "Umubare ugomba kuba urenze zero.",
+
+        priceRequired:
+            "Igiciro cyo kurangura kigomba kuba kirenze zero.",
+
+        paidTooMuch:
+            "Amafaranga yishyuwe ntashobora kurenza amafaranga yose.",
+
+        paidStatusError:
+            "Iyo ari Paid, amafaranga yose agomba kuba yishyuwe.",
+
+        partialStatusError:
+            "Partial payment igomba kuba irenze zero ariko iri munsi y'amafaranga yose.",
+
+        creditStatusError:
+            "Credit igomba kuba nta mafaranga yishyuwe.",
+
+        errorLoading:
+            "Ibyaranguwe ntibishoboye gufunguka.",
+
+        admin:
+            "Admin",
+
+        manager:
+            "Manager",
+
+        cashier:
+            "Cashier"
+
+    }
+
+};
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function getLanguage() {
+
+    if (
+        window.DreamLandI18n &&
+        typeof window.DreamLandI18n.getLanguage ===
+            "function"
+    ) {
+
+        try {
+
+            const language =
+                window.DreamLandI18n.getLanguage();
+
+            if (
+                language === "rw" ||
+                language === "en"
+            ) {
+
+                return language;
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Language read failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    return (
+        localStorage.getItem(
+            "dreamland_language"
+        ) === "rw"
+            ? "rw"
+            : "en"
+    );
+
+}
+
+
+function t(key) {
+
+    const language =
+        getLanguage();
+
+
+    return (
+        translations[language]?.[key] ??
+        translations.en[key] ??
+        key
+    );
+
+}
+
+
+/* =========================================================
+   FORMATTING
+========================================================= */
+
+function formatNumber(value) {
+
+    return new Intl.NumberFormat(
+        "en-US",
+        {
+            maximumFractionDigits: 2
+        }
+    ).format(
+        Number(value) || 0
+    );
+
+}
+
+
+function formatMoney(value) {
+
+    return (
+        formatNumber(value) +
+        " RWF"
+    );
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value) {
+
+    return String(
+        value ?? ""
+    )
+    .replaceAll(
+        "&",
+        "&amp;"
+    )
+    .replaceAll(
+        "<",
+        "&lt;"
+    )
+    .replaceAll(
+        ">",
+        "&gt;"
+    )
+    .replaceAll(
+        '"',
+        "&quot;"
+    )
+    .replaceAll(
+        "'",
+        "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   ROLE TEXT
+========================================================= */
+
+function getRoleText(role) {
+
+    return (
+        translations[
+            getLanguage()
+        ]?.[role]
+        ||
+        translations.en[role]
+        ||
+        role
+        ||
+        "-"
+    );
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function setDefaultDate() {
+
+    const input =
+        document.getElementById(
+            "purchaseDate"
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    const offset =
+        now.getTimezoneOffset();
+
+
+    const localDate =
+        new Date(
+            now.getTime()
+            -
+            offset * 60000
+        );
+
+
+    input.value =
+        localDate
+            .toISOString()
+            .slice(0, 16);
+
+}
+
+
+/* =========================================================
+   APPLY TRANSLATIONS
+========================================================= */
+
+function applyPageTranslations() {
+
+    if (
+        window.DreamLandI18n &&
+        typeof window.DreamLandI18n.applyTranslations ===
+            "function"
+    ) {
+
+        try {
+
+            window.DreamLandI18n.applyTranslations();
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Shared i18n failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    document
+        .querySelectorAll(
+            "[data-i18n]"
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18n;
+
+
+            const value =
+                t(key);
+
+
+            if (value) {
+
+                element.textContent =
+                    value;
+
+            }
+
+        });
+
+
+    document
+        .querySelectorAll(
+            "[data-i18n-placeholder]"
+        )
+        .forEach(element => {
+
+            const key =
+                element.dataset.i18nPlaceholder;
+
+
+            element.placeholder =
+                t(key);
+
+        });
+
+
+    renderBranchOptions();
+
+    renderProductOptions();
+
+    renderHistory();
+
+    updateSummary();
+
+
+    if (state.profile) {
+
+        const roleElement =
+            document.getElementById(
+                "userRole"
+            );
+
+
+        if (roleElement) {
+
+            roleElement.textContent =
+                getRoleText(
+                    state.profile.role
+                );
+
+        }
+
+    }
+
+}
+
+
+/* =========================================================
+   AUTHENTICATION
+========================================================= */
+
+async function initializePage() {
+
+    try {
+
+        if (
+            !window.DreamLandAuth ||
+            typeof window.DreamLandAuth.requireAuth !==
+                "function"
+        ) {
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        /*
+         * IMPORTANT:
+         *
+         * requireAuth() returns:
+         *
+         * {
+         *     user,
+         *     profile,
+         *     error
+         * }
+         */
+
+        const authResult =
+            await window.DreamLandAuth.requireAuth();
+
+
+        if (!authResult) {
+
+            return;
+
+        }
+
+
+        state.profile =
+            authResult.profile;
+
+
+        if (!state.profile) {
+
+            console.error(
+                "Authenticated user has no valid profile."
+            );
+
+
+            window.location.href =
+                "index.html";
+
+            return;
+
+        }
+
+
+        const role =
+            String(
+                state.profile.role || ""
+            )
+                .trim()
+                .toLowerCase();
+
+
+        /*
+         * Stock In is available to:
+         *
+         * Admin
+         * Manager
+         *
+         * Cashier is intentionally excluded.
+         */
+
+        if (
+            ![
+                "admin",
+                "manager"
+            ].includes(
+                role
+            )
+        ) {
+
+            console.warn(
+                "STOCK IN ACCESS DENIED:",
+                role
+            );
+
+
+            if (
+                typeof window.DreamLandAuth
+                    .showAccessRestricted ===
+                    "function"
+            ) {
+
+                window.DreamLandAuth
+                    .showAccessRestricted();
+
+            }
+            else {
+
+                alert(
+                    t("restricted")
+                );
+
+
+                window.location.href =
+                    "dashboard.html";
+
+            }
+
+
+            return;
+
+        }
+
+
+        const roleElement =
+            document.getElementById(
+                "userRole"
+            );
+
+
+        if (roleElement) {
+
+            roleElement.textContent =
+                getRoleText(
+                    role
+                );
+
+        }
+
+
+        setDefaultDate();
+
+
+        await loadBranches();
+
+        await loadProducts();
+
+        await loadPurchaseHistory();
+
+
+        applyPageTranslations();
+
+
+        updateSummary();
+
+
+        console.log(
+            "STOCK IN PAGE READY"
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "STOCK IN INITIALIZATION ERROR:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD BRANCHES
+========================================================= */
+
+async function loadBranches() {
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("branches")
+            .select(
+                "id,name,active"
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "BRANCH LOAD ERROR:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    state.branches =
+        data || [];
+
+
+    renderBranchOptions();
+
+}
+
+
+/* =========================================================
+   RENDER BRANCHES
+========================================================= */
+
+function renderBranchOptions() {
+
+    const select =
+        document.getElementById(
+            "branch"
+        );
+
+
+    if (!select) {
+        return;
+    }
+
+
+    select.innerHTML = "";
+
+
+    const role =
+        String(
+            state.profile?.role || ""
+        )
+            .trim()
+            .toLowerCase();
+
+
+    /*
+     * ADMIN
+     */
+
+    if (
+        role === "admin"
+    ) {
+
+        const placeholder =
+            document.createElement(
+                "option"
+            );
+
+
+        placeholder.value =
+            "";
+
+
+        placeholder.textContent =
+            t("branch");
+
+
+        select.appendChild(
+            placeholder
+        );
+
+
+        state.branches.forEach(
+            branch => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+
+                option.value =
+                    branch.id;
+
+
+                option.textContent =
+                    branch.name;
+
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        select.disabled =
+            false;
+
+
+        return;
+
+    }
+
+
+    /*
+     * MANAGER
+     */
+
+    const ownBranch =
+        state.branches.find(
+            branch =>
+                branch.id ===
+                state.profile?.branch_id
+        );
+
+
+    if (!ownBranch) {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+
+        option.value =
+            "";
+
+
+        option.textContent =
+            t("branch");
+
+
+        select.appendChild(
+            option
+        );
+
+
+        select.disabled =
+            true;
+
+
+        return;
+
+    }
+
+
+    const option =
+        document.createElement(
+            "option"
+        );
+
+
+    option.value =
+        ownBranch.id;
+
+
+    option.textContent =
+        ownBranch.name;
+
+
+    select.appendChild(
+        option
+    );
+
+
+    select.value =
+        ownBranch.id;
+
+
+    select.disabled =
+        true;
+
+}
+
+
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("products")
+            .select(`
+                id,
+                name,
+                unit,
+                purchase_price,
+                active
+            `)
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name",
+                {
+                    ascending: true
+                }
+            );
+
+
+    if (error) {
+
+        console.error(
+            "PRODUCT LOAD ERROR:",
+            error
+        );
+
+        throw error;
+
+    }
+
+
+    state.products =
+        data || [];
+
+
+    renderProductOptions();
+
+}
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProductOptions() {
+
+    const select =
+        document.getElementById(
+            "product"
+        );
+
+
+    if (!select) {
+        return;
+    }
+
+
+    const currentValue =
+        select.value;
+
+
+    select.innerHTML = `
+        <option value="">
+            ${escapeHtml(
+                t("selectProduct")
+            )}
+        </option>
+    `;
+
+
+    state.products.forEach(
+        product => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+
+            option.value =
+                product.id;
+
+
+            option.textContent =
+                product.name;
+
+
+            option.dataset.unit =
+                product.unit || "";
+
+
+            option.dataset.price =
+                product.purchase_price || 0;
+
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        state.products.some(
+            product =>
+                product.id ===
+                currentValue
+        )
+    ) {
+
+        select.value =
+            currentValue;
+
+    }
+
+}
+
+
+/* =========================================================
+   PRODUCT CHANGE
+========================================================= */
+
+document
+    .getElementById(
+        "product"
+    )
+    .addEventListener(
+        "change",
+        function () {
+
+            const option =
+                this.options[
+                    this.selectedIndex
+                ];
+
+
+            if (
+                !option ||
+                !option.value
+            ) {
+
+                updateSummary();
+
+                return;
+
+            }
+
+
+            const productUnit =
+                option.dataset.unit ||
+                "";
+
+
+            const productPrice =
+                Number(
+                    option.dataset.price
+                ) || 0;
+
+
+            if (productUnit) {
+
+                const unitSelect =
+                    document.getElementById(
+                        "unit"
+                    );
+
+
+                let unitOption =
+                    Array.from(
+                        unitSelect.options
+                    )
+                    .find(
+                        item =>
+                            item.value ===
+                            productUnit
+                    );
+
+
+                if (!unitOption) {
+
+                    unitOption =
+                        document.createElement(
+                            "option"
+                        );
+
+
+                    unitOption.value =
+                        productUnit;
+
+
+                    unitOption.textContent =
+                        productUnit;
+
+
+                    unitSelect.appendChild(
+                        unitOption
+                    );
+
+                }
+
+
+                unitSelect.value =
+                    productUnit;
+
+            }
+
+
+            if (
+                productPrice > 0
+            ) {
+
+                document.getElementById(
+                    "price"
+                ).value =
+                    productPrice;
+
+            }
+
+
+            updateSummary();
+
+        }
+    );
+
+
+/* =========================================================
+   SUMMARY EVENTS
+========================================================= */
+
+document
+    .getElementById(
+        "quantity"
+    )
+    .addEventListener(
+        "input",
+        updateSummary
+    );
+
+
+document
+    .getElementById(
+        "price"
+    )
+    .addEventListener(
+        "input",
+        updateSummary
+    );
+
+
+document
+    .getElementById(
+        "amountPaid"
+    )
+    .addEventListener(
+        "input",
+        updateSummary
+    );
+
+
+document
+    .getElementById(
+        "paymentStatus"
+    )
+    .addEventListener(
+        "change",
+        updateSummary
+    );
+
+
+/* =========================================================
+   UPDATE SUMMARY
+========================================================= */
+
+function updateSummary() {
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            )?.value
+        ) || 0;
+
+
+    const price =
+        Number(
+            document.getElementById(
+                "price"
+            )?.value
+        ) || 0;
+
+
+    const paid =
+        Number(
+            document.getElementById(
+                "amountPaid"
+            )?.value
+        ) || 0;
+
+
+    const total =
+        quantity * price;
+
+
+    const debt =
+        Math.max(
+            0,
+            total - paid
+        );
+
+
+    const summaryQuantity =
+        document.getElementById(
+            "summaryQuantity"
+        );
+
+
+    const summaryPrice =
+        document.getElementById(
+            "summaryPrice"
+        );
+
+
+    const summaryTotal =
+        document.getElementById(
+            "summaryTotal"
+        );
+
+
+    const summaryPaid =
+        document.getElementById(
+            "summaryPaid"
+        );
+
+
+    const summaryDebt =
+        document.getElementById(
+            "summaryDebt"
+        );
+
+
+    if (summaryQuantity) {
+
+        summaryQuantity.textContent =
+            formatNumber(
+                quantity
+            );
+
+    }
+
+
+    if (summaryPrice) {
+
+        summaryPrice.textContent =
+            formatMoney(
+                price
+            );
+
+    }
+
+
+    if (summaryTotal) {
+
+        summaryTotal.textContent =
+            formatMoney(
+                total
+            );
+
+    }
+
+
+    if (summaryPaid) {
+
+        summaryPaid.textContent =
+            formatMoney(
+                paid
+            );
+
+    }
+
+
+    if (summaryDebt) {
+
+        summaryDebt.textContent =
+            formatMoney(
+                debt
+            );
+
+    }
+
+}
+
+
+/* =========================================================
+   VALIDATE FORM
+========================================================= */
+
+function validateForm() {
+
+    const purchaseDate =
+        document.getElementById(
+            "purchaseDate"
+        ).value;
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const supplier =
+        document.getElementById(
+            "supplier"
+        ).value
+            .trim();
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const unit =
+        document.getElementById(
+            "unit"
+        ).value;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        ) || 0;
+
+
+    const price =
+        Number(
+            document.getElementById(
+                "price"
+            ).value
+        ) || 0;
+
+
+    const paymentStatus =
+        document.getElementById(
+            "paymentStatus"
+        ).value;
+
+
+    const amountPaid =
+        Number(
+            document.getElementById(
+                "amountPaid"
+            ).value
+        ) || 0;
+
+
+    const total =
+        quantity * price;
+
+
+    if (!purchaseDate) {
+
+        return t(
+            "purchaseDate"
+        );
+
+    }
+
+
+    if (!branchId) {
+
+        return t(
+            "branchRequired"
+        );
+
+    }
+
+
+    if (!supplier) {
+
+        return t(
+            "supplierRequired"
+        );
+
+    }
+
+
+    if (!productId) {
+
+        return t(
+            "productRequired"
+        );
+
+    }
+
+
+    if (!unit) {
+
+        return t(
+            "unitRequired"
+        );
+
+    }
+
+
+    if (quantity <= 0) {
+
+        return t(
+            "quantityRequired"
+        );
+
+    }
+
+
+    if (price <= 0) {
+
+        return t(
+            "priceRequired"
+        );
+
+    }
+
+
+    if (amountPaid > total) {
+
+        return t(
+            "paidTooMuch"
+        );
+
+    }
+
+
+    if (
+        paymentStatus === "paid" &&
+        amountPaid !== total
+    ) {
+
+        return t(
+            "paidStatusError"
+        );
+
+    }
+
+
+    if (
+        paymentStatus === "partial" &&
+        (
+            amountPaid <= 0 ||
+            amountPaid >= total
+        )
+    ) {
+
+        return t(
+            "partialStatusError"
+        );
+
+    }
+
+
+    if (
+        paymentStatus === "credit" &&
+        amountPaid !== 0
+    ) {
+
+        return t(
+            "creditStatusError"
+        );
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   SAVE PURCHASE
+========================================================= */
+
+async function savePurchase() {
+
+    if (
+        state.saving
+    ) {
+
+        return;
+
+    }
+
+
+    const validationError =
+        validateForm();
+
+
+    if (validationError) {
+
+        alert(
+            validationError
+        );
+
+        return;
+
+    }
+
+
+    const saveBtn =
+        document.getElementById(
+            "saveBtn"
+        );
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const supplier =
+        document.getElementById(
+            "supplier"
+        ).value
+            .trim();
+
+
+    const invoice =
+        document.getElementById(
+            "invoice"
+        ).value
+            .trim();
+
+
+    const purchaseDate =
+        document.getElementById(
+            "purchaseDate"
+        ).value;
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const unit =
+        document.getElementById(
+            "unit"
+        ).value;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        );
+
+
+    const purchasePrice =
+        Number(
+            document.getElementById(
+                "price"
+            ).value
+        );
+
+
+    const paymentStatus =
+        document.getElementById(
+            "paymentStatus"
+        ).value;
+
+
+    const amountPaid =
+        Number(
+            document.getElementById(
+                "amountPaid"
+            ).value
+        ) || 0;
+
+
+    const notes =
+        document.getElementById(
+            "notes"
+        ).value
+            .trim();
+
+
+    state.saving =
+        true;
+
+
+    saveBtn.disabled =
+        true;
+
+
+    saveBtn.textContent =
+        t("saving");
+
+
+    try {
+
+        /*
+         * Atomic transaction.
+         *
+         * Database function:
+         *
+         * create_stock_in_transaction(
+         *     branch,
+         *     supplier,
+         *     invoice,
+         *     date,
+         *     product,
+         *     quantity,
+         *     unit,
+         *     price,
+         *     payment status,
+         *     amount paid,
+         *     notes
+         * )
+         */
+
+        const {
+            data,
+            error
+        } =
+            await db.rpc(
+                "create_stock_in_transaction",
+                {
+                    p_branch_id:
+                        branchId,
+
+                    p_supplier_name:
+                        supplier,
+
+                    p_invoice_reference:
+                        invoice || null,
+
+                    p_purchase_date:
+                        new Date(
+                            purchaseDate
+                        ).toISOString(),
+
+                    p_product_id:
+                        productId,
+
+                    p_quantity:
+                        quantity,
+
+                    p_unit:
+                        unit,
+
+                    p_purchase_price:
+                        purchasePrice,
+
+                    p_payment_status:
+                        paymentStatus,
+
+                    p_amount_paid:
+                        amountPaid,
+
+                    p_notes:
+                        notes || null
+
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                "CREATE STOCK IN ERROR:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        console.log(
+            "STOCK IN CREATED:",
+            data
+        );
+
+
+        alert(
+            "✅ " +
+            t("purchaseSaved")
+        );
+
+
+        clearForm();
+
+
+        await loadPurchaseHistory();
+
+    }
+    catch (error) {
+
+        console.error(
+            "STOCK IN SAVE FAILED:",
+            error
+        );
+
+
+        alert(
+            "❌ " +
+            t("saveFailed")
+            +
+            "\n\n"
+            +
+            (
+                error?.message ||
+                "Unknown database error."
+            )
+        );
+
+    }
+    finally {
+
+        state.saving =
+            false;
+
+
+        saveBtn.disabled =
+            false;
+
+
+        saveBtn.innerHTML =
+            `
+            +
+            <span data-i18n="savePurchase">
+                ${escapeHtml(
+                    t("savePurchase")
+                )}
+            </span>
+            `;
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR FORM
+========================================================= */
+
+function clearForm() {
+
+    document.getElementById(
+        "supplier"
+    ).value = "";
+
+
+    document.getElementById(
+        "invoice"
+    ).value = "";
+
+
+    document.getElementById(
+        "product"
+    ).value = "";
+
+
+    document.getElementById(
+        "unit"
+    ).value = "";
+
+
+    document.getElementById(
+        "quantity"
+    ).value = "";
+
+
+    document.getElementById(
+        "price"
+    ).value = "";
+
+
+    document.getElementById(
+        "amountPaid"
+    ).value = "";
+
+
+    document.getElementById(
+        "notes"
+    ).value = "";
+
+
+    document.getElementById(
+        "paymentStatus"
+    ).value =
+        "paid";
+
+
+    setDefaultDate();
+
+
+    updateSummary();
+
+}
+
+
+/* =========================================================
+   LOAD PURCHASE HISTORY
+========================================================= */
+
+async function loadPurchaseHistory() {
+
+    const tbody =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = `
+        <tr>
+            <td
+                colspan="8"
+                class="empty-state"
+            >
+                ${escapeHtml(
+                    t("loading")
+                )}
+            </td>
+        </tr>
+    `;
+
+
+    try {
+
+        /*
+         * RLS controls which purchases
+         * the current user can see.
+         */
+
+        const {
+            data,
+            error
+        } =
+            await db
+                .from("purchases")
+                .select(`
+                    id,
+                    branch_id,
+                    supplier_name,
+                    invoice_reference,
+                    purchase_date,
+                    payment_status,
+                    amount_paid,
+                    total_amount,
+
+                    branches (
+                        name
+                    ),
+
+                    purchase_items (
+                        quantity,
+                        unit,
+
+                        products (
+                            name
+                        )
+                    ),
+
+                    supplier_debts (
+                        balance
+                    )
+                `)
+                .order(
+                    "purchase_date",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(30);
+
+
+        if (error) {
+
+            console.error(
+                "PURCHASE HISTORY ERROR:",
+                error
+            );
+
+            throw error;
+
+        }
+
+
+        state.purchaseHistory =
+            data || [];
+
+
+        renderHistory();
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOAD PURCHASE HISTORY ERROR:",
+            error
+        );
+
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty-state"
+                >
+                    ${escapeHtml(
+                        t("errorLoading")
+                    )}
+                </td>
+            </tr>
+        `;
+
+    }
+
+}
+
+
+/* =========================================================
+   RENDER HISTORY
+========================================================= */
+
+function renderHistory() {
+
+    const tbody =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    if (
+        !state.purchaseHistory.length
+    ) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td
+                    colspan="8"
+                    class="empty-state"
+                >
+                    ${escapeHtml(
+                        t("noPurchases")
+                    )}
+                </td>
+            </tr>
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        state.purchaseHistory
+            .map(
+                purchase => {
+
+                    const items =
+                        purchase.purchase_items ||
+                        [];
+
+
+                    const firstItem =
+                        items[0] ||
+                        null;
+
+
+                    const productName =
+                        firstItem
+                            ?.products
+                            ?.name
+                        ||
+                        "-";
+
+
+                    const quantity =
+                        Number(
+                            firstItem?.quantity
+                        ) || 0;
+
+
+                    const unit =
+                        firstItem?.unit ||
+                        "";
+
+
+                    const supplierDebts =
+                        purchase.supplier_debts ||
+                        [];
+
+
+                    const debt =
+                        supplierDebts.reduce(
+                            (
+                                total,
+                                item
+                            ) =>
+                                total +
+                                (
+                                    Number(
+                                        item.balance
+                                    ) || 0
+                                ),
+                            0
+                        );
+
+
+                    const date =
+                        purchase.purchase_date
+                            ?
+                            new Date(
+                                purchase.purchase_date
+                            ).toLocaleString(
+                                "en-GB"
+                            )
+                            :
+                            "-";
+
+
+                    const paymentStatus =
+                        String(
+                            purchase.payment_status ||
+                            ""
+                        )
+                            .trim()
+                            .toLowerCase();
+
+
+                    const paymentLabel =
+                        paymentStatus
+                            .toUpperCase();
+
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    date
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    purchase
+                                        .branches
+                                        ?.name ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    purchase
+                                        .supplier_name ||
+                                    "-"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    productName
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatNumber(
+                                        quantity
+                                    )
+                                )}
+                                ${unit
+                                    ? " " +
+                                      escapeHtml(
+                                          unit
+                                      )
+                                    : ""}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatMoney(
+                                        purchase
+                                            .total_amount
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                <span
+                                    class="${
+                                        paymentStatus ===
+                                        "paid"
+                                            ?
+                                            "status-success"
+                                            :
+                                            "status-danger"
+                                    }"
+                                >
+                                    ${escapeHtml(
+                                        paymentLabel
+                                    )}
+                                </span>
+                            </td>
+
+                            <td>
+                                <span
+                                    class="${
+                                        debt > 0
+                                            ?
+                                            "status-danger"
+                                            :
+                                            "status-success"
+                                    }"
+                                >
+                                    ${escapeHtml(
+                                        formatMoney(
+                                            debt
+                                        )
+                                    )}
+                                </span>
+                            </td>
+
+                        </tr>
+                    `;
+
+                }
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+document
+    .getElementById(
+        "logoutBtn"
+    )
+    .addEventListener(
+        "click",
+        async () => {
+
+            try {
+
+                if (
+                    window.DreamLandAuth &&
+                    typeof window.DreamLandAuth.signOut ===
+                        "function"
+                ) {
+
+                    await window.DreamLandAuth
+                        .signOut();
+
+                    return;
+
+                }
+
+
+                await db.auth.signOut();
+
+
+                window.location.href =
+                    "index.html";
+
+            }
+            catch (error) {
+
+                console.error(
+                    "LOGOUT ERROR:",
+                    error
+                );
+
+
+                window.location.href =
+                    "index.html";
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   SAVE BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "saveBtn"
+    )
+    .addEventListener(
+        "click",
+        savePurchase
+    );
+
+
+/* =========================================================
+   CLEAR BUTTON
+========================================================= */
+
+document
+    .getElementById(
+        "clearBtn"
+    )
+    .addEventListener(
+        "click",
+        clearForm
+    );
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+document.addEventListener(
+    "click",
+    async event => {
+
+        const button =
+            event.target.closest(
+                "[data-language]"
+            );
+
+
+        if (!button) {
+            return;
+        }
+
+
+        const language =
+            button.dataset.language;
+
+
+        if (
+            language !== "en" &&
+            language !== "rw"
+        ) {
+
+            return;
+
+        }
+
+
+        try {
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n.setLanguage ===
+                    "function"
+            ) {
+
+                await window.DreamLandI18n
+                    .setLanguage(
+                        language
+                    );
+
+            }
+            else {
+
+                localStorage.setItem(
+                    "dreamland_language",
+                    language
+                );
+
+            }
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Language change failed:",
+                error
+            );
+
+
+            localStorage.setItem(
+                "dreamland_language",
+                language
+            );
+
+        }
+
+
+        applyPageTranslations();
+
+    }
+);
+
+
+/* =========================================================
+   START
+========================================================= */
+
+initializePage();
+
+</script>
+
+</body>
+</html>

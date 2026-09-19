@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="Dream Land Motel secure password recovery"
+    >
+
+    <meta
+        name="theme-color"
+        content="#14532d"
+    >
+
+    <title>
+        Dream Land Motel | Password Recovery
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body class="auth-page recovery-page">
+
+<main class="auth-card">
+
+    <!-- =====================================================
+         HEADER
+    ====================================================== -->
+
+    <section class="auth-header">
+
+        <img
+            class="auth-logo"
+            src="images/logo1.png"
+            alt="Dream Land Motel Logo"
+            onerror="this.style.display='none'"
+        >
+
+        <h1>
+            Dream Land Motel
+        </h1>
+
+        <p
+            id="subtitle"
+            data-i18n="securePasswordRecovery"
+        >
+            Secure Password Recovery
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENT
+    ====================================================== -->
+
+    <section class="auth-content">
+
+        <!-- LANGUAGE -->
+
+        <div class="auth-language-row">
+
+            <button
+                type="button"
+                class="language-btn"
+                id="languageBtn"
+                data-language
+                aria-label="Change language"
+            >
+                Kinyarwanda
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             RECOVERY FORM
+        ================================================== -->
+
+        <form
+            id="recoveryForm"
+            novalidate
+        >
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label
+                    for="username"
+                    id="usernameLabel"
+                >
+                    Username
+                </label>
+
+                <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Enter your username"
+                    maxlength="100"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                >
+
+            </div>
+
+
+            <!-- RECOVERY CODE -->
+
+            <div class="form-group">
+
+                <label
+                    for="code"
+                    id="codeLabel"
+                >
+                    Recovery Code
+                </label>
+
+                <input
+                    id="code"
+                    name="code"
+                    type="text"
+                    autocomplete="one-time-code"
+                    placeholder="Enter your recovery code"
+                    maxlength="64"
+                    spellcheck="false"
+                    autocapitalize="characters"
+                    required
+                >
+
+                <p
+                    class="form-hint"
+                    id="hint"
+                >
+                    Enter the one-time recovery code provided
+                    by the system administrator.
+                    The code expires after 15 minutes
+                    and can only be used once.
+                </p>
+
+            </div>
+
+
+            <!-- SUBMIT -->
+
+            <button
+                type="submit"
+                class="auth-submit-btn"
+                id="submitBtn"
+            >
+                Continue
+            </button>
+
+
+            <!-- MESSAGE -->
+
+            <div
+                id="message"
+                class="auth-message"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+        </form>
+
+
+        <!-- =================================================
+             BACK TO LOGIN
+        ================================================== -->
+
+        <div class="auth-back-container">
+
+            <a
+                href="index.html"
+                class="auth-back-link"
+                id="backLogin"
+            >
+                ← Back to Login
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+    ====================================================== -->
+
+    <footer class="auth-footer">
+
+        Dream Land Motel • Secure Account Recovery
+
+    </footer>
+
+</main>
+
+
+<!-- =========================================================
+     SUPABASE
+========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+
+<script src="i18n.js"></script>
+
+
+<script>
+"use strict";
+
+
+/*
+============================================================
+DREAM LAND MOTEL
+PASSWORD RECOVERY
+============================================================
+
+This page is PUBLIC.
+
+It does NOT require an authenticated Supabase session.
+
+Flow:
+
+index.html
+    ↓
+recovery.html
+    ↓
+direct-password-recovery Edge Function
+    ↓
+Supabase recovery action link
+    ↓
+update-password.html
+*/
+
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+        /*
+        ========================================================
+        ELEMENTS
+        ========================================================
+        */
+
+        const form =
+            document.getElementById(
+                "recoveryForm"
+            );
+
+        const usernameInput =
+            document.getElementById(
+                "username"
+            );
+
+        const codeInput =
+            document.getElementById(
+                "code"
+            );
+
+        const submitBtn =
+            document.getElementById(
+                "submitBtn"
+            );
+
+        const message =
+            document.getElementById(
+                "message"
+            );
+
+        const languageBtn =
+            document.getElementById(
+                "languageBtn"
+            );
+
+        const subtitle =
+            document.getElementById(
+                "subtitle"
+            );
+
+        const usernameLabel =
+            document.getElementById(
+                "usernameLabel"
+            );
+
+        const codeLabel =
+            document.getElementById(
+                "codeLabel"
+            );
+
+        const hint =
+            document.getElementById(
+                "hint"
+            );
+
+        const backLogin =
+            document.getElementById(
+                "backLogin"
+            );
+
+
+        /*
+        ========================================================
+        EDGE FUNCTION
+        ========================================================
+        */
+
+        const FUNCTION_URL =
+            `${SUPABASE_URL}/functions/v1/direct-password-recovery`;
+
+
+        /*
+        ========================================================
+        TRANSLATIONS
+        ========================================================
+        */
+
+        const fallbackTranslations = {
+
+            en: {
+
+                securePasswordRecovery:
+                    "Secure Password Recovery",
+
+                username:
+                    "Username",
+
+                recoveryCode:
+                    "Recovery Code",
+
+                enterUsername:
+                    "Enter your username",
+
+                enterRecoveryCode:
+                    "Enter your recovery code",
+
+                recoveryHint:
+                    "Enter the one-time recovery code provided by the system administrator. The code expires after 15 minutes and can only be used once.",
+
+                continue:
+                    "Continue",
+
+                verifying:
+                    "Verifying...",
+
+                backToLogin:
+                    "← Back to Login",
+
+                passwordRecoveryFailed:
+                    "Recovery failed. Please check your username and recovery code."
+
+            },
+
+
+            rw: {
+
+                securePasswordRecovery:
+                    "Gusubizamo ijambo ry'ibanga",
+
+                username:
+                    "Username",
+
+                recoveryCode:
+                    "Recovery Code",
+
+                enterUsername:
+                    "Andika username yawe",
+
+                enterRecoveryCode:
+                    "Andika recovery code",
+
+                recoveryHint:
+                    "Andika recovery code wahawe n'umuyobozi wa system. Code irangira nyuma y'iminota 15 kandi ikoreshwa inshuro imwe gusa.",
+
+                continue:
+                    "Komeza",
+
+                verifying:
+                    "Birimo kugenzurwa...",
+
+                backToLogin:
+                    "← Subira kuri Login",
+
+                passwordRecoveryFailed:
+                    "Recovery yananiwe. Reba username na recovery code."
+
+            }
+
+        };
+
+
+        /*
+        ========================================================
+        LANGUAGE HELPERS
+        ========================================================
+        */
+
+        function getLanguage() {
+
+            if (
+                window.DreamLandI18n &&
+                typeof
+                    window.DreamLandI18n.getLanguage
+                    === "function"
+            ) {
+
+                return
+                    window.DreamLandI18n.getLanguage();
+
+            }
+
+
+            const stored =
+                localStorage.getItem(
+                    "dreamland_language"
+                );
+
+
+            return stored === "rw"
+                ? "rw"
+                : "en";
+
+        }
+
+
+        function getTranslation(
+            key
+        ) {
+
+            /*
+             * First use shared i18n if available.
+             */
+
+            if (
+                window.DreamLandI18n &&
+                typeof
+                    window.DreamLandI18n.t
+                    === "function"
+            ) {
+
+                const shared =
+                    window.DreamLandI18n.t(
+                        key
+                    );
+
+                if (
+                    shared &&
+                    shared !== key
+                ) {
+
+                    return shared;
+
+                }
+
+            }
+
+
+            /*
+             * Fallback for keys that may not yet
+             * exist in the shared translation file.
+             */
+
+            const language =
+                getLanguage();
+
+
+            return (
+                fallbackTranslations
+                    [language]?.[key]
+                ||
+                fallbackTranslations
+                    .en?.[key]
+                ||
+                key
+            );
+
+        }
+
+
+        /*
+        ========================================================
+        UPDATE PAGE LANGUAGE
+        ========================================================
+        */
+
+        function updateLanguage() {
+
+            const language =
+                getLanguage();
+
+
+            document.documentElement.lang =
+                language;
+
+
+            subtitle.textContent =
+                getTranslation(
+                    "securePasswordRecovery"
+                );
+
+
+            usernameLabel.textContent =
+                getTranslation(
+                    "username"
+                );
+
+
+            codeLabel.textContent =
+                getTranslation(
+                    "recoveryCode"
+                );
+
+
+            usernameInput.placeholder =
+                getTranslation(
+                    "enterUsername"
+                );
+
+
+            codeInput.placeholder =
+                getTranslation(
+                    "enterRecoveryCode"
+                );
+
+
+            hint.textContent =
+                getTranslation(
+                    "recoveryHint"
+                );
+
+
+            backLogin.textContent =
+                getTranslation(
+                    "backToLogin"
+                );
+
+
+            if (
+                !submitBtn.disabled
+            ) {
+
+                submitBtn.textContent =
+                    getTranslation(
+                        "continue"
+                    );
+
+            }
+
+
+            /*
+             * The shared i18n system normally controls
+             * the language button text.
+             */
+
+            if (
+                window.DreamLandI18n &&
+                typeof
+                    window.DreamLandI18n
+                        .updateLanguageButtons
+                    === "function"
+            ) {
+
+                window.DreamLandI18n
+                    .updateLanguageButtons();
+
+            }
+            else {
+
+                languageBtn.textContent =
+                    language === "rw"
+                        ? "English"
+                        : "Kinyarwanda";
+
+            }
+
+        }
+
+
+        /*
+        ========================================================
+        LANGUAGE BUTTON
+        ========================================================
+        */
+
+        /*
+         * i18n.js owns the [data-language] click handling.
+         *
+         * We only keep this fallback for safety in case
+         * the shared file is not available.
+         */
+
+        if (
+            !window.DreamLandI18n
+        ) {
+
+            languageBtn.addEventListener(
+                "click",
+                function () {
+
+                    const current =
+                        getLanguage();
+
+                    const next =
+                        current === "en"
+                            ? "rw"
+                            : "en";
+
+                    localStorage.setItem(
+                        "dreamland_language",
+                        next
+                    );
+
+                    updateLanguage();
+
+                }
+            );
+
+        }
+
+
+        /*
+        ========================================================
+        MESSAGE
+        ========================================================
+        */
+
+        function showMessage(
+            text,
+            type
+        ) {
+
+            message.textContent =
+                text;
+
+            message.className =
+                `auth-message ${type}`;
+
+        }
+
+
+        function clearMessage() {
+
+            message.textContent =
+                "";
+
+            message.className =
+                "auth-message";
+
+        }
+
+
+        /*
+        ========================================================
+        LOADING
+        ========================================================
+        */
+
+        function setLoading(
+            loading
+        ) {
+
+            submitBtn.disabled =
+                loading;
+
+
+            if (loading) {
+
+                submitBtn.textContent =
+                    getTranslation(
+                        "verifying"
+                    );
+
+            }
+            else {
+
+                submitBtn.textContent =
+                    getTranslation(
+                        "continue"
+                    );
+
+            }
+
+        }
+
+
+        /*
+        ========================================================
+        NORMALIZE RECOVERY CODE
+        ========================================================
+        */
+
+        codeInput.addEventListener(
+            "input",
+            function () {
+
+                codeInput.value =
+                    codeInput.value
+                        .trim()
+                        .toUpperCase();
+
+            }
+        );
+
+
+        /*
+        ========================================================
+        RECOVERY REQUEST
+        ========================================================
+        */
+
+        form.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+
+                clearMessage();
+
+
+                const username =
+                    usernameInput.value.trim();
+
+
+                const code =
+                    codeInput.value
+                        .trim()
+                        .toUpperCase();
+
+
+                /*
+                 * Basic validation.
+                 */
+
+                if (
+                    !username ||
+                    !code
+                ) {
+
+                    showMessage(
+                        getLanguage() === "rw"
+                            ? "Uzuza username na recovery code."
+                            : "Please enter both username and recovery code.",
+                        "error"
+                    );
+
+                    if (!username) {
+
+                        usernameInput.focus();
+
+                    }
+                    else {
+
+                        codeInput.focus();
+
+                    }
+
+                    return;
+
+                }
+
+
+                /*
+                 * Prevent duplicate requests.
+                 */
+
+                setLoading(true);
+
+
+                try {
+
+                    /*
+                    ====================================================
+                    CALL SECURE EDGE FUNCTION
+                    ====================================================
+                    */
+
+                    const response =
+                        await fetch(
+                            FUNCTION_URL,
+                            {
+
+                                method: "POST",
+
+                                headers: {
+
+                                    "Content-Type":
+                                        "application/json",
+
+                                    /*
+                                     * Publishable key only.
+                                     *
+                                     * NEVER put the Supabase
+                                     * service-role key here.
+                                     */
+
+                                    "apikey":
+                                        SUPABASE_PUBLISHABLE_KEY,
+
+                                    "Authorization":
+                                        `Bearer ${SUPABASE_PUBLISHABLE_KEY}`
+
+                                },
+
+                                body:
+                                    JSON.stringify({
+
+                                        username,
+                                        code
+
+                                    })
+
+                            }
+                        );
+
+
+                    /*
+                    ====================================================
+                    READ JSON RESPONSE
+                    ====================================================
+                    */
+
+                    let result = null;
+
+
+                    try {
+
+                        result =
+                            await response.json();
+
+                    }
+                    catch {
+
+                        result = null;
+
+                    }
+
+
+                    /*
+                    ====================================================
+                    VALIDATE RESPONSE
+                    ====================================================
+                    */
+
+                    if (
+                        !response.ok ||
+                        !result ||
+                        result.success !== true ||
+                        typeof
+                            result.action_link
+                            !== "string" ||
+                        !result.action_link
+                    ) {
+
+                        throw new Error(
+                            "RECOVERY_FAILED"
+                        );
+
+                    }
+
+
+                    /*
+                    ====================================================
+                    SUCCESS
+                    ====================================================
+                    */
+
+                    showMessage(
+
+                        getLanguage() === "rw"
+                            ? "Code yemerewe. Turakujyana kuri page yo gushyiraho password nshya..."
+                            : "Code verified. Redirecting you to set a new password...",
+
+                        "success"
+
+                    );
+
+
+                    /*
+                     * Keep button disabled.
+                     */
+
+                    submitBtn.disabled =
+                        true;
+
+
+                    /*
+                     * Short delay so the success
+                     * message can be seen.
+                     */
+
+                    window.setTimeout(
+                        function () {
+
+                            /*
+                             * The secure recovery action
+                             * link comes from Supabase.
+                             */
+
+                            window.location.href =
+                                result.action_link;
+
+                        },
+                        800
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "DREAM LAND PASSWORD RECOVERY ERROR:",
+                        error
+                    );
+
+
+                    /*
+                     * Do not expose internal
+                     * Supabase/Edge Function errors.
+                     */
+
+                    showMessage(
+
+                        getTranslation(
+                            "passwordRecoveryFailed"
+                        ) !== "passwordRecoveryFailed"
+
+                            ? getTranslation(
+                                "passwordRecoveryFailed"
+                            )
+
+                            : (
+                                getLanguage() === "rw"
+                                    ? "Recovery yananiwe. Reba username na recovery code."
+                                    : "Recovery failed. Please check your username and recovery code."
+                            ),
+
+                        "error"
+
+                    );
+
+
+                    setLoading(false);
+
+                }
+
+            }
+        );
+
+
+        /*
+        ========================================================
+        INITIALIZE
+        ========================================================
+        */
+
+        updateLanguage();
+
+
+        console.log(
+            "DREAM LAND PASSWORD RECOVERY READY"
+        );
+
+    }
+);
+</script>
+
+</body>
+
+</html>

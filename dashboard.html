@@ -1,0 +1,2840 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dream Land Business System</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel Business Control System Dashboard"
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="i18n.js"></script>
+
+    <script src="auth.js"></script>
+
+</head>
+
+
+<body class="dashboard-page">
+
+
+<header>
+
+    <div class="brand">
+
+        <h1 id="brandTitle">
+            Dream Land Motel
+        </h1>
+
+        <p id="systemTitle">
+            Business Control System
+        </p>
+
+    </div>
+
+
+    <div class="header-right">
+
+        <button
+            class="language-btn"
+            id="languageBtn"
+            type="button"
+        >
+            🇷🇼 Kinyarwanda
+        </button>
+
+
+        <button
+            class="logout-btn"
+            id="logoutBtn"
+            type="button"
+        >
+            Logout
+        </button>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    <!-- ======================================================
+         WELCOME
+    ======================================================= -->
+
+    <section class="welcome">
+
+        <h2 id="welcomeTitle">
+            Welcome to Dashboard
+        </h2>
+
+        <p id="welcomeText">
+            Manage sales, stock, expenses and business performance from one place.
+        </p>
+
+
+        <div class="user-info">
+
+            <span id="loggedUserLabel">
+                Logged in as:
+            </span>
+
+            <strong id="loggedUserName">
+                Loading...
+            </strong>
+
+            <span aria-hidden="true">
+                —
+            </span>
+
+            <strong id="loggedUserRole">
+                ...
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         BRANCH SELECTOR
+    ======================================================= -->
+
+    <section class="branch-section">
+
+        <h3 id="branchTitle">
+            Select Branch
+        </h3>
+
+
+        <div class="branches">
+
+            <button
+                class="branch-btn active"
+                type="button"
+                data-branch="combined"
+                id="combinedBranchBtn"
+            >
+
+                <strong>
+                    🔄 Combined
+                </strong>
+
+                <span id="combinedText">
+                    Kabuga + Bisenga
+                </span>
+
+            </button>
+
+
+            <button
+                class="branch-btn"
+                type="button"
+                data-branch="kabuga"
+                id="kabugaBranchBtn"
+            >
+
+                <strong>
+                    🏢 Kabuga
+                </strong>
+
+                <span id="kabugaText">
+                    Kabuga Branch
+                </span>
+
+            </button>
+
+
+            <button
+                class="branch-btn"
+                type="button"
+                data-branch="bisenga"
+                id="bisengaBranchBtn"
+            >
+
+                <strong>
+                    🏢 Bisenga
+                </strong>
+
+                <span id="bisengaText">
+                    Bisenga Branch
+                </span>
+
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SUMMARY CARDS
+    ======================================================= -->
+
+    <section class="cards">
+
+
+        <div class="card">
+
+            <div
+                class="card-title"
+                id="salesTitle"
+            >
+                Today's Sales
+            </div>
+
+            <div
+                class="card-value"
+                id="salesValue"
+            >
+                0 RWF
+            </div>
+
+            <div
+                class="card-note"
+                id="salesNote"
+            >
+                Kabuga + Bisenga
+            </div>
+
+        </div>
+
+
+        <div class="card">
+
+            <div
+                class="card-title"
+                id="stockTitle"
+            >
+                Current Stock
+            </div>
+
+            <div
+                class="card-value"
+                id="stockValue"
+            >
+                0
+            </div>
+
+            <div
+                class="card-note"
+                id="stockNote"
+            >
+                Total physical stock
+            </div>
+
+        </div>
+
+
+        <div class="card danger">
+
+            <div
+                class="card-title"
+                id="lowStockTitle"
+            >
+                Low Stock
+            </div>
+
+            <div
+                class="card-value"
+                id="lowStockValue"
+            >
+                0
+            </div>
+
+            <div
+                class="card-note"
+                id="lowStockNote"
+            >
+                Products need attention
+            </div>
+
+        </div>
+
+
+        <div class="card warning">
+
+            <div
+                class="card-title"
+                id="supplierDebtTitle"
+            >
+                Supplier Debts
+            </div>
+
+            <div
+                class="card-value"
+                id="supplierDebtValue"
+            >
+                0 RWF
+            </div>
+
+            <div
+                class="card-note"
+                id="supplierDebtNote"
+            >
+                Amount owed to suppliers
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         SALES + QUICK ACTIONS
+    ======================================================= -->
+
+    <section class="dashboard-grid">
+
+
+        <div class="panel">
+
+            <h3 id="salesReportTitle">
+                Today's Branch Sales
+            </h3>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th id="branchHeader">
+                                Branch
+                            </th>
+
+                            <th id="saleHeader">
+                                Sales
+                            </th>
+
+                            <th id="transactionHeader">
+                                Transactions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        <tr>
+
+                            <td id="kabugaBranchName">
+                                🏢 Kabuga
+                            </td>
+
+                            <td
+                                class="positive"
+                                id="kabugaSales"
+                            >
+                                0 RWF
+                            </td>
+
+                            <td id="kabugaTransactions">
+                                0
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td id="bisengaBranchName">
+                                🏢 Bisenga
+                            </td>
+
+                            <td
+                                class="positive"
+                                id="bisengaSales"
+                            >
+                                0 RWF
+                            </td>
+
+                            <td id="bisengaTransactions">
+                                0
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>
+
+                                <strong id="totalLabel">
+                                    Total
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                <strong id="totalSales">
+                                    0 RWF
+                                </strong>
+
+                            </td>
+
+                            <td>
+
+                                <strong id="totalTransactions">
+                                    0
+                                </strong>
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- ==================================================
+             QUICK ACTIONS
+        =================================================== -->
+
+        <div class="panel">
+
+            <h3 id="quickTitle">
+                Quick Actions
+            </h3>
+
+
+            <div class="actions">
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="products.html"
+                    data-permission="products"
+                    id="productsBtn"
+                >
+                    📦 Products
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="stock-in.html"
+                    data-permission="stock_in"
+                    id="stockInBtn"
+                >
+                    ➕ Stock In
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="issue-to-server.html"
+                    data-permission="issue"
+                    id="issueBtn"
+                >
+                    📤 Issue to Server
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="new-sale.html"
+                    data-permission="new_sale"
+                    id="posBtn"
+                >
+                    🛒 New Sale
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="return-stock.html"
+                    data-permission="return"
+                    id="returnBtn"
+                >
+                    🔄 Return Stock
+                </button>
+
+
+                <button
+                    class="action-btn"
+                    type="button"
+                    data-page="reports.html"
+                    data-permission="reports"
+                    id="reportsBtn"
+                >
+                    📊 Reports
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ======================================================
+         LOW STOCK
+    ======================================================= -->
+
+    <section class="panel low-stock-panel">
+
+        <h3 id="warningTitle">
+            ⚠️ Low Stock Warning
+        </h3>
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th id="productHeader">
+                            Product
+                        </th>
+
+                        <th id="currentHeader">
+                            Current Stock
+                        </th>
+
+                        <th id="minimumHeader">
+                            Minimum
+                        </th>
+
+                        <th id="statusHeader">
+                            Status
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="lowStockBody">
+
+                    <tr>
+
+                        <td
+                            colspan="4"
+                            class="empty-row"
+                            id="loadingStock"
+                        >
+                            Loading stock...
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<footer>
+
+    Dream Land Motel System 2026
+
+</footer>
+
+
+<script>
+
+"use strict";
+
+
+/* ============================================================
+   BRANCH IDS
+============================================================ */
+
+const BRANCH_IDS = {
+
+    kabuga:
+        "92f52581-efaa-4462-b807-24e7e00438eb",
+
+    bisenga:
+        "e1269a07-97b8-43b8-bf65-0d838212a0ac"
+
+};
+
+
+/* ============================================================
+   STATE
+============================================================ */
+
+let currentProfile = null;
+
+let selectedBranch = "combined";
+
+let dashboardLanguage = "en";
+
+let isUpdating = false;
+
+
+/* ============================================================
+   TRANSLATIONS
+============================================================ */
+
+const dashboardTranslations = {
+
+    en: {
+
+        systemTitle:
+            "Business Control System",
+
+        welcomeTitle:
+            "Welcome to Dashboard",
+
+        welcomeText:
+            "Manage sales, stock, expenses and business performance from one place.",
+
+        loggedUserLabel:
+            "Logged in as:",
+
+        branchTitle:
+            "Select Branch",
+
+        combinedText:
+            "Kabuga + Bisenga",
+
+        kabugaText:
+            "Kabuga Branch",
+
+        bisengaText:
+            "Bisenga Branch",
+
+        salesTitle:
+            "Today's Sales",
+
+        stockTitle:
+            "Current Stock",
+
+        lowStockTitle:
+            "Low Stock",
+
+        supplierDebtTitle:
+            "Supplier Debts",
+
+        salesReportTitle:
+            "Today's Branch Sales",
+
+        quickTitle:
+            "Quick Actions",
+
+        warningTitle:
+            "⚠️ Low Stock Warning",
+
+        branchHeader:
+            "Branch",
+
+        saleHeader:
+            "Sales",
+
+        transactionHeader:
+            "Transactions",
+
+        productHeader:
+            "Product",
+
+        currentHeader:
+            "Current Stock",
+
+        minimumHeader:
+            "Minimum",
+
+        statusHeader:
+            "Status",
+
+        totalLabel:
+            "Total",
+
+        productsBtn:
+            "📦 Products",
+
+        stockInBtn:
+            "➕ Stock In",
+
+        issueBtn:
+            "📤 Issue to Server",
+
+        posBtn:
+            "🛒 New Sale",
+
+        returnBtn:
+            "🔄 Return Stock",
+
+        reportsBtn:
+            "📊 Reports",
+
+        salesNoteCombined:
+            "Kabuga + Bisenga",
+
+        stockNote:
+            "Total physical stock",
+
+        lowStockNote:
+            "Products need attention",
+
+        supplierDebtNote:
+            "Amount owed to suppliers",
+
+        low:
+            "Low",
+
+        healthy:
+            "✓ Stock is healthy",
+
+        loading:
+            "Loading...",
+
+        accessRestricted:
+            "Access Restricted",
+
+        notAllowed:
+            "You are not allowed to access this action.",
+
+        kabugaBranch:
+            "Kabuga Branch",
+
+        bisengaBranch:
+            "Bisenga Branch",
+
+        combined:
+            "Combined",
+
+        kabugaName:
+            "🏢 Kabuga",
+
+        bisengaName:
+            "🏢 Bisenga",
+
+        logout:
+            "Logout"
+
+    },
+
+
+    rw: {
+
+        systemTitle:
+            "Sisitemu yo Kugenzura Ubucuruzi",
+
+        welcomeTitle:
+            "Murakaza neza kuri Dashboard",
+
+        welcomeText:
+            "Genzura igurisha, stock, amafaranga n'imikorere y'ubucuruzi ahantu hamwe.",
+
+        loggedUserLabel:
+            "Winjiye nka:",
+
+        branchTitle:
+            "Hitamo Ishami",
+
+        combinedText:
+            "Kabuga + Bisenga",
+
+        kabugaText:
+            "Ishami rya Kabuga",
+
+        bisengaText:
+            "Ishami rya Bisenga",
+
+        salesTitle:
+            "Igurisha ry'uyu munsi",
+
+        stockTitle:
+            "Stock Ihari",
+
+        lowStockTitle:
+            "Stock Nto",
+
+        supplierDebtTitle:
+            "Imyenda y'Abacuruzi",
+
+        salesReportTitle:
+            "Igurisha ry'Amashami Uyu Munsi",
+
+        quickTitle:
+            "Ibikorwa Byihuse",
+
+        warningTitle:
+            "⚠️ Umuburo wa Stock Nto",
+
+        branchHeader:
+            "Ishami",
+
+        saleHeader:
+            "Igurisha",
+
+        transactionHeader:
+            "Transactions",
+
+        productHeader:
+            "Igicuruzwa",
+
+        currentHeader:
+            "Stock Ihari",
+
+        minimumHeader:
+            "Minimum",
+
+        statusHeader:
+            "Status",
+
+        totalLabel:
+            "Total",
+
+        productsBtn:
+            "📦 Ibicuruzwa",
+
+        stockInBtn:
+            "➕ Kwinjiza Stock",
+
+        issueBtn:
+            "📤 Guha Server Ibicuruzwa",
+
+        posBtn:
+            "🛒 Igurisha Rishya",
+
+        returnBtn:
+            "🔄 Kugarura Stock",
+
+        reportsBtn:
+            "📊 Raporo",
+
+        salesNoteCombined:
+            "Kabuga + Bisenga",
+
+        stockNote:
+            "Stock yose ihari",
+
+        lowStockNote:
+            "Ibicuruzwa bikwiye kwitabwaho",
+
+        supplierDebtNote:
+            "Amafaranga tubereyemo abacuruzi",
+
+        low:
+            "Nto",
+
+        healthy:
+            "✓ Stock imeze neza",
+
+        loading:
+            "Birimo gutegurwa...",
+
+        accessRestricted:
+            "Ntabwo Wemerewe",
+
+        notAllowed:
+            "Ntabwo wemerewe gukoresha iki gikorwa.",
+
+        kabugaBranch:
+            "Ishami rya Kabuga",
+
+        bisengaBranch:
+            "Ishami rya Bisenga",
+
+        combined:
+            "Amashami Yombi",
+
+        kabugaName:
+            "🏢 Kabuga",
+
+        bisengaName:
+            "🏢 Bisenga",
+
+        logout:
+            "Sohoka"
+
+    }
+
+};
+
+
+/* ============================================================
+   TRANSLATION
+============================================================ */
+
+function t(key) {
+
+    return (
+        dashboardTranslations[
+            dashboardLanguage
+        ]?.[key] ??
+        dashboardTranslations.en[key] ??
+        key
+    );
+
+}
+
+
+/* ============================================================
+   LOAD LANGUAGE
+============================================================ */
+
+function loadLanguage() {
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof window.DreamLandI18n.getLanguage ===
+                "function"
+        ) {
+
+            dashboardLanguage =
+                window.DreamLandI18n.getLanguage();
+
+        }
+        else {
+
+            dashboardLanguage =
+                localStorage.getItem(
+                    "dreamland_language"
+                ) || "en";
+
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Language loading failed:",
+            error
+        );
+
+        dashboardLanguage = "en";
+
+    }
+
+
+    if (
+        dashboardLanguage !== "en" &&
+        dashboardLanguage !== "rw"
+    ) {
+
+        dashboardLanguage = "en";
+
+    }
+
+}
+
+
+/* ============================================================
+   APPLY LANGUAGE
+============================================================ */
+
+function applyLanguage() {
+
+    loadLanguage();
+
+
+    const translationIds = [
+
+        "systemTitle",
+        "welcomeTitle",
+        "welcomeText",
+        "loggedUserLabel",
+        "branchTitle",
+        "combinedText",
+        "kabugaText",
+        "bisengaText",
+        "salesTitle",
+        "stockTitle",
+        "lowStockTitle",
+        "supplierDebtTitle",
+        "salesReportTitle",
+        "quickTitle",
+        "warningTitle",
+        "branchHeader",
+        "saleHeader",
+        "transactionHeader",
+        "productHeader",
+        "currentHeader",
+        "minimumHeader",
+        "statusHeader",
+        "totalLabel",
+        "productsBtn",
+        "stockInBtn",
+        "issueBtn",
+        "posBtn",
+        "returnBtn",
+        "reportsBtn",
+        "stockNote",
+        "lowStockNote",
+        "supplierDebtNote",
+        "kabugaBranchName",
+        "bisengaBranchName"
+
+    ];
+
+
+    translationIds.forEach(
+        id => {
+
+            const element =
+                document.getElementById(id);
+
+
+            if (!element) {
+
+                return;
+
+            }
+
+
+            element.textContent =
+                t(id);
+
+        }
+    );
+
+
+    const languageButton =
+        document.getElementById(
+            "languageBtn"
+        );
+
+
+    if (languageButton) {
+
+        languageButton.textContent =
+            dashboardLanguage === "rw"
+                ? "🇬🇧 English"
+                : "🇷🇼 Kinyarwanda";
+
+    }
+
+
+    const logoutButton =
+        document.getElementById(
+            "logoutBtn"
+        );
+
+
+    if (logoutButton) {
+
+        logoutButton.textContent =
+            t("logout");
+
+    }
+
+
+    document.documentElement.lang =
+        dashboardLanguage === "rw"
+            ? "rw"
+            : "en";
+
+
+    updateDynamicLanguage();
+
+}
+
+
+/* ============================================================
+   CHANGE LANGUAGE
+============================================================ */
+
+async function changeLanguage() {
+
+    const nextLanguage =
+        dashboardLanguage === "en"
+            ? "rw"
+            : "en";
+
+
+    dashboardLanguage =
+        nextLanguage;
+
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof window.DreamLandI18n.setLanguage ===
+                "function"
+        ) {
+
+            window.DreamLandI18n.setLanguage(
+                nextLanguage
+            );
+
+        }
+        else {
+
+            localStorage.setItem(
+                "dreamland_language",
+                nextLanguage
+            );
+
+        }
+
+    }
+    catch (error) {
+
+        console.warn(
+            "Language save failed:",
+            error
+        );
+
+        localStorage.setItem(
+            "dreamland_language",
+            nextLanguage
+        );
+
+    }
+
+
+    applyLanguage();
+
+
+    await updateDashboard();
+
+}
+
+
+/* ============================================================
+   DYNAMIC LANGUAGE
+============================================================ */
+
+function updateDynamicLanguage() {
+
+    const salesNote =
+        document.getElementById(
+            "salesNote"
+        );
+
+
+    if (salesNote) {
+
+        if (
+            selectedBranch === "combined"
+        ) {
+
+            salesNote.textContent =
+                t("salesNoteCombined");
+
+        }
+        else if (
+            selectedBranch === "kabuga"
+        ) {
+
+            salesNote.textContent =
+                t("kabugaBranch");
+
+        }
+        else {
+
+            salesNote.textContent =
+                t("bisengaBranch");
+
+        }
+
+    }
+
+}
+
+
+/* ============================================================
+   AUTHENTICATION
+============================================================ */
+
+async function initializeDashboard() {
+
+    if (
+        !window.DreamLandAuth ||
+        typeof DreamLandAuth.requireAuth !==
+            "function"
+    ) {
+
+        console.error(
+            "auth.js is not available."
+        );
+
+        return;
+
+    }
+
+
+    const authResult =
+        await DreamLandAuth.requireAuth();
+
+
+    if (!authResult) {
+
+        return;
+
+    }
+
+
+    currentProfile =
+        authResult.profile;
+
+
+    if (!currentProfile) {
+
+        console.error(
+            "Authenticated user has no valid profile."
+        );
+
+        await DreamLandAuth.signOut();
+
+        return;
+
+    }
+
+
+    const userName =
+        currentProfile.full_name ||
+        currentProfile.username ||
+        "User";
+
+
+    const role =
+        String(
+            currentProfile.role || ""
+        ).toLowerCase();
+
+
+    document.getElementById(
+        "loggedUserName"
+    ).textContent =
+        userName;
+
+
+    document.getElementById(
+        "loggedUserRole"
+    ).textContent =
+        role.toUpperCase();
+
+
+    /*
+     * Admin:
+     *   combined + both branches
+     *
+     * Manager/Cashier:
+     *   own assigned branch only
+     */
+
+    if (
+        role !== "admin"
+    ) {
+
+        if (
+            currentProfile.branch_id ===
+            BRANCH_IDS.kabuga
+        ) {
+
+            selectedBranch =
+                "kabuga";
+
+        }
+        else if (
+            currentProfile.branch_id ===
+            BRANCH_IDS.bisenga
+        ) {
+
+            selectedBranch =
+                "bisenga";
+
+        }
+        else {
+
+            console.error(
+                "Non-admin profile has no valid branch."
+            );
+
+            await DreamLandAuth.signOut();
+
+            return;
+
+        }
+
+    }
+
+
+    setupBranchButtons();
+
+    setupQuickActions();
+
+    applyLanguage();
+
+    await updateDashboard();
+
+}
+
+
+/* ============================================================
+   BRANCH ACCESS
+============================================================ */
+
+function canUseBranch(branch) {
+
+    if (!currentProfile) {
+
+        return false;
+
+    }
+
+
+    const role =
+        String(
+            currentProfile.role || ""
+        ).toLowerCase();
+
+
+    if (
+        role === "admin"
+    ) {
+
+        return (
+            branch === "combined" ||
+            branch === "kabuga" ||
+            branch === "bisenga"
+        );
+
+    }
+
+
+    if (
+        branch === "combined"
+    ) {
+
+        return false;
+
+    }
+
+
+    const branchId =
+        BRANCH_IDS[branch];
+
+
+    return (
+        currentProfile.branch_id ===
+        branchId
+    );
+
+}
+
+
+/* ============================================================
+   ACCESS RESTRICTED
+============================================================ */
+
+function showRestricted() {
+
+    const message =
+        `${t("accessRestricted")}\n\n${t("notAllowed")}`;
+
+
+    if (
+        window.DreamLandAuth &&
+        typeof DreamLandAuth.showAccessRestricted ===
+            "function"
+    ) {
+
+        try {
+
+            DreamLandAuth.showAccessRestricted();
+
+            return;
+
+        }
+        catch (error) {
+
+            console.warn(
+                "Shared access restriction UI failed:",
+                error
+            );
+
+        }
+
+    }
+
+
+    alert(message);
+
+}
+
+
+/* ============================================================
+   BRANCH BUTTONS
+============================================================ */
+
+function setupBranchButtons() {
+
+    document
+        .querySelectorAll(
+            ".branch-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const branch =
+                            button.dataset.branch;
+
+
+                        if (
+                            !canUseBranch(branch)
+                        ) {
+
+                            showRestricted();
+
+                            return;
+
+                        }
+
+
+                        if (
+                            selectedBranch ===
+                            branch
+                        ) {
+
+                            return;
+
+                        }
+
+
+                        selectedBranch =
+                            branch;
+
+
+                        updateActiveBranchButton();
+
+
+                        await updateDashboard();
+
+                    }
+                );
+
+            }
+        );
+
+
+    updateActiveBranchButton();
+
+}
+
+
+/* ============================================================
+   ACTIVE BRANCH BUTTON
+============================================================ */
+
+function updateActiveBranchButton() {
+
+    document
+        .querySelectorAll(
+            ".branch-btn"
+        )
+        .forEach(
+            button => {
+
+                const branch =
+                    button.dataset.branch;
+
+
+                const allowed =
+                    canUseBranch(branch);
+
+
+                button.disabled =
+                    !allowed;
+
+
+                button.classList.toggle(
+                    "active",
+                    branch === selectedBranch
+                );
+
+            }
+        );
+
+}
+
+
+/* ============================================================
+   QUICK ACTION PERMISSIONS
+============================================================ */
+
+function canUseAction(action) {
+
+    if (!currentProfile) {
+
+        return false;
+
+    }
+
+
+    const role =
+        String(
+            currentProfile.role || ""
+        ).toLowerCase();
+
+
+    const permissions = {
+
+        products: [
+            "admin",
+            "manager",
+            "cashier"
+        ],
+
+        stock_in: [
+            "admin",
+            "manager"
+        ],
+
+        issue: [
+            "admin",
+            "manager",
+            "cashier"
+        ],
+
+        new_sale: [
+            "admin",
+            "manager",
+            "cashier"
+        ],
+
+        return: [
+            "admin",
+            "manager",
+            "cashier"
+        ],
+
+        reports: [
+            "admin",
+            "manager",
+            "cashier"
+        ]
+
+    };
+
+
+    return (
+        permissions[action] || []
+    ).includes(role);
+
+}
+
+
+/* ============================================================
+   QUICK ACTIONS
+============================================================ */
+
+function setupQuickActions() {
+
+    document
+        .querySelectorAll(
+            ".action-btn[data-page]"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        const page =
+                            button.dataset.page;
+
+
+                        const permission =
+                            button.dataset.permission;
+
+
+                        if (
+                            !canUseAction(
+                                permission
+                            )
+                        ) {
+
+                            showRestricted();
+
+                            return;
+
+                        }
+
+
+                        window.location.href =
+                            page;
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* ============================================================
+   RWANDA DATE PARTS
+============================================================ */
+
+function getRwandaDateParts(
+    date = new Date()
+) {
+
+    const formatter =
+        new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone:
+                    "Africa/Kigali",
+
+                year:
+                    "numeric",
+
+                month:
+                    "2-digit",
+
+                day:
+                    "2-digit"
+            }
+        );
+
+
+    const parts =
+        formatter.formatToParts(
+            date
+        );
+
+
+    const result = {};
+
+
+    parts.forEach(
+        part => {
+
+            if (
+                part.type !== "literal"
+            ) {
+
+                result[part.type] =
+                    part.value;
+
+            }
+
+        }
+    );
+
+
+    return {
+
+        year:
+            Number(
+                result.year
+            ),
+
+        month:
+            Number(
+                result.month
+            ),
+
+        day:
+            Number(
+                result.day
+            )
+
+    };
+
+}
+
+
+/* ============================================================
+   RWANDA DAY RANGE
+============================================================ */
+
+function getRwandaDayRange() {
+
+    const parts =
+        getRwandaDateParts();
+
+
+    const year =
+        parts.year;
+
+
+    const month =
+        String(
+            parts.month
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const day =
+        String(
+            parts.day
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const start =
+        `${year}-${month}-${day}T00:00:00+02:00`;
+
+
+    /*
+     * Rwanda does not use daylight-saving time,
+     * so +02:00 remains stable.
+     */
+
+    const tomorrow =
+        new Date(
+            `${start}`
+        );
+
+
+    tomorrow.setUTCDate(
+        tomorrow.getUTCDate() + 1
+    );
+
+
+    const endYear =
+        tomorrow.getUTCFullYear();
+
+
+    const endMonth =
+        String(
+            tomorrow.getUTCMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const endDay =
+        String(
+            tomorrow.getUTCDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const end =
+        `${endYear}-${endMonth}-${endDay}T00:00:00+02:00`;
+
+
+    return {
+
+        start,
+
+        end
+
+    };
+
+}
+
+
+/* ============================================================
+   SELECTED BRANCH IDS
+============================================================ */
+
+function getSelectedBranchIds() {
+
+    if (
+        selectedBranch === "kabuga"
+    ) {
+
+        return [
+            BRANCH_IDS.kabuga
+        ];
+
+    }
+
+
+    if (
+        selectedBranch === "bisenga"
+    ) {
+
+        return [
+            BRANCH_IDS.bisenga
+        ];
+
+    }
+
+
+    return [
+
+        BRANCH_IDS.kabuga,
+
+        BRANCH_IDS.bisenga
+
+    ];
+
+}
+
+
+/* ============================================================
+   LOAD TODAY'S SALES
+============================================================ */
+
+async function loadDashboardSales() {
+
+    const range =
+        getRwandaDayRange();
+
+
+    const branchIds =
+        getSelectedBranchIds();
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("sales")
+            .select(
+                "id, branch_id, total_amount, created_at"
+            )
+            .in(
+                "branch_id",
+                branchIds
+            )
+            .gte(
+                "created_at",
+                range.start
+            )
+            .lt(
+                "created_at",
+                range.end
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Dashboard sales error:",
+            error
+        );
+
+
+        return null;
+
+    }
+
+
+    let kabugaSales = 0;
+
+    let bisengaSales = 0;
+
+    let kabugaTransactions = 0;
+
+    let bisengaTransactions = 0;
+
+
+    (data || []).forEach(
+        sale => {
+
+            const amount =
+                Number(
+                    sale.total_amount
+                ) || 0;
+
+
+            if (
+                sale.branch_id ===
+                BRANCH_IDS.kabuga
+            ) {
+
+                kabugaSales +=
+                    amount;
+
+                kabugaTransactions++;
+
+            }
+
+
+            else if (
+                sale.branch_id ===
+                BRANCH_IDS.bisenga
+            ) {
+
+                bisengaSales +=
+                    amount;
+
+                bisengaTransactions++;
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "kabugaSales"
+    ).textContent =
+        formatMoney(
+            kabugaSales
+        );
+
+
+    document.getElementById(
+        "bisengaSales"
+    ).textContent =
+        formatMoney(
+            bisengaSales
+        );
+
+
+    document.getElementById(
+        "kabugaTransactions"
+    ).textContent =
+        formatNumber(
+            kabugaTransactions
+        );
+
+
+    document.getElementById(
+        "bisengaTransactions"
+    ).textContent =
+        formatNumber(
+            bisengaTransactions
+        );
+
+
+    const totalSales =
+        kabugaSales +
+        bisengaSales;
+
+
+    const totalTransactions =
+        kabugaTransactions +
+        bisengaTransactions;
+
+
+    document.getElementById(
+        "totalSales"
+    ).textContent =
+        formatMoney(
+            totalSales
+        );
+
+
+    document.getElementById(
+        "totalTransactions"
+    ).textContent =
+        formatNumber(
+            totalTransactions
+        );
+
+
+    return {
+
+        kabugaSales,
+
+        bisengaSales,
+
+        kabugaTransactions,
+
+        bisengaTransactions
+
+    };
+
+}
+
+
+/* ============================================================
+   LOAD SUPPLIER DEBTS
+============================================================ */
+
+async function loadSupplierDebts() {
+
+    const branchIds =
+        getSelectedBranchIds();
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("supplier_debts")
+            .select(
+                "balance, branch_id, status"
+            )
+            .in(
+                "branch_id",
+                branchIds
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Supplier debt error:",
+            error
+        );
+
+
+        document.getElementById(
+            "supplierDebtValue"
+        ).textContent =
+            "—";
+
+
+        return null;
+
+    }
+
+
+    let total = 0;
+
+
+    (data || []).forEach(
+        debt => {
+
+            const balance =
+                Number(
+                    debt.balance
+                ) || 0;
+
+
+            if (
+                balance > 0 &&
+                String(
+                    debt.status || ""
+                ).toLowerCase() !==
+                    "paid"
+            ) {
+
+                total +=
+                    balance;
+
+            }
+
+        }
+    );
+
+
+    document.getElementById(
+        "supplierDebtValue"
+    ).textContent =
+        formatMoney(
+            total
+        );
+
+
+    return total;
+
+}
+
+
+/* ============================================================
+   LOAD PRODUCTS
+============================================================ */
+
+async function loadProducts() {
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("products")
+            .select(
+                "id, name, unit, minimum_stock, active"
+            )
+            .eq(
+                "active",
+                true
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Products error:",
+            error
+        );
+
+
+        return null;
+
+    }
+
+
+    return data || [];
+
+}
+
+
+/* ============================================================
+   LOAD STOCK MOVEMENTS
+============================================================ */
+
+async function loadStockMovements() {
+
+    const branchIds =
+        getSelectedBranchIds();
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("stock_movements")
+            .select(
+                "branch_id, product_id, movement_type, quantity, from_location, to_location"
+            )
+            .in(
+                "branch_id",
+                branchIds
+            );
+
+
+    if (error) {
+
+        console.error(
+            "Stock movements error:",
+            error
+        );
+
+
+        return null;
+
+    }
+
+
+    return data || [];
+
+}
+
+
+/* ============================================================
+   CALCULATE PHYSICAL STOCK
+============================================================ */
+
+/*
+ * IMPORTANT:
+ *
+ * Physical branch stock =
+ *
+ * purchases
+ * + positive adjustments
+ * - sales
+ * - waste
+ *
+ * issue_to_server and return_from_server
+ * do NOT change total physical stock.
+ *
+ * They only move stock between:
+ *
+ * main_stock <-> server
+ *
+ * Therefore they must be neutral in this
+ * branch-level physical-stock calculation.
+ */
+
+function calculatePhysicalStock(
+    products,
+    movements
+) {
+
+    const stock = {};
+
+
+    products.forEach(
+        product => {
+
+            stock[
+                product.id
+            ] = 0;
+
+        }
+    );
+
+
+    movements.forEach(
+        movement => {
+
+            const productId =
+                movement.product_id;
+
+
+            if (
+                !Object.prototype.hasOwnProperty.call(
+                    stock,
+                    productId
+                )
+            ) {
+
+                stock[productId] =
+                    0;
+
+            }
+
+
+            const quantity =
+                Number(
+                    movement.quantity
+                ) || 0;
+
+
+            switch (
+                movement.movement_type
+            ) {
+
+                case "purchase":
+
+                    stock[productId] +=
+                        quantity;
+
+                    break;
+
+
+                case "sale":
+
+                    stock[productId] -=
+                        quantity;
+
+                    break;
+
+
+                case "waste":
+
+                    stock[productId] -=
+                        quantity;
+
+                    break;
+
+
+                case "adjustment":
+
+                    stock[productId] +=
+                        quantity;
+
+                    break;
+
+
+                case "issue_to_server":
+
+                    /*
+                     * Main stock -> server stock.
+                     *
+                     * Total physical branch stock
+                     * remains unchanged.
+                     */
+
+                    break;
+
+
+                case "return_from_server":
+
+                    /*
+                     * Server stock -> main stock.
+                     *
+                     * Total physical branch stock
+                     * remains unchanged.
+                     */
+
+                    break;
+
+
+                case "transfer":
+
+                    /*
+                     * No active branch-transfer workflow
+                     * is currently used by the system.
+                     */
+
+                    break;
+
+            }
+
+        }
+    );
+
+
+    return stock;
+
+}
+
+
+/* ============================================================
+   LOAD LOW STOCK
+============================================================ */
+
+async function loadLowStock() {
+
+    const [
+        products,
+        movements
+    ] =
+        await Promise.all([
+            loadProducts(),
+            loadStockMovements()
+        ]);
+
+
+    const body =
+        document.getElementById(
+            "lowStockBody"
+        );
+
+
+    if (
+        !products ||
+        !movements
+    ) {
+
+        body.innerHTML = "";
+
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        const cell =
+            document.createElement(
+                "td"
+            );
+
+
+        cell.colSpan = 4;
+
+        cell.className =
+            "empty-row";
+
+
+        cell.textContent =
+            "—";
+
+
+        row.appendChild(
+            cell
+        );
+
+
+        body.appendChild(
+            row
+        );
+
+
+        document.getElementById(
+            "lowStockValue"
+        ).textContent =
+            "—";
+
+
+        document.getElementById(
+            "stockValue"
+        ).textContent =
+            "—";
+
+
+        return null;
+
+    }
+
+
+    const stock =
+        calculatePhysicalStock(
+            products,
+            movements
+        );
+
+
+    body.innerHTML =
+        "";
+
+
+    let lowCount = 0;
+
+    let totalStock = 0;
+
+
+    products.forEach(
+        product => {
+
+            let currentStock =
+                Number(
+                    stock[product.id]
+                ) || 0;
+
+
+            /*
+             * Avoid displaying -0.
+             */
+
+            if (
+                Math.abs(
+                    currentStock
+                ) < 0.000001
+            ) {
+
+                currentStock = 0;
+
+            }
+
+
+            const minimum =
+                Number(
+                    product.minimum_stock
+                ) || 0;
+
+
+            totalStock +=
+                currentStock;
+
+
+            if (
+                minimum > 0 &&
+                currentStock <= minimum
+            ) {
+
+                lowCount++;
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                const productCell =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                productCell.textContent =
+                    product.name;
+
+
+                const currentCell =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                currentCell.className =
+                    "negative";
+
+
+                currentCell.textContent =
+                    `${formatNumber(currentStock)} ${product.unit || ""}`;
+
+
+                const minimumCell =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                minimumCell.textContent =
+                    `${formatNumber(minimum)} ${product.unit || ""}`;
+
+
+                const statusCell =
+                    document.createElement(
+                        "td"
+                    );
+
+
+                statusCell.className =
+                    "negative";
+
+
+                statusCell.textContent =
+                    t("low");
+
+
+                row.appendChild(
+                    productCell
+                );
+
+
+                row.appendChild(
+                    currentCell
+                );
+
+
+                row.appendChild(
+                    minimumCell
+                );
+
+
+                row.appendChild(
+                    statusCell
+                );
+
+
+                body.appendChild(
+                    row
+                );
+
+            }
+
+        }
+    );
+
+
+    if (
+        lowCount === 0
+    ) {
+
+        const row =
+            document.createElement(
+                "tr"
+            );
+
+
+        const cell =
+            document.createElement(
+                "td"
+            );
+
+
+        cell.colSpan =
+            4;
+
+
+        cell.className =
+            "positive empty-row";
+
+
+        cell.textContent =
+            t("healthy");
+
+
+        row.appendChild(
+            cell
+        );
+
+
+        body.appendChild(
+            row
+        );
+
+    }
+
+
+    document.getElementById(
+        "lowStockValue"
+    ).textContent =
+        formatNumber(
+            lowCount
+        );
+
+
+    document.getElementById(
+        "stockValue"
+    ).textContent =
+        formatNumber(
+            totalStock
+        );
+
+
+    return {
+
+        lowCount,
+
+        totalStock
+
+    };
+
+}
+
+
+/* ============================================================
+   UPDATE DASHBOARD
+============================================================ */
+
+async function updateDashboard() {
+
+    if (
+        !currentProfile ||
+        isUpdating
+    ) {
+
+        return;
+
+    }
+
+
+    isUpdating = true;
+
+
+    try {
+
+        updateActiveBranchButton();
+
+        updateDynamicLanguage();
+
+
+        const [
+            sales,
+            stock,
+            supplierDebt
+        ] =
+            await Promise.all([
+                loadDashboardSales(),
+                loadLowStock(),
+                loadSupplierDebts()
+            ]);
+
+
+        if (!sales) {
+
+            document.getElementById(
+                "salesValue"
+            ).textContent =
+                "—";
+
+            return;
+
+        }
+
+
+        let salesValue = 0;
+
+
+        if (
+            selectedBranch ===
+            "kabuga"
+        ) {
+
+            salesValue =
+                sales.kabugaSales;
+
+        }
+        else if (
+            selectedBranch ===
+            "bisenga"
+        ) {
+
+            salesValue =
+                sales.bisengaSales;
+
+        }
+        else {
+
+            salesValue =
+                sales.kabugaSales +
+                sales.bisengaSales;
+
+        }
+
+
+        document.getElementById(
+            "salesValue"
+        ).textContent =
+            formatMoney(
+                salesValue
+            );
+
+
+        /*
+         * stock and supplierDebt are already
+         * rendered by their respective loaders.
+         *
+         * They are intentionally retained here
+         * to make the Promise.all() explicit.
+         */
+
+        void stock;
+
+        void supplierDebt;
+
+
+        updateDynamicLanguage();
+
+    }
+    catch (error) {
+
+        console.error(
+            "Dashboard update failed:",
+            error
+        );
+
+    }
+    finally {
+
+        isUpdating = false;
+
+    }
+
+}
+
+
+/* ============================================================
+   FORMATTING
+============================================================ */
+
+function formatNumber(value) {
+
+    const number =
+        Number(value);
+
+
+    if (
+        !Number.isFinite(number)
+    ) {
+
+        return "0";
+
+    }
+
+
+    return number.toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits:
+                2
+        }
+    );
+
+}
+
+
+function formatMoney(value) {
+
+    return `${formatNumber(value)} RWF`;
+
+}
+
+
+/* ============================================================
+   LOGOUT
+============================================================ */
+
+async function logout() {
+
+    if (
+        window.DreamLandAuth &&
+        typeof DreamLandAuth.signOut ===
+            "function"
+    ) {
+
+        await DreamLandAuth.signOut();
+
+    }
+
+}
+
+
+/* ============================================================
+   BUTTON EVENTS
+============================================================ */
+
+document
+    .getElementById(
+        "languageBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            changeLanguage()
+                .catch(
+                    error => {
+
+                        console.error(
+                            "Language change failed:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+
+document
+    .getElementById(
+        "logoutBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            logout()
+                .catch(
+                    error => {
+
+                        console.error(
+                            "Logout failed:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+
+/* ============================================================
+   START
+============================================================ */
+
+initializeDashboard()
+    .catch(
+        error => {
+
+            console.error(
+                "DASHBOARD INITIALIZATION FAILED:",
+                error
+            );
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

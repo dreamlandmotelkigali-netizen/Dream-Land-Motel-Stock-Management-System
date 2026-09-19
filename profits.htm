@@ -1,0 +1,2903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Dream Land Motel | Profits</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel Business Control System - Profitability"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+
+        <div class="brand">
+            Dream Land Motel
+            <small>Business Control System</small>
+        </div>
+
+        <div class="top-actions">
+
+            <button
+                type="button"
+                id="languageBtn"
+                class="top-btn"
+            >
+                Kinyarwanda
+            </button>
+
+            <button
+                type="button"
+                id="logoutBtn"
+                class="logout-btn"
+            >
+                Logout
+            </button>
+
+        </div>
+
+    </div>
+</header>
+
+
+<main class="container">
+
+    <!-- NAVIGATION -->
+    <nav class="nav">
+
+        <a href="dashboard.html">Dashboard</a>
+
+        <a href="products.html">Products</a>
+
+        <a href="stock-in.html">Stock In</a>
+
+        <a href="issue-to-server.html">
+            Issue to Server
+        </a>
+
+        <a href="return-stock.html">
+            Return Stock
+        </a>
+
+        <a href="waste.html">
+            Waste
+        </a>
+
+        <a href="new-sale.html">
+            New Sale
+        </a>
+
+        <a href="debts.html">
+            Debts
+        </a>
+
+        <a href="expenses.html">
+            Expenses
+        </a>
+
+        <a href="reports.html">
+            Reports
+        </a>
+
+        <a href="operating-purchases.html">
+            Operating Purchases
+        </a>
+
+        <a
+            href="profits.html"
+            class="active"
+        >
+            Profits
+        </a>
+
+    </nav>
+
+
+    <!-- STATUS -->
+    <div
+        id="status"
+        class="status"
+        aria-live="polite"
+    ></div>
+
+
+    <!-- PAGE HEADER -->
+    <section class="page-header">
+
+        <div>
+
+            <h1 id="pageTitle">
+                Profits
+            </h1>
+
+            <p id="pageSubtitle">
+                Track sales, COGS, gross profit, expenses,
+                operating purchases and net profit.
+            </p>
+
+        </div>
+
+        <div class="profile-box">
+
+            <strong id="userName">—</strong>
+
+            <span id="userRole">—</span>
+
+        </div>
+
+    </section>
+
+
+    <!-- FILTERS -->
+    <section class="filter-panel">
+
+        <div class="filter-grid">
+
+            <div class="field">
+
+                <label
+                    for="branchSelect"
+                    id="branchLabel"
+                >
+                    Branch
+                </label>
+
+                <select id="branchSelect"></select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="periodSelect"
+                    id="periodLabel"
+                >
+                    Period
+                </label>
+
+                <select id="periodSelect">
+
+                    <option value="today">
+                        Today
+                    </option>
+
+                    <option
+                        value="month"
+                        selected
+                    >
+                        This Month
+                    </option>
+
+                    <option value="custom">
+                        Custom Date
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="fromDate"
+                    id="fromLabel"
+                >
+                    From
+                </label>
+
+                <input
+                    type="date"
+                    id="fromDate"
+                    disabled
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label
+                    for="toDate"
+                    id="toLabel"
+                >
+                    To
+                </label>
+
+                <input
+                    type="date"
+                    id="toDate"
+                    disabled
+                >
+
+            </div>
+
+        </div>
+
+
+        <div class="filter-actions">
+
+            <button
+                type="button"
+                id="applyBtn"
+                class="primary-btn"
+            >
+                Apply Filters
+            </button>
+
+            <button
+                type="button"
+                id="resetBtn"
+                class="secondary-btn"
+            >
+                Reset
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- SUMMARY -->
+    <section class="summary-grid">
+
+        <article class="summary-card">
+
+            <div
+                class="summary-label"
+                id="salesLabel"
+            >
+                Total Sales
+            </div>
+
+            <div
+                class="summary-value"
+                id="salesValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="salesNote"
+            >
+                Revenue from sales
+            </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+            <div
+                class="summary-label"
+                id="cogsLabel"
+            >
+                COGS
+            </div>
+
+            <div
+                class="summary-value"
+                id="cogsValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="cogsNote"
+            >
+                Cost of goods sold
+            </div>
+
+        </article>
+
+
+        <article
+            class="summary-card gross-card"
+            id="grossCard"
+        >
+
+            <div
+                class="summary-label"
+                id="grossLabel"
+            >
+                Gross Profit
+            </div>
+
+            <div
+                class="summary-value"
+                id="grossValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="grossNote"
+            >
+                Sales − COGS
+            </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+            <div
+                class="summary-label"
+                id="expensesLabel"
+            >
+                Expenses
+            </div>
+
+            <div
+                class="summary-value"
+                id="expensesValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="expensesNote"
+            >
+                Recorded expenses
+            </div>
+
+        </article>
+
+
+        <article class="summary-card">
+
+            <div
+                class="summary-label"
+                id="operatingLabel"
+            >
+                Operating Purchases
+            </div>
+
+            <div
+                class="summary-value"
+                id="operatingValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="operatingNote"
+            >
+                Operating costs outside inventory
+            </div>
+
+        </article>
+
+
+        <article
+            class="summary-card net-card"
+            id="netCard"
+        >
+
+            <div
+                class="summary-label"
+                id="netLabel"
+            >
+                Net Profit
+            </div>
+
+            <div
+                class="summary-value"
+                id="netValue"
+            >
+                0 Frw
+            </div>
+
+            <div
+                class="summary-note"
+                id="netNote"
+            >
+                Gross Profit − Expenses − Operating Purchases
+            </div>
+
+        </article>
+
+    </section>
+
+
+    <!-- PROFIT MARGIN -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2 id="marginTitle">
+                Profit Margin
+            </h2>
+
+            <span id="marginPeriod">—</span>
+
+        </div>
+
+
+        <div class="margin-body">
+
+            <div class="margin-box">
+
+                <div
+                    class="summary-label"
+                    id="marginLabel"
+                >
+                    Net Profit Margin
+                </div>
+
+                <div
+                    class="margin-value"
+                    id="marginValue"
+                >
+                    0%
+                </div>
+
+                <div
+                    class="margin-description"
+                    id="marginDescription"
+                >
+                    Net Profit ÷ Total Sales
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- PRODUCT PROFITABILITY -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2 id="productTitle">
+                Product Profitability
+            </h2>
+
+            <span id="productCount">
+                0 products
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th id="thProduct">
+                            Product
+                        </th>
+
+                        <th id="thCategory">
+                            Category
+                        </th>
+
+                        <th
+                            id="thQuantity"
+                            class="num"
+                        >
+                            Qty Sold
+                        </th>
+
+                        <th
+                            id="thSales"
+                            class="num"
+                        >
+                            Sales
+                        </th>
+
+                        <th
+                            id="thCost"
+                            class="num"
+                        >
+                            Cost
+                        </th>
+
+                        <th
+                            id="thGrossProfit"
+                            class="num"
+                        >
+                            Gross Profit
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="productBody"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="productEmpty"
+            class="empty hidden"
+        >
+            No sales data for this period.
+        </div>
+
+    </section>
+
+
+    <!-- SALES PROFIT DETAIL -->
+    <section class="section">
+
+        <div class="section-header">
+
+            <h2 id="salesDetailTitle">
+                Sales Profit Detail
+            </h2>
+
+            <span id="saleCount">
+                0 sales
+            </span>
+
+        </div>
+
+
+        <div class="table-wrap">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th id="thDate">
+                            Date
+                        </th>
+
+                        <th id="thSaleNumber">
+                            Sale No.
+                        </th>
+
+                        <th id="thBranch">
+                            Branch
+                        </th>
+
+                        <th id="thCustomer">
+                            Customer
+                        </th>
+
+                        <th
+                            id="thSalesAmount"
+                            class="num"
+                        >
+                            Sales
+                        </th>
+
+                        <th
+                            id="thCogs"
+                            class="num"
+                        >
+                            COGS
+                        </th>
+
+                        <th
+                            id="thGross"
+                            class="num"
+                        >
+                            Gross Profit
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="saleBody"></tbody>
+
+            </table>
+
+        </div>
+
+
+        <div
+            id="saleEmpty"
+            class="empty hidden"
+        >
+            No sales data for this period.
+        </div>
+
+    </section>
+
+
+    <!-- ACCOUNTING NOTICE -->
+    <div
+        class="notice"
+        id="accountingNotice"
+    >
+        <strong>Important:</strong>
+        Do not record the same operating cost in both
+        Expenses and Operating Purchases. Doing so would
+        count the cost twice and make Net Profit appear lower.
+    </div>
+
+</main>
+
+
+<footer>
+    Dream Land Motel System 2026
+</footer>
+
+
+<!-- SUPABASE -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="supabase.js"></script>
+<script src="i18n.js"></script>
+<script src="auth.js"></script>
+
+
+<script>
+"use strict";
+
+(() => {
+
+    /* =====================================================
+       CONSTANTS
+    ===================================================== */
+
+    const KABUGA_ID =
+        "92f52581-efaa-4462-b807-24e7e00438eb";
+
+    const BISENGA_ID =
+        "e1269a07-97b8-43b8-bf65-0d838212a0ac";
+
+
+    const state = {
+
+        profile: null,
+
+        allowedBranchIds: [],
+
+        branches: [],
+
+        language: "en",
+
+        loading: false
+
+    };
+
+
+    const $ = id =>
+        document.getElementById(id);
+
+
+    /* =====================================================
+       HTML SAFETY
+    ===================================================== */
+
+    function escapeHtml(value) {
+
+        return String(value ?? "")
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       NUMBER FORMATTING
+    ===================================================== */
+
+    function money(value) {
+
+        const number = Number(value || 0);
+
+        return (
+            number.toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                }
+            )
+            + " Frw"
+        );
+
+    }
+
+
+    function numberFormat(value) {
+
+        return Number(value || 0)
+            .toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 2
+                }
+            );
+
+    }
+
+
+    function percentage(value) {
+
+        return (
+            Number(value || 0)
+                .toLocaleString(
+                    "en-US",
+                    {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2
+                    }
+                )
+            + "%"
+        );
+
+    }
+
+
+    /* =====================================================
+       RWANDA DATE
+    ===================================================== */
+
+    function getKigaliToday() {
+
+        return new Intl.DateTimeFormat(
+            "en-CA",
+            {
+                timeZone: "Africa/Kigali",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit"
+            }
+        ).format(new Date());
+
+    }
+
+
+    function getMonthStart() {
+
+        const today =
+            getKigaliToday();
+
+        return (
+            today.substring(0, 8) +
+            "01"
+        );
+
+    }
+
+
+    function buildKigaliStart(date) {
+
+        return `${date}T00:00:00+02:00`;
+
+    }
+
+
+    function buildKigaliEnd(date) {
+
+        return `${date}T23:59:59.999+02:00`;
+
+    }
+
+
+    function formatDate(value) {
+
+        if (!value) {
+            return "—";
+        }
+
+        const date =
+            new Date(value);
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
+            return String(value);
+
+        }
+
+        return new Intl.DateTimeFormat(
+            state.language === "rw"
+                ? "rw-RW"
+                : "en-GB",
+            {
+                timeZone: "Africa/Kigali",
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        ).format(date);
+
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    function setStatus(
+        message,
+        type = "loading"
+    ) {
+
+        const element =
+            $("status");
+
+        element.textContent =
+            message || "";
+
+        element.className =
+            message
+                ? `status show ${type}`
+                : "status";
+
+    }
+
+
+    function clearStatus() {
+
+        $("status").textContent = "";
+
+        $("status").className =
+            "status";
+
+    }
+
+
+    /* =====================================================
+       TRANSLATIONS
+    ===================================================== */
+
+    const translations = {
+
+        en: {
+
+            language: "Kinyarwanda",
+            logout: "Logout",
+
+            title: "Profits",
+
+            subtitle:
+                "Track sales, COGS, gross profit, expenses, operating purchases and net profit.",
+
+            branch: "Branch",
+            period: "Period",
+            from: "From",
+            to: "To",
+
+            combined: "Combined",
+            kabuga: "Kabuga",
+            bisenga: "Bisenga",
+
+            today: "Today",
+            month: "This Month",
+            custom: "Custom Date",
+
+            apply: "Apply Filters",
+            applying: "Loading…",
+            reset: "Reset",
+
+            totalSales: "Total Sales",
+            salesNote: "Revenue from sales",
+
+            cogs: "COGS",
+            cogsNote: "Cost of goods sold",
+
+            grossProfit: "Gross Profit",
+            grossNote: "Sales − COGS",
+
+            expenses: "Expenses",
+            expensesNote: "Recorded expenses",
+
+            operatingPurchases:
+                "Operating Purchases",
+
+            operatingNote:
+                "Operating costs outside inventory",
+
+            netProfit: "Net Profit",
+
+            netNote:
+                "Gross Profit − Expenses − Operating Purchases",
+
+            marginTitle: "Profit Margin",
+
+            marginLabel:
+                "Net Profit Margin",
+
+            marginDescription:
+                "Net Profit ÷ Total Sales",
+
+            productTitle:
+                "Product Profitability",
+
+            salesDetailTitle:
+                "Sales Profit Detail",
+
+            product: "Product",
+
+            category: "Category",
+
+            quantity: "Qty Sold",
+
+            sales: "Sales",
+
+            cost: "Cost",
+
+            gross: "Gross Profit",
+
+            date: "Date",
+
+            saleNumber: "Sale No.",
+
+            customer: "Customer",
+
+            noProduct:
+                "No sales data for this period.",
+
+            noSales:
+                "No sales data for this period.",
+
+            products: "products",
+
+            salesCount: "sales",
+
+            loading:
+                "Loading profit data…",
+
+            error:
+                "Could not load profit data.",
+
+            restricted:
+                "Access Restricted",
+
+            noBranch:
+                "Your account has no assigned branch. Access to this page is restricted.",
+
+            noBranches:
+                "No accessible branches were found.",
+
+            notice:
+                "Important: Do not record the same operating cost in both Expenses and Operating Purchases. Doing so would count the cost twice and make Net Profit appear lower.",
+
+            unknownError:
+                "An unexpected error occurred."
+
+        },
+
+
+        rw: {
+
+            language: "English",
+
+            logout: "Sohoka",
+
+            title: "Profits",
+
+            subtitle:
+                "Reba Sales, COGS, Gross Profit, Expenses, Operating Purchases na Net Profit.",
+
+            branch: "Branch",
+
+            period: "Igihe",
+
+            from: "Kuva",
+
+            to: "Kugeza",
+
+            combined: "Byombi",
+
+            kabuga: "Kabuga",
+
+            bisenga: "Bisenga",
+
+            today: "Uyu munsi",
+
+            month: "Uku kwezi",
+
+            custom: "Itariki wihitiyemo",
+
+            apply: "Shyira mu bikorwa",
+
+            applying:
+                "Birimo gutegurwa…",
+
+            reset: "Subiramo",
+
+            totalSales:
+                "Amafaranga y'Ubucuruzi",
+
+            salesNote:
+                "Amafaranga yavuye muri Sales",
+
+            cogs:
+                "COGS",
+
+            cogsNote:
+                "Ikiguzi cy'ibicuruzwa byagurishijwe",
+
+            grossProfit:
+                "Gross Profit",
+
+            grossNote:
+                "Sales − COGS",
+
+            expenses:
+                "Expenses",
+
+            expensesNote:
+                "Expenses zanditswe",
+
+            operatingPurchases:
+                "Operating Purchases",
+
+            operatingNote:
+                "Ibiciro bya business bitari stock",
+
+            netProfit:
+                "Net Profit",
+
+            netNote:
+                "Gross Profit − Expenses − Operating Purchases",
+
+            marginTitle:
+                "Profit Margin",
+
+            marginLabel:
+                "Net Profit Margin",
+
+            marginDescription:
+                "Net Profit ÷ Total Sales",
+
+            productTitle:
+                "Profit ku Gicuruzwa",
+
+            salesDetailTitle:
+                "Ibisobanuro bya Profit kuri buri Sale",
+
+            product:
+                "Igicuruzwa",
+
+            category:
+                "Category",
+
+            quantity:
+                "Umubare wagurishijwe",
+
+            sales:
+                "Sales",
+
+            cost:
+                "Cost",
+
+            gross:
+                "Gross Profit",
+
+            date:
+                "Itariki",
+
+            saleNumber:
+                "No. ya Sale",
+
+            customer:
+                "Umukiriya",
+
+            noProduct:
+                "Nta bicuruzwa byagurishijwe muri iki gihe.",
+
+            noSales:
+                "Nta sales zabonetse muri iki gihe.",
+
+            products:
+                "products",
+
+            salesCount:
+                "sales",
+
+            loading:
+                "Profit iri kubarwa…",
+
+            error:
+                "Profit data ntiyabashije gufunguka.",
+
+            restricted:
+                "Ntabwo wemerewe",
+
+            noBranch:
+                "Konti yawe nta branch yagenewe. Ntabwo wemerewe gukoresha iyi page.",
+
+            noBranches:
+                "Nta branch wemerewe kubona yabonetse.",
+
+            notice:
+                "Icyitonderwa: Ntukandike ikiguzi kimwe muri Expenses no muri Operating Purchases. Kubikora byabara ikiguzi kabiri bigatuma Net Profit igaragara nk'aho iri hasi.",
+
+            unknownError:
+                "Habaye ikibazo kitateganyijwe."
+
+        }
+
+    };
+
+
+    function t(key) {
+
+        const lang =
+            state.language === "rw"
+                ? "rw"
+                : "en";
+
+        return (
+            translations[lang]?.[key] ||
+            translations.en[key] ||
+            key
+        );
+
+    }
+
+
+    /* =====================================================
+       LANGUAGE
+    ===================================================== */
+
+    function getLanguage() {
+
+        let language = "en";
+
+        if (
+            window.DreamLandI18n &&
+            typeof DreamLandI18n.getLanguage ===
+                "function"
+        ) {
+
+            language =
+                DreamLandI18n.getLanguage();
+
+        }
+        else {
+
+            language =
+                localStorage.getItem(
+                    "dreamland_language"
+                ) || "en";
+
+        }
+
+        return language === "rw"
+            ? "rw"
+            : "en";
+
+    }
+
+
+    function setLanguage(language) {
+
+        state.language =
+            language === "rw"
+                ? "rw"
+                : "en";
+
+        if (
+            window.DreamLandI18n &&
+            typeof DreamLandI18n.setLanguage ===
+                "function"
+        ) {
+
+            DreamLandI18n.setLanguage(
+                state.language
+            );
+
+        }
+        else {
+
+            localStorage.setItem(
+                "dreamland_language",
+                state.language
+            );
+
+        }
+
+    }
+
+
+    function applyLanguage() {
+
+        state.language =
+            getLanguage();
+
+
+        document.documentElement.lang =
+            state.language === "rw"
+                ? "rw"
+                : "en";
+
+
+        $("languageBtn").textContent =
+            t("language");
+
+        $("logoutBtn").textContent =
+            t("logout");
+
+        $("pageTitle").textContent =
+            t("title");
+
+        $("pageSubtitle").textContent =
+            t("subtitle");
+
+        $("branchLabel").textContent =
+            t("branch");
+
+        $("periodLabel").textContent =
+            t("period");
+
+        $("fromLabel").textContent =
+            t("from");
+
+        $("toLabel").textContent =
+            t("to");
+
+        $("applyBtn").textContent =
+            state.loading
+                ? t("applying")
+                : t("apply");
+
+        $("resetBtn").textContent =
+            t("reset");
+
+        $("salesLabel").textContent =
+            t("totalSales");
+
+        $("salesNote").textContent =
+            t("salesNote");
+
+        $("cogsLabel").textContent =
+            t("cogs");
+
+        $("cogsNote").textContent =
+            t("cogsNote");
+
+        $("grossLabel").textContent =
+            t("grossProfit");
+
+        $("grossNote").textContent =
+            t("grossNote");
+
+        $("expensesLabel").textContent =
+            t("expenses");
+
+        $("expensesNote").textContent =
+            t("expensesNote");
+
+        $("operatingLabel").textContent =
+            t("operatingPurchases");
+
+        $("operatingNote").textContent =
+            t("operatingNote");
+
+        $("netLabel").textContent =
+            t("netProfit");
+
+        $("netNote").textContent =
+            t("netNote");
+
+        $("marginTitle").textContent =
+            t("marginTitle");
+
+        $("marginLabel").textContent =
+            t("marginLabel");
+
+        $("marginDescription").textContent =
+            t("marginDescription");
+
+        $("productTitle").textContent =
+            t("productTitle");
+
+        $("salesDetailTitle").textContent =
+            t("salesDetailTitle");
+
+        $("thProduct").textContent =
+            t("product");
+
+        $("thCategory").textContent =
+            t("category");
+
+        $("thQuantity").textContent =
+            t("quantity");
+
+        $("thSales").textContent =
+            t("sales");
+
+        $("thCost").textContent =
+            t("cost");
+
+        $("thGrossProfit").textContent =
+            t("gross");
+
+        $("thDate").textContent =
+            t("date");
+
+        $("thSaleNumber").textContent =
+            t("saleNumber");
+
+        $("thBranch").textContent =
+            t("branch");
+
+        $("thCustomer").textContent =
+            t("customer");
+
+        $("thSalesAmount").textContent =
+            t("sales");
+
+        $("thCogs").textContent =
+            t("cogs");
+
+        $("thGross").textContent =
+            t("gross");
+
+        updatePeriodOptions();
+
+        $("productEmpty").textContent =
+            t("noProduct");
+
+        $("saleEmpty").textContent =
+            t("noSales");
+
+        $("accountingNotice").textContent =
+            t("notice");
+
+        updateCounts();
+
+        updateProfileText();
+
+    }
+
+
+    function updatePeriodOptions() {
+
+        const select =
+            $("periodSelect");
+
+        if (!select) {
+            return;
+        }
+
+        select.options[0].textContent =
+            t("today");
+
+        select.options[1].textContent =
+            t("month");
+
+        select.options[2].textContent =
+            t("custom");
+
+    }
+
+
+    /* =====================================================
+       PROFILE
+    ===================================================== */
+
+    function updateProfileText() {
+
+        if (!state.profile) {
+            return;
+        }
+
+        $("userName").textContent =
+            state.profile.full_name ||
+            state.profile.username ||
+            "User";
+
+        $("userRole").textContent =
+            state.profile.role ||
+            "";
+
+    }
+
+
+    /* =====================================================
+       ROLE
+    ===================================================== */
+
+    function isAdmin() {
+
+        return (
+            String(
+                state.profile?.role || ""
+            ).toLowerCase() ===
+            "admin"
+        );
+
+    }
+
+
+    /* =====================================================
+       BRANCH
+    ===================================================== */
+
+    function branchName(branchId) {
+
+        const branch =
+            state.branches.find(
+                item =>
+                    item.id === branchId
+            );
+
+        if (branch?.name) {
+            return branch.name;
+        }
+
+        if (branchId === KABUGA_ID) {
+            return "Kabuga";
+        }
+
+        if (branchId === BISENGA_ID) {
+            return "Bisenga";
+        }
+
+        return "—";
+
+    }
+
+
+    async function loadBranches() {
+
+        let query =
+            db
+                .from("branches")
+                .select(
+                    "id,name,active"
+                )
+                .eq(
+                    "active",
+                    true
+                )
+                .order("name");
+
+
+        if (!isAdmin()) {
+
+            if (!state.profile?.branch_id) {
+
+                throw new Error(
+                    t("noBranch")
+                );
+
+            }
+
+            query =
+                query.eq(
+                    "id",
+                    state.profile.branch_id
+                );
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await query;
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        state.branches =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        state.allowedBranchIds =
+            state.branches.map(
+                branch => branch.id
+            );
+
+
+        if (
+            state.branches.length === 0
+        ) {
+
+            throw new Error(
+                t("noBranches")
+            );
+
+        }
+
+
+        if (
+            !isAdmin() &&
+            !state.allowedBranchIds.includes(
+                state.profile.branch_id
+            )
+        ) {
+
+            throw new Error(
+                t("restricted")
+            );
+
+        }
+
+
+        renderBranchOptions();
+
+    }
+
+
+    function renderBranchOptions() {
+
+        const select =
+            $("branchSelect");
+
+        select.innerHTML = "";
+
+
+        if (isAdmin()) {
+
+            const combined =
+                document.createElement(
+                    "option"
+                );
+
+            combined.value =
+                "combined";
+
+            combined.textContent =
+                t("combined");
+
+            select.appendChild(
+                combined
+            );
+
+        }
+
+
+        state.branches.forEach(
+            branch => {
+
+                const option =
+                    document.createElement(
+                        "option"
+                    );
+
+                option.value =
+                    branch.id;
+
+                option.textContent =
+                    branch.name;
+
+                select.appendChild(
+                    option
+                );
+
+            }
+        );
+
+
+        if (isAdmin()) {
+
+            select.disabled = false;
+
+            select.value =
+                "combined";
+
+        }
+        else {
+
+            select.value =
+                state.profile.branch_id;
+
+            select.disabled = true;
+
+        }
+
+    }
+
+
+    function validateSelectedBranch() {
+
+        const selected =
+            $("branchSelect").value;
+
+
+        if (isAdmin()) {
+
+            if (
+                selected !== "combined" &&
+                !state.allowedBranchIds.includes(
+                    selected
+                )
+            ) {
+
+                throw new Error(
+                    t("restricted")
+                );
+
+            }
+
+            return selected;
+
+        }
+
+
+        if (
+            selected !==
+            state.profile?.branch_id
+        ) {
+
+            throw new Error(
+                t("restricted")
+            );
+
+        }
+
+
+        return selected;
+
+    }
+
+
+    /* =====================================================
+       DATE FILTER
+    ===================================================== */
+
+    function getDateRange() {
+
+        const period =
+            $("periodSelect").value;
+
+        const today =
+            getKigaliToday();
+
+
+        if (period === "today") {
+
+            return {
+                from: today,
+                to: today
+            };
+
+        }
+
+
+        if (period === "month") {
+
+            return {
+                from: getMonthStart(),
+                to: today
+            };
+
+        }
+
+
+        let from =
+            $("fromDate").value;
+
+        let to =
+            $("toDate").value;
+
+
+        if (!from || !to) {
+
+            from = today;
+            to = today;
+
+            $("fromDate").value =
+                from;
+
+            $("toDate").value =
+                to;
+
+        }
+
+
+        if (from > to) {
+
+            const temp =
+                from;
+
+            from = to;
+            to = temp;
+
+            $("fromDate").value =
+                from;
+
+            $("toDate").value =
+                to;
+
+        }
+
+
+        return {
+            from,
+            to
+        };
+
+    }
+
+
+    function setupDates() {
+
+        const today =
+            getKigaliToday();
+
+        const monthStart =
+            getMonthStart();
+
+
+        $("fromDate").value =
+            monthStart;
+
+        $("toDate").value =
+            today;
+
+
+        $("fromDate").disabled = true;
+
+        $("toDate").disabled = true;
+
+    }
+
+
+    function updateDateControls() {
+
+        const custom =
+            $("periodSelect").value ===
+            "custom";
+
+
+        $("fromDate").disabled =
+            state.loading ||
+            !custom;
+
+        $("toDate").disabled =
+            state.loading ||
+            !custom;
+
+    }
+
+
+    /* =====================================================
+       SALES
+    ===================================================== */
+
+    async function loadSalesProfit(
+        from,
+        to,
+        branch
+    ) {
+
+        let query =
+            db
+                .from("profit_sales_detail")
+                .select("*")
+                .gte(
+                    "sale_date",
+                    buildKigaliStart(from)
+                )
+                .lte(
+                    "sale_date",
+                    buildKigaliEnd(to)
+                )
+                .order(
+                    "sale_date",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (branch !== "combined") {
+
+            query =
+                query.eq(
+                    "branch_id",
+                    branch
+                );
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await query;
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        return Array.isArray(data)
+            ? data
+            : [];
+
+    }
+
+
+    /* =====================================================
+       EXPENSES
+    ===================================================== */
+
+    async function loadExpenses(
+        from,
+        to,
+        branch
+    ) {
+
+        let query =
+            db
+                .from("expenses")
+                .select(
+                    "branch_id,amount,expense_date"
+                )
+                .gte(
+                    "expense_date",
+                    buildKigaliStart(from)
+                )
+                .lte(
+                    "expense_date",
+                    buildKigaliEnd(to)
+                );
+
+
+        if (branch !== "combined") {
+
+            query =
+                query.eq(
+                    "branch_id",
+                    branch
+                );
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await query;
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        return (
+            data || []
+        ).reduce(
+            (
+                total,
+                row
+            ) =>
+                total +
+                Number(
+                    row.amount || 0
+                ),
+            0
+        );
+
+    }
+
+
+    /* =====================================================
+       OPERATING PURCHASES
+    ===================================================== */
+
+    async function loadOperatingPurchases(
+        from,
+        to,
+        branch
+    ) {
+
+        let query =
+            db
+                .from("operating_purchases")
+                .select(
+                    "branch_id,total_amount,purchase_date"
+                )
+                .gte(
+                    "purchase_date",
+                    buildKigaliStart(from)
+                )
+                .lte(
+                    "purchase_date",
+                    buildKigaliEnd(to)
+                );
+
+
+        if (branch !== "combined") {
+
+            query =
+                query.eq(
+                    "branch_id",
+                    branch
+                );
+
+        }
+
+
+        const {
+            data,
+            error
+        } = await query;
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        return (
+            data || []
+        ).reduce(
+            (
+                total,
+                row
+            ) =>
+                total +
+                Number(
+                    row.total_amount || 0
+                ),
+            0
+        );
+
+    }
+
+
+    /* =====================================================
+       RENDER REPORT
+    ===================================================== */
+
+    function render(
+        rows,
+        expenses,
+        operatingPurchases,
+        range
+    ) {
+
+        const sales =
+            rows.reduce(
+                (
+                    total,
+                    row
+                ) =>
+                    total +
+                    Number(
+                        row.sales_amount || 0
+                    ),
+                0
+            );
+
+
+        const cogs =
+            rows.reduce(
+                (
+                    total,
+                    row
+                ) =>
+                    total +
+                    Number(
+                        row.cost_amount || 0
+                    ),
+                0
+            );
+
+
+        const grossProfit =
+            rows.reduce(
+                (
+                    total,
+                    row
+                ) =>
+                    total +
+                    Number(
+                        row.gross_profit || 0
+                    ),
+                0
+            );
+
+
+        const netProfit =
+            grossProfit -
+            expenses -
+            operatingPurchases;
+
+
+        const margin =
+            sales === 0
+                ? 0
+                : (
+                    netProfit /
+                    sales
+                ) * 100;
+
+
+        /* SUMMARY */
+
+        $("salesValue").textContent =
+            money(sales);
+
+        $("cogsValue").textContent =
+            money(cogs);
+
+        $("grossValue").textContent =
+            money(grossProfit);
+
+        $("expensesValue").textContent =
+            money(expenses);
+
+        $("operatingValue").textContent =
+            money(operatingPurchases);
+
+        $("netValue").textContent =
+            money(netProfit);
+
+        $("marginValue").textContent =
+            percentage(margin);
+
+
+        $("marginPeriod").textContent =
+            `${range.from} → ${range.to}`;
+
+
+        /* PROFIT / LOSS CLASSES */
+
+        $("grossValue").className =
+            `summary-value ${
+                grossProfit < 0
+                    ? "negative"
+                    : "positive"
+            }`;
+
+
+        $("netValue").className =
+            `summary-value ${
+                netProfit < 0
+                    ? "negative"
+                    : "positive"
+            }`;
+
+
+        $("marginValue").className =
+            `margin-value ${
+                margin < 0
+                    ? "negative"
+                    : "positive"
+            }`;
+
+
+        $("grossCard")
+            .classList.toggle(
+                "negative-card",
+                grossProfit < 0
+            );
+
+
+        $("netCard")
+            .classList.toggle(
+                "negative-card",
+                netProfit < 0
+            );
+
+
+        /* =================================================
+           PRODUCT PROFITABILITY
+        ================================================= */
+
+        const products =
+            new Map();
+
+
+        rows.forEach(row => {
+
+            const key =
+                row.product_id ||
+                `product:${row.product_name || "unknown"}`;
+
+
+            if (!products.has(key)) {
+
+                products.set(
+                    key,
+                    {
+                        product_name:
+                            row.product_name ||
+                            "—",
+
+                        category:
+                            row.category ||
+                            "—",
+
+                        quantity: 0,
+
+                        sales: 0,
+
+                        cost: 0,
+
+                        gross: 0
+
+                    }
+                );
+
+            }
+
+
+            const product =
+                products.get(key);
+
+
+            product.quantity +=
+                Number(
+                    row.quantity || 0
+                );
+
+
+            product.sales +=
+                Number(
+                    row.sales_amount || 0
+                );
+
+
+            product.cost +=
+                Number(
+                    row.cost_amount || 0
+                );
+
+
+            product.gross +=
+                Number(
+                    row.gross_profit || 0
+                );
+
+        });
+
+
+        const productRows =
+            Array.from(
+                products.values()
+            ).sort(
+                (a, b) =>
+                    b.gross -
+                    a.gross
+            );
+
+
+        $("productBody").innerHTML =
+            productRows
+                .map(
+                    product => `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    product.product_name
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    product.category
+                                )}
+                            </td>
+
+                            <td class="num">
+                                ${numberFormat(
+                                    product.quantity
+                                )}
+                            </td>
+
+                            <td class="num">
+                                ${money(
+                                    product.sales
+                                )}
+                            </td>
+
+                            <td class="num">
+                                ${money(
+                                    product.cost
+                                )}
+                            </td>
+
+                            <td
+                                class="num ${
+                                    product.gross < 0
+                                        ? "negative"
+                                        : "positive"
+                                }"
+                            >
+                                ${money(
+                                    product.gross
+                                )}
+                            </td>
+
+                        </tr>
+
+                    `
+                )
+                .join("");
+
+
+        $("productEmpty")
+            .classList.toggle(
+                "hidden",
+                productRows.length > 0
+            );
+
+
+        /* =================================================
+           SALE DETAIL
+        ================================================= */
+
+        const saleMap =
+            new Map();
+
+
+        rows.forEach(row => {
+
+            const key =
+                row.sale_id ||
+                `sale:${row.sale_number || row.sale_date}`;
+
+
+            if (!saleMap.has(key)) {
+
+                saleMap.set(
+                    key,
+                    {
+                        date:
+                            row.sale_date,
+
+                        saleNumber:
+                            row.sale_number ||
+                            "—",
+
+                        branch:
+                            row.branch_name ||
+                            branchName(
+                                row.branch_id
+                            ),
+
+                        customer:
+                            row.customer_name ||
+                            "—",
+
+                        sales: 0,
+
+                        cost: 0,
+
+                        gross: 0
+
+                    }
+                );
+
+            }
+
+
+            const sale =
+                saleMap.get(key);
+
+
+            sale.sales +=
+                Number(
+                    row.sales_amount || 0
+                );
+
+
+            sale.cost +=
+                Number(
+                    row.cost_amount || 0
+                );
+
+
+            sale.gross +=
+                Number(
+                    row.gross_profit || 0
+                );
+
+        });
+
+
+        const salesRows =
+            Array.from(
+                saleMap.values()
+            ).sort(
+                (a, b) =>
+                    new Date(b.date) -
+                    new Date(a.date)
+            );
+
+
+        $("saleBody").innerHTML =
+            salesRows
+                .map(
+                    sale => `
+
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatDate(
+                                        sale.date
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    sale.saleNumber
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    sale.branch
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    sale.customer
+                                )}
+                            </td>
+
+                            <td class="num">
+                                ${money(
+                                    sale.sales
+                                )}
+                            </td>
+
+                            <td class="num">
+                                ${money(
+                                    sale.cost
+                                )}
+                            </td>
+
+                            <td
+                                class="num ${
+                                    sale.gross < 0
+                                        ? "negative"
+                                        : "positive"
+                                }"
+                            >
+                                ${money(
+                                    sale.gross
+                                )}
+                            </td>
+
+                        </tr>
+
+                    `
+                )
+                .join("");
+
+
+        $("saleEmpty")
+            .classList.toggle(
+                "hidden",
+                salesRows.length > 0
+            );
+
+
+        updateCounts();
+
+    }
+
+
+    /* =====================================================
+       COUNTS
+    ===================================================== */
+
+    function updateCounts() {
+
+        const productRows =
+            $("productBody")
+                ?.querySelectorAll("tr")
+                .length || 0;
+
+
+        const saleRows =
+            $("saleBody")
+                ?.querySelectorAll("tr")
+                .length || 0;
+
+
+        $("productCount").textContent =
+            `${productRows} ${t("products")}`;
+
+
+        $("saleCount").textContent =
+            `${saleRows} ${t("salesCount")}`;
+
+    }
+
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    function setLoading(isLoading) {
+
+        state.loading =
+            Boolean(isLoading);
+
+
+        $("applyBtn").disabled =
+            state.loading;
+
+        $("resetBtn").disabled =
+            state.loading;
+
+        $("periodSelect").disabled =
+            state.loading;
+
+
+        $("branchSelect").disabled =
+            state.loading ||
+            !isAdmin();
+
+
+        updateDateControls();
+
+        applyLanguage();
+
+    }
+
+
+    /* =====================================================
+       LOAD DATA
+    ===================================================== */
+
+    async function loadData() {
+
+        if (state.loading) {
+            return;
+        }
+
+
+        let range;
+        let branch;
+
+
+        try {
+
+            range =
+                getDateRange();
+
+            branch =
+                validateSelectedBranch();
+
+        }
+        catch (error) {
+
+            setStatus(
+                error?.message ||
+                t("restricted"),
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        setLoading(true);
+
+        setStatus(
+            t("loading"),
+            "loading"
+        );
+
+
+        try {
+
+            if (!window.db) {
+
+                throw new Error(
+                    "Supabase client is not available."
+                );
+
+            }
+
+
+            const [
+                salesRows,
+                expenses,
+                operatingPurchases
+            ] =
+                await Promise.all([
+
+                    loadSalesProfit(
+                        range.from,
+                        range.to,
+                        branch
+                    ),
+
+                    loadExpenses(
+                        range.from,
+                        range.to,
+                        branch
+                    ),
+
+                    loadOperatingPurchases(
+                        range.from,
+                        range.to,
+                        branch
+                    )
+
+                ]);
+
+
+            render(
+                salesRows,
+                expenses,
+                operatingPurchases,
+                range
+            );
+
+
+            clearStatus();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Profits page error:",
+                error
+            );
+
+
+            /*
+             * Do not leave old profit numbers
+             * visible after a failed query.
+             */
+
+            render(
+                [],
+                0,
+                0,
+                range
+            );
+
+
+            setStatus(
+                `${t("error")} ${
+                    error?.message ||
+                    t("unknownError")
+                }`,
+                "error"
+            );
+
+        }
+        finally {
+
+            setLoading(false);
+
+        }
+
+    }
+
+
+    /* =====================================================
+       LANGUAGE
+    ===================================================== */
+
+    function setupLanguage() {
+
+        $("languageBtn")
+            .addEventListener(
+                "click",
+                async () => {
+
+                    if (state.loading) {
+                        return;
+                    }
+
+
+                    const nextLanguage =
+                        state.language === "rw"
+                            ? "en"
+                            : "rw";
+
+
+                    setLanguage(
+                        nextLanguage
+                    );
+
+
+                    applyLanguage();
+
+                    await loadData();
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    function resetFilters() {
+
+        if (state.loading) {
+            return;
+        }
+
+
+        if (isAdmin()) {
+
+            $("branchSelect").value =
+                "combined";
+
+        }
+        else {
+
+            $("branchSelect").value =
+                state.profile.branch_id;
+
+        }
+
+
+        $("periodSelect").value =
+            "month";
+
+
+        $("fromDate").value =
+            getMonthStart();
+
+        $("toDate").value =
+            getKigaliToday();
+
+
+        updateDateControls();
+
+        loadData();
+
+    }
+
+
+    /* =====================================================
+       LOGOUT
+    ===================================================== */
+
+    async function logout() {
+
+        try {
+
+            if (
+                window.DreamLandAuth &&
+                typeof DreamLandAuth.signOut ===
+                    "function"
+            ) {
+
+                await DreamLandAuth.signOut();
+
+                return;
+
+            }
+
+
+            await db.auth.signOut();
+
+            window.location.href =
+                "index.html";
+
+        }
+        catch (error) {
+
+            console.error(
+                "Logout error:",
+                error
+            );
+
+
+            setStatus(
+                error?.message ||
+                "Logout failed.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       EVENTS
+    ===================================================== */
+
+    function setupEvents() {
+
+        $("applyBtn")
+            .addEventListener(
+                "click",
+                loadData
+            );
+
+
+        $("resetBtn")
+            .addEventListener(
+                "click",
+                resetFilters
+            );
+
+
+        $("logoutBtn")
+            .addEventListener(
+                "click",
+                logout
+            );
+
+
+        $("periodSelect")
+            .addEventListener(
+                "change",
+                () => {
+
+                    const custom =
+                        $("periodSelect").value ===
+                        "custom";
+
+
+                    if (!custom) {
+
+                        const range =
+                            getDateRange();
+
+                        $("fromDate").value =
+                            range.from;
+
+                        $("toDate").value =
+                            range.to;
+
+                    }
+
+
+                    updateDateControls();
+
+                }
+            );
+
+
+        $("branchSelect")
+            .addEventListener(
+                "change",
+                () => {
+
+                    if (!isAdmin()) {
+
+                        $("branchSelect").value =
+                            state.profile.branch_id;
+
+                    }
+
+                }
+            );
+
+    }
+
+
+    /* =====================================================
+       BOOT
+    ===================================================== */
+
+    async function boot() {
+
+        try {
+
+            const authResult =
+                await DreamLandAuth.requireAuth();
+
+
+            if (!authResult) {
+                return;
+            }
+
+
+            state.profile =
+                authResult.profile;
+
+
+            if (
+                !isAdmin() &&
+                !state.profile.branch_id
+            ) {
+
+                setStatus(
+                    t("noBranch"),
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            state.language =
+                getLanguage();
+
+
+            updateProfileText();
+
+            applyLanguage();
+
+            setupDates();
+
+            setupEvents();
+
+            setupLanguage();
+
+
+            await loadBranches();
+
+
+            applyLanguage();
+
+
+            await loadData();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Profits boot error:",
+                error
+            );
+
+
+            setStatus(
+                error?.message ||
+                t("error"),
+                "error"
+            );
+
+        }
+
+    }
+
+
+    window.addEventListener(
+        "DOMContentLoaded",
+        boot
+    );
+
+})();
+</script>
+
+</body>
+</html>

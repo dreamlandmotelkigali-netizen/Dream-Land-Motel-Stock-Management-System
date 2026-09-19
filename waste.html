@@ -1,0 +1,1649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dream Land Motel | Waste</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel stock waste management"
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =========================
+         HEADER
+    ========================== -->
+    <header class="app-header">
+        <div class="header-inner">
+
+            <a href="dashboard.html" class="brand">
+                <img
+                    src="images/logo1.png"
+                    alt="Dream Land Motel"
+                    class="brand-logo"
+                >
+
+                <div class="brand-text">
+                    <strong>Dream Land Motel</strong>
+                    <span data-i18n="businessSystem">
+                        Business Control System
+                    </span>
+                </div>
+            </a>
+
+            <div class="header-actions">
+
+                <div id="languageSwitcher"></div>
+
+                <button
+                    type="button"
+                    id="logoutBtn"
+                    class="btn btn-danger"
+                    data-i18n="logout"
+                >
+                    Logout
+                </button>
+
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+    <main class="page-container">
+
+        <!-- PAGE TITLE -->
+        <section class="page-heading">
+
+            <div>
+                <h1 data-i18n="waste">
+                    Waste
+                </h1>
+
+                <p data-i18n="recordStockWaste">
+                    Record damaged, expired or lost stock.
+                </p>
+            </div>
+
+            <a
+                href="dashboard.html"
+                class="btn btn-secondary"
+                data-i18n="backToDashboard"
+            >
+                Back to Dashboard
+            </a>
+
+        </section>
+
+
+        <!-- =========================
+             FORM CARD
+        ========================== -->
+        <section class="card">
+
+            <div class="card-header">
+                <div>
+                    <h2 data-i18n="recordWaste">
+                        Record Waste
+                    </h2>
+
+                    <p class="muted">
+                        <span data-i18n="wasteReducesMainStock">
+                            Waste reduces main stock.
+                        </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <form id="wasteForm" novalidate>
+
+                <div class="form-grid">
+
+                    <!-- BRANCH -->
+                    <div class="form-group">
+
+                        <label for="branchSelect" data-i18n="branch">
+                            Branch
+                        </label>
+
+                        <select
+                            id="branchSelect"
+                            name="branch"
+                            required
+                        >
+                            <option value="">
+                                Select branch
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- PRODUCT -->
+                    <div class="form-group">
+
+                        <label for="productSelect" data-i18n="product">
+                            Product
+                        </label>
+
+                        <select
+                            id="productSelect"
+                            name="product"
+                            required
+                            disabled
+                        >
+                            <option value="">
+                                Select product
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- QUANTITY -->
+                    <div class="form-group">
+
+                        <label for="quantity" data-i18n="quantity">
+                            Quantity
+                        </label>
+
+                        <input
+                            type="number"
+                            id="quantity"
+                            name="quantity"
+                            min="0.001"
+                            step="0.001"
+                            inputmode="decimal"
+                            placeholder="0"
+                            required
+                            disabled
+                        >
+
+                    </div>
+
+
+                    <!-- UNIT -->
+                    <div class="form-group">
+
+                        <label for="unitDisplay" data-i18n="unit">
+                            Unit
+                        </label>
+
+                        <input
+                            type="text"
+                            id="unitDisplay"
+                            readonly
+                            placeholder="-"
+                        >
+
+                    </div>
+
+
+                    <!-- CURRENT STOCK -->
+                    <div class="form-group">
+
+                        <label
+                            for="currentStock"
+                            data-i18n="currentStock"
+                        >
+                            Current Stock
+                        </label>
+
+                        <input
+                            type="text"
+                            id="currentStock"
+                            readonly
+                            value="-"
+                        >
+
+                    </div>
+
+
+                    <!-- REASON -->
+                    <div class="form-group form-group-wide">
+
+                        <label for="reason" data-i18n="reason">
+                            Reason
+                        </label>
+
+                        <textarea
+                            id="reason"
+                            name="reason"
+                            rows="3"
+                            maxlength="500"
+                            placeholder="Example: Damaged during storage"
+                            required
+                        ></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="saveWasteBtn"
+                        class="btn btn-primary"
+                        disabled
+                    >
+                        <span data-i18n="saveWaste">
+                            Save Waste
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        id="resetBtn"
+                        class="btn btn-secondary"
+                        data-i18n="clear"
+                    >
+                        Clear
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- MESSAGE -->
+            <div
+                id="formMessage"
+                class="alert hidden"
+                role="alert"
+                aria-live="polite"
+            ></div>
+
+        </section>
+
+
+        <!-- =========================
+             SUMMARY
+        ========================== -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="selectedProduct"
+                >
+                    Selected Product
+                </span>
+
+                <strong
+                    id="summaryProduct"
+                    class="stat-value"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="availableStock"
+                >
+                    Available Stock
+                </span>
+
+                <strong
+                    id="summaryStock"
+                    class="stat-value"
+                >
+                    -
+                </strong>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span
+                    class="stat-label"
+                    data-i18n="selectedWaste"
+                >
+                    Selected Waste
+                </span>
+
+                <strong
+                    id="summaryWaste"
+                    class="stat-value"
+                >
+                    0
+                </strong>
+
+            </div>
+
+        </section>
+
+
+        <!-- =========================
+             RECENT WASTE
+        ========================== -->
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2 data-i18n="recentWaste">
+                        Recent Waste
+                    </h2>
+
+                    <p class="muted">
+                        <span data-i18n="wasteHistory">
+                            Recent stock waste records.
+                        </span>
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="refreshBtn"
+                    class="btn btn-secondary"
+                    data-i18n="refresh"
+                >
+                    Refresh
+                </button>
+
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th data-i18n="date">
+                                Date
+                            </th>
+
+                            <th data-i18n="branch">
+                                Branch
+                            </th>
+
+                            <th data-i18n="product">
+                                Product
+                            </th>
+
+                            <th data-i18n="quantity">
+                                Quantity
+                            </th>
+
+                            <th data-i18n="reason">
+                                Reason
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="wasteTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="5"
+                                class="empty-state"
+                                data-i18n="loading"
+                            >
+                                Loading...
+
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+    <footer class="app-footer">
+
+        <span>
+            Dream Land Motel
+        </span>
+
+        <span>•</span>
+
+        <span data-i18n="businessControlSystem">
+            Business Control System
+        </span>
+
+    </footer>
+
+
+    <!-- =========================
+         SUPABASE
+    ========================== -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="i18n.js"></script>
+
+    <script src="auth.js"></script>
+
+
+    <!-- =========================
+         PAGE SCRIPT
+    ========================== -->
+    <script>
+
+        const BRANCHES = {
+            kabuga: {
+                id: "92f52581-efaa-4462-b807-24e7e00438eb",
+                name: "Kabuga"
+            },
+
+            bisenga: {
+                id: "e1269a07-97b8-43b8-bf65-0d838212a0ac",
+                name: "Bisenga"
+            }
+        };
+
+
+        let authResult = null;
+        let profile = null;
+
+        let products = [];
+        let movements = [];
+        let branches = [];
+
+        let currentBranchId = null;
+        let selectedProduct = null;
+
+
+        /* =========================================
+           DOM
+        ========================================== */
+
+        const branchSelect =
+            document.getElementById("branchSelect");
+
+        const productSelect =
+            document.getElementById("productSelect");
+
+        const quantityInput =
+            document.getElementById("quantity");
+
+        const unitDisplay =
+            document.getElementById("unitDisplay");
+
+        const currentStockInput =
+            document.getElementById("currentStock");
+
+        const reasonInput =
+            document.getElementById("reason");
+
+        const wasteForm =
+            document.getElementById("wasteForm");
+
+        const saveWasteBtn =
+            document.getElementById("saveWasteBtn");
+
+        const resetBtn =
+            document.getElementById("resetBtn");
+
+        const refreshBtn =
+            document.getElementById("refreshBtn");
+
+        const formMessage =
+            document.getElementById("formMessage");
+
+        const wasteTableBody =
+            document.getElementById("wasteTableBody");
+
+        const summaryProduct =
+            document.getElementById("summaryProduct");
+
+        const summaryStock =
+            document.getElementById("summaryStock");
+
+        const summaryWaste =
+            document.getElementById("summaryWaste");
+
+        const logoutBtn =
+            document.getElementById("logoutBtn");
+
+
+        /* =========================================
+           HELPERS
+        ========================================== */
+
+        function escapeHtml(value) {
+
+            return String(value ?? "")
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        function getTranslation(key, fallback) {
+
+            try {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n.t === "function"
+                ) {
+
+                    const value =
+                        window.DreamLandI18n.t(key);
+
+                    if (value && value !== key) {
+                        return value;
+                    }
+                }
+
+            } catch (error) {
+                console.warn("Translation error:", error);
+            }
+
+            return fallback;
+        }
+
+
+        function formatNumber(value) {
+
+            const number = Number(value);
+
+            if (!Number.isFinite(number)) {
+                return "0";
+            }
+
+            return number.toLocaleString(
+                undefined,
+                {
+                    maximumFractionDigits: 3
+                }
+            );
+        }
+
+
+        function formatDate(value) {
+
+            if (!value) {
+                return "-";
+            }
+
+            const date = new Date(value);
+
+            if (Number.isNaN(date.getTime())) {
+                return "-";
+            }
+
+            return date.toLocaleString();
+        }
+
+
+        function showMessage(message, type = "info") {
+
+            formMessage.textContent = message;
+
+            formMessage.className =
+                `alert alert-${type}`;
+
+        }
+
+
+        function hideMessage() {
+
+            formMessage.textContent = "";
+
+            formMessage.className =
+                "alert hidden";
+
+        }
+
+
+        function calculateMainStock(
+            branchId,
+            productId
+        ) {
+
+            if (!branchId || !productId) {
+                return 0;
+            }
+
+            return movements
+                .filter(movement =>
+                    movement.branch_id === branchId &&
+                    movement.product_id === productId &&
+                    !movement.server_id
+                )
+                .reduce((total, movement) => {
+
+                    const quantity =
+                        Number(movement.quantity) || 0;
+
+                    switch (movement.movement_type) {
+
+                        case "purchase":
+                            return total + quantity;
+
+                        case "return_from_server":
+                            return total + quantity;
+
+                        case "adjustment":
+                            return total + quantity;
+
+                        case "issue_to_server":
+                            return total - quantity;
+
+                        case "waste":
+                            return total - quantity;
+
+                        default:
+                            return total;
+                    }
+
+                }, 0);
+        }
+
+
+        function updateSelectedProduct() {
+
+            const productId =
+                productSelect.value;
+
+            selectedProduct =
+                products.find(
+                    product => product.id === productId
+                ) || null;
+
+
+            if (!selectedProduct) {
+
+                unitDisplay.value = "-";
+
+                currentStockInput.value = "-";
+
+                summaryProduct.textContent = "-";
+
+                summaryStock.textContent = "-";
+
+                quantityInput.disabled = true;
+
+                saveWasteBtn.disabled = true;
+
+                return;
+            }
+
+
+            unitDisplay.value =
+                selectedProduct.unit || "-";
+
+
+            const stock =
+                calculateMainStock(
+                    currentBranchId,
+                    selectedProduct.id
+                );
+
+
+            currentStockInput.value =
+                formatNumber(stock);
+
+
+            summaryProduct.textContent =
+                selectedProduct.name;
+
+
+            summaryStock.textContent =
+                `${formatNumber(stock)} ${selectedProduct.unit || ""}`;
+
+
+            quantityInput.disabled = false;
+
+            saveWasteBtn.disabled = false;
+
+            updateWastePreview();
+        }
+
+
+        function updateWastePreview() {
+
+            const quantity =
+                Number(quantityInput.value) || 0;
+
+            summaryWaste.textContent =
+                formatNumber(quantity);
+
+
+            if (!selectedProduct || !currentBranchId) {
+                return;
+            }
+
+
+            const stock =
+                calculateMainStock(
+                    currentBranchId,
+                    selectedProduct.id
+                );
+
+
+            if (quantity > stock) {
+
+                currentStockInput.classList.add(
+                    "input-error"
+                );
+
+            } else {
+
+                currentStockInput.classList.remove(
+                    "input-error"
+                );
+            }
+        }
+
+
+        /* =========================================
+           BRANCHES
+        ========================================== */
+
+        function populateBranches() {
+
+            branchSelect.innerHTML = "";
+
+            if (profile.role === "admin") {
+
+                branchSelect.innerHTML += `
+                    <option value="">
+                        ${escapeHtml(
+                            getTranslation(
+                                "selectBranch",
+                                "Select branch"
+                            )
+                        )}
+                    </option>
+                `;
+
+                branchSelect.innerHTML += `
+                    <option value="${BRANCHES.kabuga.id}">
+                        Kabuga
+                    </option>
+                `;
+
+                branchSelect.innerHTML += `
+                    <option value="${BRANCHES.bisenga.id}">
+                        Bisenga
+                    </option>
+                `;
+
+            } else {
+
+                const branchId =
+                    profile.branch_id;
+
+                if (
+                    branchId === BRANCHES.kabuga.id
+                ) {
+
+                    branchSelect.innerHTML = `
+                        <option value="${BRANCHES.kabuga.id}">
+                            Kabuga
+                        </option>
+                    `;
+
+                } else if (
+                    branchId === BRANCHES.bisenga.id
+                ) {
+
+                    branchSelect.innerHTML = `
+                        <option value="${BRANCHES.bisenga.id}">
+                            Bisenga
+                        </option>
+                    `;
+
+                } else {
+
+                    branchSelect.innerHTML = `
+                        <option value="">
+                            ${escapeHtml(
+                                getTranslation(
+                                    "noBranchAssigned",
+                                    "No branch assigned"
+                                )
+                            )}
+                        </option>
+                    `;
+
+                }
+            }
+        }
+
+
+        /* =========================================
+           PRODUCTS
+        ========================================== */
+
+        async function loadProducts() {
+
+            productSelect.disabled = true;
+
+            productSelect.innerHTML = `
+                <option value="">
+                    ${escapeHtml(
+                        getTranslation(
+                            "loading",
+                            "Loading..."
+                        )
+                    )}
+                </option>
+            `;
+
+
+            const {
+                data,
+                error
+            } = await db
+                .from("products")
+                .select(`
+                    id,
+                    name,
+                    category,
+                    unit,
+                    barcode,
+                    minimum_stock,
+                    active
+                `)
+                .eq("active", true)
+                .order("name");
+
+
+            if (error) {
+
+                console.error(
+                    "Products error:",
+                    error
+                );
+
+                productSelect.innerHTML = `
+                    <option value="">
+                        ${escapeHtml(
+                            getTranslation(
+                                "loadError",
+                                "Could not load products"
+                            )
+                        )}
+                    </option>
+                `;
+
+                return;
+            }
+
+
+            products = data || [];
+
+
+            productSelect.innerHTML = `
+                <option value="">
+                    ${escapeHtml(
+                        getTranslation(
+                            "selectProduct",
+                            "Select product"
+                        )
+                    )}
+                </option>
+            `;
+
+
+            products.forEach(product => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    product.id;
+
+                option.textContent =
+                    `${product.name} (${product.unit})`;
+
+                productSelect.appendChild(option);
+
+            });
+
+
+            productSelect.disabled =
+                !currentBranchId;
+
+            updateSelectedProduct();
+        }
+
+
+        /* =========================================
+           STOCK MOVEMENTS
+        ========================================== */
+
+        async function loadMovements() {
+
+            if (!currentBranchId) {
+
+                movements = [];
+
+                return;
+            }
+
+
+            const {
+                data,
+                error
+            } = await db
+                .from("stock_movements")
+                .select(`
+                    id,
+                    branch_id,
+                    product_id,
+                    movement_type,
+                    quantity,
+                    from_location,
+                    to_location,
+                    server_id,
+                    reason,
+                    created_at
+                `)
+                .eq(
+                    "branch_id",
+                    currentBranchId
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+            if (error) {
+
+                console.error(
+                    "Stock movements error:",
+                    error
+                );
+
+                movements = [];
+
+                showMessage(
+                    getTranslation(
+                        "stockLoadError",
+                        "Could not load stock information."
+                    ),
+                    "error"
+                );
+
+                return;
+            }
+
+
+            movements = data || [];
+
+            updateSelectedProduct();
+        }
+
+
+        /* =========================================
+           WASTE HISTORY
+        ========================================== */
+
+        async function loadWasteHistory() {
+
+            wasteTableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="empty-state">
+                        ${escapeHtml(
+                            getTranslation(
+                                "loading",
+                                "Loading..."
+                            )
+                        )}
+                    </td>
+                </tr>
+            `;
+
+
+            let query =
+                db
+                    .from("stock_movements")
+                    .select(`
+                        id,
+                        branch_id,
+                        product_id,
+                        quantity,
+                        reason,
+                        created_at,
+                        movement_type,
+                        products (
+                            name,
+                            unit
+                        ),
+                        branches (
+                            name
+                        )
+                    `)
+                    .eq(
+                        "movement_type",
+                        "waste"
+                    )
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    )
+                    .limit(100);
+
+
+            if (profile.role !== "admin") {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        profile.branch_id
+                    );
+
+            } else if (currentBranchId) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        currentBranchId
+                    );
+            }
+
+
+            const {
+                data,
+                error
+            } = await query;
+
+
+            if (error) {
+
+                console.error(
+                    "Waste history error:",
+                    error
+                );
+
+                wasteTableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="empty-state error-text"
+                        >
+                            ${escapeHtml(
+                                getTranslation(
+                                    "loadError",
+                                    "Could not load records."
+                                )
+                            )}
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            if (!data || data.length === 0) {
+
+                wasteTableBody.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="5"
+                            class="empty-state"
+                        >
+                            ${escapeHtml(
+                                getTranslation(
+                                    "noRecords",
+                                    "No records found."
+                                )
+                            )}
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            wasteTableBody.innerHTML =
+                data.map(item => {
+
+                    const product =
+                        item.products || {};
+
+                    const branch =
+                        item.branches || {};
+
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatDate(
+                                        item.created_at
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    branch.name || "-"
+                                )}
+                            </td>
+
+                            <td>
+                                <strong>
+                                    ${escapeHtml(
+                                        product.name || "-"
+                                    )}
+                                </strong>
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatNumber(
+                                        item.quantity
+                                    )
+                                )}
+                                ${escapeHtml(
+                                    product.unit || ""
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    item.reason || "-"
+                                )}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }).join("");
+        }
+
+
+        /* =========================================
+           LOAD BRANCH DATA
+        ========================================== */
+
+        async function loadBranchData() {
+
+            currentBranchId =
+                branchSelect.value || null;
+
+
+            selectedProduct = null;
+
+            productSelect.value = "";
+
+            quantityInput.value = "";
+
+            unitDisplay.value = "-";
+
+            currentStockInput.value = "-";
+
+            summaryProduct.textContent = "-";
+
+            summaryStock.textContent = "-";
+
+            summaryWaste.textContent = "0";
+
+
+            if (!currentBranchId) {
+
+                productSelect.disabled = true;
+
+                saveWasteBtn.disabled = true;
+
+                movements = [];
+
+                await loadWasteHistory();
+
+                return;
+            }
+
+
+            productSelect.disabled = false;
+
+            await loadMovements();
+
+            await loadWasteHistory();
+
+            updateSelectedProduct();
+        }
+
+
+        /* =========================================
+           SAVE WASTE
+        ========================================== */
+
+        async function saveWaste() {
+
+            hideMessage();
+
+
+            if (!currentBranchId) {
+
+                showMessage(
+                    getTranslation(
+                        "selectBranch",
+                        "Please select a branch."
+                    ),
+                    "error"
+                );
+
+                return;
+            }
+
+
+            if (!selectedProduct) {
+
+                showMessage(
+                    getTranslation(
+                        "selectProduct",
+                        "Please select a product."
+                    ),
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const quantity =
+                Number(quantityInput.value);
+
+
+            if (
+                !Number.isFinite(quantity) ||
+                quantity <= 0
+            ) {
+
+                showMessage(
+                    getTranslation(
+                        "invalidQuantity",
+                        "Enter a valid quantity."
+                    ),
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const availableStock =
+                calculateMainStock(
+                    currentBranchId,
+                    selectedProduct.id
+                );
+
+
+            if (quantity > availableStock) {
+
+                showMessage(
+                    `${getTranslation(
+                        "insufficientStock",
+                        "Insufficient stock."
+                    )} ${getTranslation(
+                        "available",
+                        "Available"
+                    )}: ${formatNumber(availableStock)} ${selectedProduct.unit || ""}`,
+                    "error"
+                );
+
+                return;
+            }
+
+
+            const reason =
+                reasonInput.value.trim();
+
+
+            if (!reason) {
+
+                showMessage(
+                    getTranslation(
+                        "reasonRequired",
+                        "Please enter a reason."
+                    ),
+                    "error"
+                );
+
+                return;
+            }
+
+
+            saveWasteBtn.disabled = true;
+
+            saveWasteBtn.textContent =
+                getTranslation(
+                    "saving",
+                    "Saving..."
+                );
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await db.rpc(
+                    "create_waste_transaction",
+                    {
+                        p_branch_id:
+                            currentBranchId,
+
+                        p_product_id:
+                            selectedProduct.id,
+
+                        p_quantity:
+                            quantity,
+
+                        p_reason:
+                            reason
+                    }
+                );
+
+
+                if (error) {
+                    throw error;
+                }
+
+
+                if (!data) {
+                    throw new Error(
+                        "Waste transaction returned no ID."
+                    );
+                }
+
+
+                showMessage(
+                    getTranslation(
+                        "wasteSaved",
+                        "Waste recorded successfully."
+                    ),
+                    "success"
+                );
+
+
+                quantityInput.value = "";
+
+                reasonInput.value = "";
+
+                await loadMovements();
+
+                await loadWasteHistory();
+
+                updateSelectedProduct();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Save waste error:",
+                    error
+                );
+
+
+                showMessage(
+                    error.message ||
+                    getTranslation(
+                        "saveError",
+                        "Could not save the record."
+                    ),
+                    "error"
+                );
+
+            } finally {
+
+                saveWasteBtn.textContent =
+                    getTranslation(
+                        "saveWaste",
+                        "Save Waste"
+                    );
+
+                updateSelectedProduct();
+            }
+        }
+
+
+        /* =========================================
+           RESET
+        ========================================== */
+
+        function resetForm() {
+
+            productSelect.value = "";
+
+            quantityInput.value = "";
+
+            reasonInput.value = "";
+
+            selectedProduct = null;
+
+            unitDisplay.value = "-";
+
+            currentStockInput.value = "-";
+
+            summaryProduct.textContent = "-";
+
+            summaryStock.textContent = "-";
+
+            summaryWaste.textContent = "0";
+
+            hideMessage();
+
+            saveWasteBtn.disabled =
+                !currentBranchId;
+        }
+
+
+        /* =========================================
+           EVENTS
+        ========================================== */
+
+        branchSelect.addEventListener(
+            "change",
+            loadBranchData
+        );
+
+
+        productSelect.addEventListener(
+            "change",
+            updateSelectedProduct
+        );
+
+
+        quantityInput.addEventListener(
+            "input",
+            updateWastePreview
+        );
+
+
+        wasteForm.addEventListener(
+            "submit",
+            async event => {
+
+                event.preventDefault();
+
+                await saveWaste();
+
+            }
+        );
+
+
+        resetBtn.addEventListener(
+            "click",
+            resetForm
+        );
+
+
+        refreshBtn.addEventListener(
+            "click",
+            async () => {
+
+                hideMessage();
+
+                await loadMovements();
+
+                await loadWasteHistory();
+
+            }
+        );
+
+
+        logoutBtn.addEventListener(
+            "click",
+            async () => {
+
+                await DreamLandAuth.signOut();
+
+            }
+        );
+
+
+        /* =========================================
+           LANGUAGE
+        ========================================== */
+
+        document.addEventListener(
+            "languageChanged",
+            () => {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n
+                        .applyTranslations === "function"
+                ) {
+
+                    window.DreamLandI18n
+                        .applyTranslations();
+                }
+
+                loadWasteHistory();
+
+            }
+        );
+
+
+        /* =========================================
+           INIT
+        ========================================== */
+
+        async function init() {
+
+            authResult =
+                await DreamLandAuth.requireAuth();
+
+            if (!authResult) {
+                return;
+            }
+
+
+            profile =
+                authResult.profile;
+
+
+            if (
+                !profile ||
+                !profile.active
+            ) {
+
+                await DreamLandAuth.signOut();
+
+                return;
+            }
+
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n
+                    .createLanguageSwitcher === "function"
+            ) {
+
+                window.DreamLandI18n
+                    .createLanguageSwitcher(
+                        document.getElementById(
+                            "languageSwitcher"
+                        )
+                    );
+            }
+
+
+            populateBranches();
+
+            await loadProducts();
+
+
+            if (profile.role !== "admin") {
+
+                currentBranchId =
+                    profile.branch_id;
+
+                branchSelect.value =
+                    currentBranchId;
+
+                await loadBranchData();
+
+            } else {
+
+                await loadWasteHistory();
+
+            }
+
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n
+                    .applyTranslations === "function"
+            ) {
+
+                window.DreamLandI18n
+                    .applyTranslations();
+            }
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            init
+        );
+
+    </script>
+
+</body>
+</html>

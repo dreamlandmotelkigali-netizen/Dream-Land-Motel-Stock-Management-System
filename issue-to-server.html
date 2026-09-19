@@ -1,0 +1,3194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Issue to Server | Dream Land Motel</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase.js"></script>
+    <script src="i18n.js"></script>
+    <script src="auth.js"></script>
+</head>
+
+<body>
+
+<header>
+    <h1>Dream Land Motel</h1>
+
+    <p id="pageSubtitle">
+        Issue Stock to Server
+    </p>
+</header>
+
+<main class="page-container">
+
+    <!-- LANGUAGE -->
+
+    <div class="language-switcher">
+
+        <button
+            type="button"
+            id="langEn"
+            onclick="changePageLanguage('en')"
+        >
+            English
+        </button>
+
+        <button
+            type="button"
+            id="langRw"
+            onclick="changePageLanguage('rw')"
+        >
+            Kinyarwanda
+        </button>
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <a
+        href="dashboard.html"
+        class="back-link"
+        id="backLink"
+    >
+        ← Back to Dashboard
+    </a>
+
+
+    <!-- ACCESS RESTRICTED -->
+
+    <section
+        id="restrictedBox"
+        class="restricted-box"
+        hidden
+    >
+
+        <strong id="restrictedTitle">
+            Access Restricted
+        </strong>
+
+        <p id="restrictedText">
+            You are not allowed to use this page.
+        </p>
+
+    </section>
+
+
+    <!-- AUTHORIZED CONTENT -->
+
+    <div
+        id="authorizedContent"
+        hidden
+    >
+
+        <!-- ISSUE FORM -->
+
+        <section class="page-card">
+
+            <h2 id="formTitle">
+                Issue Stock to Server
+            </h2>
+
+
+            <div class="info-box">
+
+                <strong id="importantLabel">
+                    Important:
+                </strong>
+
+                <span id="importantText">
+                    Issuing stock to a server is NOT a sale.
+                    The quantity moves from Main Stock to Server Stock.
+                    The actual sale will be recorded later.
+                </span>
+
+            </div>
+
+
+            <div class="form-grid">
+
+                <!-- DATE -->
+
+                <div class="field">
+
+                    <label
+                        for="issueDate"
+                        id="dateLabel"
+                    >
+                        Date & Time
+                    </label>
+
+                    <input
+                        type="datetime-local"
+                        id="issueDate"
+                    >
+
+                </div>
+
+
+                <!-- BRANCH -->
+
+                <div class="field">
+
+                    <label
+                        for="branch"
+                        id="branchLabel"
+                    >
+                        Branch
+                    </label>
+
+                    <select id="branch">
+
+                        <option value="">
+                            Select Branch
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- SERVER -->
+
+                <div class="field">
+
+                    <label
+                        for="server"
+                        id="serverLabel"
+                    >
+                        Server
+                    </label>
+
+                    <select id="server">
+
+                        <option value="">
+                            Select Server
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- PRODUCT -->
+
+                <div class="field">
+
+                    <label
+                        for="product"
+                        id="productLabel"
+                    >
+                        Product
+                    </label>
+
+                    <select id="product">
+
+                        <option value="">
+                            Select Product
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- UNIT -->
+
+                <div class="field">
+
+                    <label
+                        for="unit"
+                        id="unitLabel"
+                    >
+                        Unit
+                    </label>
+
+                    <input
+                        type="text"
+                        id="unit"
+                        readonly
+                        placeholder="Unit"
+                    >
+
+                </div>
+
+
+                <!-- QUANTITY -->
+
+                <div class="field">
+
+                    <label
+                        for="quantity"
+                        id="quantityLabel"
+                    >
+                        Quantity to Issue
+                    </label>
+
+                    <input
+                        type="number"
+                        id="quantity"
+                        min="0"
+                        step="0.01"
+                        inputmode="decimal"
+                        placeholder="0"
+                    >
+
+                </div>
+
+
+                <!-- REASON -->
+
+                <div class="field full">
+
+                    <label
+                        for="reason"
+                        id="reasonLabel"
+                    >
+                        Reason / Note
+                    </label>
+
+                    <textarea
+                        id="reason"
+                        rows="3"
+                        placeholder="Optional note..."
+                    ></textarea>
+
+                </div>
+
+            </div>
+
+
+            <!-- STOCK SUMMARY -->
+
+            <div class="stock-box">
+
+                <div class="stock-item">
+
+                    <span id="mainStockLabel">
+                        Main Stock
+                    </span>
+
+                    <strong id="mainStock">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div class="stock-item">
+
+                    <span id="issueQuantityLabel">
+                        Quantity to Issue
+                    </span>
+
+                    <strong id="issueQuantity">
+                        0
+                    </strong>
+
+                </div>
+
+
+                <div
+                    class="stock-item"
+                    id="remainingBox"
+                >
+
+                    <span id="remainingStockLabel">
+                        Main Stock After Issue
+                    </span>
+
+                    <strong id="remainingStock">
+                        0
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- SUMMARY -->
+
+            <div class="summary-box">
+
+                <div class="summary-row">
+
+                    <span id="summaryBranchLabel">
+                        Branch
+                    </span>
+
+                    <strong id="summaryBranch">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row">
+
+                    <span id="summaryServerLabel">
+                        Server
+                    </span>
+
+                    <strong id="summaryServer">
+                        -
+                    </strong>
+
+                </div>
+
+
+                <div class="summary-row product-row">
+
+                    <span id="summaryProductLabel">
+                        Product
+                    </span>
+
+                    <strong id="summaryProduct">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div
+                id="statusMessage"
+                class="status-message"
+                role="status"
+                aria-live="polite"
+            ></div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="actions">
+
+                <button
+                    type="button"
+                    id="issueBtn"
+                    class="primary-btn"
+                >
+                    + Issue Stock to Server
+                </button>
+
+                <button
+                    type="button"
+                    id="clearBtn"
+                    class="secondary-btn"
+                >
+                    Clear
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <!-- HISTORY -->
+
+        <section class="page-card">
+
+            <h2 id="historyTitle">
+                Recent Server Issues
+            </h2>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th id="thDate">
+                                Date
+                            </th>
+
+                            <th id="thBranch">
+                                Branch
+                            </th>
+
+                            <th id="thServer">
+                                Server
+                            </th>
+
+                            <th id="thProduct">
+                                Product
+                            </th>
+
+                            <th id="thQuantity">
+                                Quantity
+                            </th>
+
+                            <th id="thFrom">
+                                From
+                            </th>
+
+                            <th id="thTo">
+                                To
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="historyBody">
+
+                        <tr>
+
+                            <td
+                                colspan="7"
+                                class="empty"
+                            >
+                                Loading...
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</main>
+
+
+<footer class="page-footer">
+    Dream Land Motel System 2026
+</footer>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   TRANSLATIONS
+========================================================= */
+
+const pageTranslations = {
+
+    en: {
+
+        subtitle: "Issue Stock to Server",
+
+        back: "← Back to Dashboard",
+
+        formTitle: "Issue Stock to Server",
+
+        important: "Important:",
+
+        importantText:
+            " Issuing stock to a server is NOT a sale. The quantity moves from Main Stock to Server Stock. The actual sale will be recorded later.",
+
+        date: "Date & Time",
+
+        branch: "Branch",
+
+        server: "Server",
+
+        product: "Product",
+
+        unit: "Unit",
+
+        quantity: "Quantity to Issue",
+
+        reason: "Reason / Note",
+
+        reasonPlaceholder:
+            "Optional note...",
+
+        mainStock: "Main Stock",
+
+        issueQuantity: "Quantity to Issue",
+
+        remainingStock:
+            "Main Stock After Issue",
+
+        summaryBranch: "Branch",
+
+        summaryServer: "Server",
+
+        summaryProduct: "Product",
+
+        issueButton:
+            "+ Issue Stock to Server",
+
+        saving:
+            "Saving...",
+
+        clear: "Clear",
+
+        history:
+            "Recent Server Issues",
+
+        dateTable: "Date",
+
+        branchTable: "Branch",
+
+        serverTable: "Server",
+
+        productTable: "Product",
+
+        quantityTable: "Quantity",
+
+        fromTable: "From",
+
+        toTable: "To",
+
+        selectBranch:
+            "Select Branch",
+
+        selectServer:
+            "Select Server",
+
+        selectProduct:
+            "Select Product",
+
+        noServers:
+            "No active servers found",
+
+        loading:
+            "Loading...",
+
+        loadingStock:
+            "Loading...",
+
+        loadingHistory:
+            "Loading server issues...",
+
+        noHistory:
+            "No server issues found.",
+
+        accessTitle:
+            "Access Restricted",
+
+        accessText:
+            "You are not allowed to use this page.",
+
+        notEnoughStock:
+            "Not enough Main Stock.",
+
+        available:
+            "Available",
+
+        requested:
+            "Requested",
+
+        success:
+            "Stock issued successfully!",
+
+        moved:
+            "moved from Main Stock to Server Stock.",
+
+        authentication:
+            "Your session has expired. Please log in again.",
+
+        genericError:
+            "Stock issue failed.",
+
+        dateRequired:
+            "Please select date and time.",
+
+        branchRequired:
+            "Please select branch.",
+
+        serverRequired:
+            "Please select server.",
+
+        productRequired:
+            "Please select product.",
+
+        quantityRequired:
+            "Quantity must be greater than zero.",
+
+        failedHistory:
+            "Failed to load issue history."
+
+    },
+
+
+    rw: {
+
+        subtitle:
+            "Guha Server Ibicuruzwa",
+
+        back:
+            "← Subira kuri Dashboard",
+
+        formTitle:
+            "Guha Server Ibicuruzwa",
+
+        important:
+            "Icyitonderwa:",
+
+        importantText:
+            " Guha server ibicuruzwa SI ukugurisha. Ibicuruzwa biva muri Main Stock bikajya muri Server Stock. Igurisha nyaryo rizandikwa nyuma.",
+
+        date:
+            "Itariki n'Igihe",
+
+        branch:
+            "Branch",
+
+        server:
+            "Server",
+
+        product:
+            "Igicuruzwa",
+
+        unit:
+            "Unit",
+
+        quantity:
+            "Umubare wo Gutanga",
+
+        reason:
+            "Impamvu / Icyitonderwa",
+
+        reasonPlaceholder:
+            "Icyitonderwa si ngombwa...",
+
+        mainStock:
+            "Main Stock",
+
+        issueQuantity:
+            "Umubare utanzwe",
+
+        remainingStock:
+            "Main Stock Isigaye",
+
+        summaryBranch:
+            "Branch",
+
+        summaryServer:
+            "Server",
+
+        summaryProduct:
+            "Igicuruzwa",
+
+        issueButton:
+            "+ Guha Server Ibicuruzwa",
+
+        saving:
+            "Birimo kubikwa...",
+
+        clear:
+            "Siba",
+
+        history:
+            "Ibicuruzwa Biheruka Guha Server",
+
+        dateTable:
+            "Itariki",
+
+        branchTable:
+            "Branch",
+
+        serverTable:
+            "Server",
+
+        productTable:
+            "Igicuruzwa",
+
+        quantityTable:
+            "Umubare",
+
+        fromTable:
+            "Byavuye",
+
+        toTable:
+            "Byagiye",
+
+        selectBranch:
+            "Hitamo Branch",
+
+        selectServer:
+            "Hitamo Server",
+
+        selectProduct:
+            "Hitamo Igicuruzwa",
+
+        noServers:
+            "Nta server ikora yabonetse",
+
+        loading:
+            "Birimo gutegurwa...",
+
+        loadingStock:
+            "Birimo gushakishwa...",
+
+        loadingHistory:
+            "Birimo gushakisha ibicuruzwa byahawe server...",
+
+        noHistory:
+            "Nta stock yahawe server iraboneka.",
+
+        accessTitle:
+            "Ntabwo Wemerewe",
+
+        accessText:
+            "Ntabwo wemerewe gukoresha uru rupapuro.",
+
+        notEnoughStock:
+            "Main Stock ntabwo ihagije.",
+
+        available:
+            "Iriho",
+
+        requested:
+            "Usabye",
+
+        success:
+            "Stock yahawe server neza!",
+
+        moved:
+            "byavuye muri Main Stock bijya muri Server Stock.",
+
+        authentication:
+            "Session yawe yarangiye. Ongera winjire.",
+
+        genericError:
+            "Gutanga stock byanze.",
+
+        dateRequired:
+            "Hitamo itariki n'igihe.",
+
+        branchRequired:
+            "Hitamo branch.",
+
+        serverRequired:
+            "Hitamo server.",
+
+        productRequired:
+            "Hitamo igicuruzwa.",
+
+        quantityRequired:
+            "Umubare ugomba kuba urenze zero.",
+
+        failedHistory:
+            "Kubona amateka ya stock yahawe server byanze."
+
+    }
+
+};
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentLanguage = "en";
+let currentAuth = null;
+let currentProfile = null;
+let products = [];
+let pageAuthorized = false;
+let stockRequestId = 0;
+
+
+/* =========================================================
+   LANGUAGE
+========================================================= */
+
+function getCurrentLanguage() {
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof window.DreamLandI18n.getLanguage ===
+                "function"
+        ) {
+
+            return window.DreamLandI18n.getLanguage();
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "Shared language system unavailable:",
+            error
+        );
+
+    }
+
+    return (
+        localStorage.getItem(
+            "dreamland_language"
+        ) || "en"
+    );
+
+}
+
+
+function changePageLanguage(language) {
+
+    if (
+        language !== "en" &&
+        language !== "rw"
+    ) {
+
+        language = "en";
+
+    }
+
+    currentLanguage =
+        language;
+
+
+    try {
+
+        if (
+            window.DreamLandI18n &&
+            typeof window.DreamLandI18n.setLanguage ===
+                "function"
+        ) {
+
+            window.DreamLandI18n.setLanguage(
+                language
+            );
+
+        } else {
+
+            localStorage.setItem(
+                "dreamland_language",
+                language
+            );
+
+        }
+
+    } catch (error) {
+
+        localStorage.setItem(
+            "dreamland_language",
+            language
+        );
+
+    }
+
+
+    applyPageLanguage();
+
+    updateRemainingStock();
+
+    loadIssueHistory();
+
+}
+
+
+function applyPageLanguage() {
+
+    const t =
+        pageTranslations[currentLanguage];
+
+    if (!t) {
+        return;
+    }
+
+
+    document.documentElement.lang =
+        currentLanguage;
+
+
+    setText(
+        "pageSubtitle",
+        t.subtitle
+    );
+
+    setText(
+        "backLink",
+        t.back
+    );
+
+    setText(
+        "formTitle",
+        t.formTitle
+    );
+
+    setText(
+        "importantLabel",
+        t.important
+    );
+
+    setText(
+        "importantText",
+        t.importantText
+    );
+
+    setText(
+        "dateLabel",
+        t.date
+    );
+
+    setText(
+        "branchLabel",
+        t.branch
+    );
+
+    setText(
+        "serverLabel",
+        t.server
+    );
+
+    setText(
+        "productLabel",
+        t.product
+    );
+
+    setText(
+        "unitLabel",
+        t.unit
+    );
+
+    setText(
+        "quantityLabel",
+        t.quantity
+    );
+
+    setText(
+        "reasonLabel",
+        t.reason
+    );
+
+    setText(
+        "mainStockLabel",
+        t.mainStock
+    );
+
+    setText(
+        "issueQuantityLabel",
+        t.issueQuantity
+    );
+
+    setText(
+        "remainingStockLabel",
+        t.remainingStock
+    );
+
+    setText(
+        "summaryBranchLabel",
+        t.summaryBranch
+    );
+
+    setText(
+        "summaryServerLabel",
+        t.summaryServer
+    );
+
+    setText(
+        "summaryProductLabel",
+        t.summaryProduct
+    );
+
+    setText(
+        "issueBtn",
+        t.issueButton
+    );
+
+    setText(
+        "clearBtn",
+        t.clear
+    );
+
+    setText(
+        "historyTitle",
+        t.history
+    );
+
+    setText(
+        "thDate",
+        t.dateTable
+    );
+
+    setText(
+        "thBranch",
+        t.branchTable
+    );
+
+    setText(
+        "thServer",
+        t.serverTable
+    );
+
+    setText(
+        "thProduct",
+        t.productTable
+    );
+
+    setText(
+        "thQuantity",
+        t.quantityTable
+    );
+
+    setText(
+        "thFrom",
+        t.fromTable
+    );
+
+    setText(
+        "thTo",
+        t.toTable
+    );
+
+    setText(
+        "restrictedTitle",
+        t.accessTitle
+    );
+
+    setText(
+        "restrictedText",
+        t.accessText
+    );
+
+
+    const reason =
+        document.getElementById(
+            "reason"
+        );
+
+    if (reason) {
+
+        reason.placeholder =
+            t.reasonPlaceholder;
+
+    }
+
+
+    document
+        .getElementById("langEn")
+        ?.classList.toggle(
+            "active",
+            currentLanguage === "en"
+        );
+
+
+    document
+        .getElementById("langRw")
+        ?.classList.toggle(
+            "active",
+            currentLanguage === "rw"
+        );
+
+
+    updateSelectPlaceholders();
+
+}
+
+
+function setText(id, text) {
+
+    const element =
+        document.getElementById(id);
+
+    if (element) {
+
+        element.textContent =
+            text;
+
+    }
+
+}
+
+
+function updateSelectPlaceholders() {
+
+    const t =
+        pageTranslations[currentLanguage];
+
+
+    const branch =
+        document.getElementById(
+            "branch"
+        );
+
+    const server =
+        document.getElementById(
+            "server"
+        );
+
+    const product =
+        document.getElementById(
+            "product"
+        );
+
+
+    if (
+        branch &&
+        branch.options.length &&
+        branch.options[0].value === ""
+    ) {
+
+        branch.options[0].textContent =
+            t.selectBranch;
+
+    }
+
+
+    if (
+        server &&
+        server.options.length &&
+        server.options[0].value === ""
+    ) {
+
+        server.options[0].textContent =
+            t.selectServer;
+
+    }
+
+
+    if (
+        product &&
+        product.options.length &&
+        product.options[0].value === ""
+    ) {
+
+        product.options[0].textContent =
+            t.selectProduct;
+
+    }
+
+}
+
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    initializePage
+);
+
+
+async function initializePage() {
+
+    currentLanguage =
+        getCurrentLanguage();
+
+
+    applyPageLanguage();
+
+    setDefaultDate();
+
+    hideAuthorizedContent();
+
+    hideRestricted();
+
+
+    try {
+
+        if (
+            !window.DreamLandAuth ||
+            typeof window.DreamLandAuth.requireAuth !==
+                "function"
+        ) {
+
+            throw new Error(
+                "Authentication system is unavailable."
+            );
+
+        }
+
+
+        const authResult =
+            await DreamLandAuth.requireAuth();
+
+
+        if (!authResult) {
+
+            return;
+
+        }
+
+
+        currentAuth =
+            authResult.user;
+
+        currentProfile =
+            authResult.profile;
+
+
+        if (!currentAuth || !currentProfile) {
+
+            throw new Error(
+                "Authenticated profile could not be loaded."
+            );
+
+        }
+
+
+        const role =
+            getProfileRole();
+
+
+        const branchId =
+            getProfileBranchId();
+
+
+        console.log(
+            "ISSUE TO SERVER AUTH:",
+            {
+                userId:
+                    currentAuth.id,
+
+                role,
+
+                branchId
+            }
+        );
+
+
+        if (
+            !isAllowedIssueRole()
+        ) {
+
+            showRestricted();
+
+            return;
+
+        }
+
+
+        pageAuthorized =
+            true;
+
+        showAuthorizedContent();
+
+
+        await loadBranches();
+
+        if (!pageAuthorized) {
+            return;
+        }
+
+
+        await loadProducts();
+
+        if (!pageAuthorized) {
+            return;
+        }
+
+
+        await loadIssueHistory();
+
+        updateSummary();
+
+    }
+    catch (error) {
+
+        console.error(
+            "ISSUE PAGE INITIALIZATION ERROR:",
+            error
+        );
+
+
+        showRestricted();
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function getProfileRole() {
+
+    return String(
+        currentProfile?.role || ""
+    )
+        .trim()
+        .toLowerCase();
+
+}
+
+
+function getProfileBranchId() {
+
+    return (
+        currentProfile?.branch_id ||
+        null
+    );
+
+}
+
+
+function isAllowedIssueRole() {
+
+    return [
+        "admin",
+        "manager",
+        "cashier"
+    ].includes(
+        getProfileRole()
+    );
+
+}
+
+
+/* =========================================================
+   PAGE ACCESS
+========================================================= */
+
+function showAuthorizedContent() {
+
+    const authorized =
+        document.getElementById(
+            "authorizedContent"
+        );
+
+    const restricted =
+        document.getElementById(
+            "restrictedBox"
+        );
+
+
+    if (authorized) {
+
+        authorized.hidden =
+            false;
+
+    }
+
+
+    if (restricted) {
+
+        restricted.hidden =
+            true;
+
+    }
+
+}
+
+
+function hideAuthorizedContent() {
+
+    const authorized =
+        document.getElementById(
+            "authorizedContent"
+        );
+
+    if (authorized) {
+
+        authorized.hidden =
+            true;
+
+    }
+
+}
+
+
+function showRestricted() {
+
+    pageAuthorized =
+        false;
+
+    hideAuthorizedContent();
+
+
+    const restricted =
+        document.getElementById(
+            "restrictedBox"
+        );
+
+    if (restricted) {
+
+        restricted.hidden =
+            false;
+
+    }
+
+}
+
+
+function hideRestricted() {
+
+    const restricted =
+        document.getElementById(
+            "restrictedBox"
+        );
+
+    if (restricted) {
+
+        restricted.hidden =
+            true;
+
+    }
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function setDefaultDate() {
+
+    const input =
+        document.getElementById(
+            "issueDate"
+        );
+
+    if (!input) {
+        return;
+    }
+
+
+    const now =
+        new Date();
+
+
+    const offset =
+        now.getTimezoneOffset();
+
+
+    const local =
+        new Date(
+            now.getTime()
+            -
+            offset * 60000
+        );
+
+
+    input.value =
+        local
+            .toISOString()
+            .slice(0, 16);
+
+}
+
+
+/* =========================================================
+   LOAD BRANCHES
+========================================================= */
+
+async function loadBranches() {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const select =
+        document.getElementById(
+            "branch"
+        );
+
+
+    const t =
+        pageTranslations[currentLanguage];
+
+
+    select.innerHTML =
+        "";
+
+
+    const placeholder =
+        document.createElement(
+            "option"
+        );
+
+    placeholder.value =
+        "";
+
+    placeholder.textContent =
+        t.selectBranch;
+
+    select.appendChild(
+        placeholder
+    );
+
+
+    let query =
+        db
+            .from("branches")
+            .select(
+                "id,name"
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name"
+            );
+
+
+    const role =
+        getProfileRole();
+
+
+    const branchId =
+        getProfileBranchId();
+
+
+    if (role !== "admin") {
+
+        if (!branchId) {
+
+            throw new Error(
+                "Your account has no branch assigned."
+            );
+
+        }
+
+
+        query =
+            query.eq(
+                "id",
+                branchId
+            );
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await query;
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    (data || []).forEach(
+        branch => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                branch.id;
+
+            option.textContent =
+                branch.name;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+
+    if (
+        role !== "admin" &&
+        branchId
+    ) {
+
+        select.value =
+            branchId;
+
+        await loadServers(
+            branchId
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   LOAD SERVERS
+========================================================= */
+
+async function loadServers(
+    branchId
+) {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const select =
+        document.getElementById(
+            "server"
+        );
+
+
+    const t =
+        pageTranslations[currentLanguage];
+
+
+    select.innerHTML =
+        "";
+
+
+    const placeholder =
+        document.createElement(
+            "option"
+        );
+
+    placeholder.value =
+        "";
+
+    placeholder.textContent =
+        t.selectServer;
+
+    select.appendChild(
+        placeholder
+    );
+
+
+    if (!branchId) {
+
+        return;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("servers")
+            .select(
+                "id,full_name,branch_id"
+            )
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "full_name"
+            );
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    if (
+        !data ||
+        data.length === 0
+    ) {
+
+        select.innerHTML =
+            "";
+
+
+        const emptyOption =
+            document.createElement(
+                "option"
+            );
+
+        emptyOption.value =
+            "";
+
+        emptyOption.textContent =
+            t.noServers;
+
+        select.appendChild(
+            emptyOption
+        );
+
+        return;
+
+    }
+
+
+    data.forEach(
+        server => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                server.id;
+
+            option.textContent =
+                server.full_name;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD PRODUCTS
+========================================================= */
+
+async function loadProducts() {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const select =
+        document.getElementById(
+            "product"
+        );
+
+
+    const t =
+        pageTranslations[currentLanguage];
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("products")
+            .select(
+                "id,name,unit"
+            )
+            .eq(
+                "active",
+                true
+            )
+            .order(
+                "name"
+            );
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    products =
+        data || [];
+
+
+    select.innerHTML =
+        "";
+
+
+    const placeholder =
+        document.createElement(
+            "option"
+        );
+
+    placeholder.value =
+        "";
+
+    placeholder.textContent =
+        t.selectProduct;
+
+    select.appendChild(
+        placeholder
+    );
+
+
+    products.forEach(
+        product => {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                product.id;
+
+            option.textContent =
+                product.name;
+
+            option.dataset.unit =
+                product.unit || "";
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   BRANCH CHANGE
+========================================================= */
+
+document
+    .getElementById("branch")
+    .addEventListener(
+        "change",
+        async function () {
+
+            if (!pageAuthorized) {
+                return;
+            }
+
+
+            const branchId =
+                this.value;
+
+
+            resetStockDisplay();
+
+
+            document.getElementById(
+                "server"
+            ).innerHTML =
+                "";
+
+
+            try {
+
+                await loadServers(
+                    branchId
+                );
+
+                updateSummary();
+
+            }
+            catch (error) {
+
+                console.error(
+                    "BRANCH CHANGE ERROR:",
+                    error
+                );
+
+                showStatus(
+                    error?.message ||
+                    pageTranslations[currentLanguage]
+                        .genericError,
+                    "error"
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   SERVER CHANGE
+========================================================= */
+
+document
+    .getElementById("server")
+    .addEventListener(
+        "change",
+        updateSummary
+    );
+
+
+/* =========================================================
+   PRODUCT CHANGE
+========================================================= */
+
+document
+    .getElementById("product")
+    .addEventListener(
+        "change",
+        async function () {
+
+            if (!pageAuthorized) {
+                return;
+            }
+
+
+            const option =
+                this.selectedOptions[0];
+
+
+            document.getElementById(
+                "unit"
+            ).value =
+                option?.dataset?.unit ||
+                "";
+
+
+            await updateMainStock();
+
+            updateSummary();
+
+        }
+    );
+
+
+/* =========================================================
+   QUANTITY CHANGE
+========================================================= */
+
+document
+    .getElementById("quantity")
+    .addEventListener(
+        "input",
+        updateRemainingStock
+    );
+
+
+/* =========================================================
+   MAIN STOCK
+========================================================= */
+
+async function getMainStock(
+    branchId,
+    productId
+) {
+
+    if (
+        !pageAuthorized ||
+        !branchId ||
+        !productId
+    ) {
+
+        return 0;
+
+    }
+
+
+    const {
+        data,
+        error
+    } =
+        await db
+            .from("stock_movements")
+            .select(
+                "movement_type,quantity,from_location,to_location"
+            )
+            .eq(
+                "branch_id",
+                branchId
+            )
+            .eq(
+                "product_id",
+                productId
+            );
+
+
+    if (error) {
+
+        throw error;
+
+    }
+
+
+    let stock =
+        0;
+
+
+    (data || []).forEach(
+        movement => {
+
+            const quantity =
+                Number(
+                    movement.quantity
+                ) || 0;
+
+
+            switch (
+                movement.movement_type
+            ) {
+
+                case "purchase":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+
+                case "issue_to_server":
+
+                    if (
+                        movement.from_location ===
+                            "main_stock" &&
+                        movement.to_location ===
+                            "server"
+                    ) {
+
+                        stock -=
+                            quantity;
+
+                    }
+
+                    break;
+
+
+                case "return_from_server":
+
+                    if (
+                        movement.to_location ===
+                            "main_stock"
+                    ) {
+
+                        stock +=
+                            quantity;
+
+                    }
+
+                    break;
+
+
+                case "waste":
+
+                    if (
+                        movement.from_location ===
+                            "main_stock"
+                    ) {
+
+                        stock -=
+                            quantity;
+
+                    }
+
+                    break;
+
+
+                case "sale":
+
+                    if (
+                        movement.from_location ===
+                            "main_stock"
+                    ) {
+
+                        stock -=
+                            quantity;
+
+                    }
+
+                    break;
+
+
+                case "adjustment":
+
+                    stock +=
+                        quantity;
+
+                    break;
+
+            }
+
+        }
+    );
+
+
+    return Math.max(
+        0,
+        stock
+    );
+
+}
+
+
+/* =========================================================
+   UPDATE MAIN STOCK
+========================================================= */
+
+async function updateMainStock() {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const mainStock =
+        document.getElementById(
+            "mainStock"
+        );
+
+
+    if (
+        !branchId ||
+        !productId
+    ) {
+
+        resetStockDisplay();
+
+        return;
+
+    }
+
+
+    const requestId =
+        ++stockRequestId;
+
+
+    mainStock.textContent =
+        pageTranslations[
+            currentLanguage
+        ].loadingStock;
+
+
+    try {
+
+        const stock =
+            await getMainStock(
+                branchId,
+                productId
+            );
+
+
+        if (
+            requestId !== stockRequestId
+        ) {
+
+            return;
+
+        }
+
+
+        mainStock.textContent =
+            formatQuantity(
+                stock
+            );
+
+
+        updateRemainingStock();
+
+    }
+    catch (error) {
+
+        console.error(
+            "GET MAIN STOCK ERROR:",
+            error
+        );
+
+
+        mainStock.textContent =
+            "Error";
+
+        updateRemainingStock();
+
+    }
+
+}
+
+
+/* =========================================================
+   REMAINING STOCK
+========================================================= */
+
+function updateRemainingStock() {
+
+    const mainText =
+        document.getElementById(
+            "mainStock"
+        ).textContent;
+
+
+    const mainStock =
+        Number(
+            String(mainText)
+                .replace(
+                    /,/g,
+                    ""
+                )
+        ) || 0;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        ) || 0;
+
+
+    const remaining =
+        mainStock -
+        quantity;
+
+
+    document.getElementById(
+        "issueQuantity"
+    ).textContent =
+        formatQuantity(
+            quantity
+        );
+
+
+    document.getElementById(
+        "remainingStock"
+    ).textContent =
+        formatQuantity(
+            remaining
+        );
+
+
+    document.getElementById(
+        "remainingBox"
+    ).classList.toggle(
+        "warning",
+        quantity > mainStock
+    );
+
+}
+
+
+/* =========================================================
+   RESET STOCK DISPLAY
+========================================================= */
+
+function resetStockDisplay() {
+
+    document.getElementById(
+        "mainStock"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "issueQuantity"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "remainingStock"
+    ).textContent =
+        "0";
+
+
+    document.getElementById(
+        "unit"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "remainingBox"
+    ).classList.remove(
+        "warning"
+    );
+
+}
+
+
+/* =========================================================
+   SUMMARY
+========================================================= */
+
+function updateSummary() {
+
+    const branch =
+        document.getElementById(
+            "branch"
+        );
+
+
+    const server =
+        document.getElementById(
+            "server"
+        );
+
+
+    const product =
+        document.getElementById(
+            "product"
+        );
+
+
+    document.getElementById(
+        "summaryBranch"
+    ).textContent =
+        branch?.selectedOptions[0]
+            ?.textContent ||
+        "-";
+
+
+    document.getElementById(
+        "summaryServer"
+    ).textContent =
+        server?.selectedOptions[0]
+            ?.textContent ||
+        "-";
+
+
+    document.getElementById(
+        "summaryProduct"
+    ).textContent =
+        product?.selectedOptions[0]
+            ?.textContent ||
+        "-";
+
+}
+
+
+/* =========================================================
+   FORMAT QUANTITY
+========================================================= */
+
+function formatQuantity(
+    quantity
+) {
+
+    const number =
+        Number(
+            quantity || 0
+        );
+
+
+    if (
+        !Number.isFinite(
+            number
+        )
+    ) {
+
+        return "0";
+
+    }
+
+
+    if (
+        Number.isInteger(
+            number
+        )
+    ) {
+
+        return number.toLocaleString(
+            "en-US"
+        );
+
+    }
+
+
+    return number.toLocaleString(
+        "en-US",
+        {
+            maximumFractionDigits: 2
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ISSUE STOCK
+========================================================= */
+
+async function issueStock() {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const button =
+        document.getElementById(
+            "issueBtn"
+        );
+
+
+    const t =
+        pageTranslations[
+            currentLanguage
+        ];
+
+
+    const date =
+        document.getElementById(
+            "issueDate"
+        ).value;
+
+
+    const branchId =
+        document.getElementById(
+            "branch"
+        ).value;
+
+
+    const serverId =
+        document.getElementById(
+            "server"
+        ).value;
+
+
+    const productId =
+        document.getElementById(
+            "product"
+        ).value;
+
+
+    const quantity =
+        Number(
+            document.getElementById(
+                "quantity"
+            ).value
+        );
+
+
+    const reason =
+        document.getElementById(
+            "reason"
+        ).value.trim();
+
+
+    if (!date) {
+
+        showStatus(
+            t.dateRequired,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!branchId) {
+
+        showStatus(
+            t.branchRequired,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!serverId) {
+
+        showStatus(
+            t.serverRequired,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (!productId) {
+
+        showStatus(
+            t.productRequired,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    if (
+        !Number.isFinite(quantity) ||
+        quantity <= 0
+    ) {
+
+        showStatus(
+            t.quantityRequired,
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    button.disabled =
+        true;
+
+
+    button.textContent =
+        t.saving;
+
+
+    clearStatus();
+
+
+    try {
+
+        /*
+         * This is only a friendly frontend
+         * validation.
+         *
+         * The RPC performs the authoritative
+         * stock/security validation again.
+         */
+
+        const mainStock =
+            await getMainStock(
+                branchId,
+                productId
+            );
+
+
+        if (
+            quantity >
+            mainStock
+        ) {
+
+            showStatus(
+                `${t.notEnoughStock} ${t.available}: ${formatQuantity(mainStock)}. ${t.requested}: ${formatQuantity(quantity)}.`,
+                "error"
+            );
+
+            return;
+
+        }
+
+
+        const issueAt =
+            new Date(
+                date
+            ).toISOString();
+
+
+        /*
+         * SECURE TRANSACTION
+         *
+         * create_issue_to_server_transaction(
+         *   uuid,
+         *   uuid,
+         *   uuid,
+         *   numeric,
+         *   timestamptz,
+         *   text
+         * )
+         */
+
+        const {
+            data,
+            error
+        } =
+            await db.rpc(
+                "create_issue_to_server_transaction",
+                {
+                    p_branch_id:
+                        branchId,
+
+                    p_server_id:
+                        serverId,
+
+                    p_product_id:
+                        productId,
+
+                    p_quantity:
+                        quantity,
+
+                    p_issue_at:
+                        issueAt,
+
+                    p_reason:
+                        reason || null
+                }
+            );
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        if (!data) {
+
+            throw new Error(
+                "The stock movement was not created."
+            );
+
+        }
+
+
+        const unit =
+            document.getElementById(
+                "unit"
+            ).value || "";
+
+
+        showStatus(
+            `${t.success} ${formatQuantity(quantity)} ${unit} ${t.moved}`,
+            "success"
+        );
+
+
+        clearForm(
+            false
+        );
+
+
+        await loadIssueHistory();
+
+    }
+    catch (error) {
+
+        console.error(
+            "ISSUE STOCK FAILED:",
+            error
+        );
+
+
+        const rawMessage =
+            error?.message ||
+            t.genericError;
+
+
+        const lowerMessage =
+            rawMessage.toLowerCase();
+
+
+        let message =
+            rawMessage;
+
+
+        if (
+            lowerMessage.includes(
+                "authentication"
+            ) ||
+            lowerMessage.includes(
+                "jwt"
+            ) ||
+            lowerMessage.includes(
+                "session"
+            )
+        ) {
+
+            message =
+                t.authentication;
+
+        }
+
+
+        showStatus(
+            message,
+            "error"
+        );
+
+    }
+    finally {
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            t.issueButton;
+
+    }
+
+}
+
+
+/* =========================================================
+   CLEAR FORM
+========================================================= */
+
+async function clearForm(
+    preserveStatus = false
+) {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const role =
+        getProfileRole();
+
+
+    const branchId =
+        getProfileBranchId();
+
+
+    const branch =
+        document.getElementById(
+            "branch"
+        );
+
+
+    const server =
+        document.getElementById(
+            "server"
+        );
+
+
+    const product =
+        document.getElementById(
+            "product"
+        );
+
+
+    if (
+        role !== "admin" &&
+        branchId
+    ) {
+
+        branch.value =
+            branchId;
+
+
+        await loadServers(
+            branchId
+        );
+
+    }
+    else {
+
+        branch.value =
+            "";
+
+
+        server.innerHTML =
+            "";
+
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            "";
+
+        option.textContent =
+            pageTranslations[
+                currentLanguage
+            ].selectServer;
+
+        server.appendChild(
+            option
+        );
+
+    }
+
+
+    product.value =
+        "";
+
+
+    document.getElementById(
+        "unit"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "quantity"
+    ).value =
+        "";
+
+
+    document.getElementById(
+        "reason"
+    ).value =
+        "";
+
+
+    resetStockDisplay();
+
+    setDefaultDate();
+
+    updateSummary();
+
+
+    if (!preserveStatus) {
+
+        clearStatus();
+
+    }
+
+}
+
+
+/* =========================================================
+   STATUS
+========================================================= */
+
+function showStatus(
+    message,
+    type
+) {
+
+    const box =
+        document.getElementById(
+            "statusMessage"
+        );
+
+
+    box.textContent =
+        message;
+
+
+    box.className =
+        `status-message ${type}`;
+
+}
+
+
+function clearStatus() {
+
+    const box =
+        document.getElementById(
+            "statusMessage"
+        );
+
+
+    box.textContent =
+        "";
+
+
+    box.className =
+        "status-message";
+
+}
+
+
+/* =========================================================
+   ISSUE HISTORY
+========================================================= */
+
+async function loadIssueHistory() {
+
+    if (!pageAuthorized) {
+        return;
+    }
+
+
+    const tbody =
+        document.getElementById(
+            "historyBody"
+        );
+
+
+    const t =
+        pageTranslations[
+            currentLanguage
+        ];
+
+
+    tbody.innerHTML =
+        `
+        <tr>
+            <td
+                colspan="7"
+                class="empty"
+            >
+                ${escapeHtml(
+                    t.loadingHistory
+                )}
+            </td>
+        </tr>
+        `;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await db
+                .from("stock_movements")
+                .select(`
+                    id,
+                    branch_id,
+                    product_id,
+                    movement_type,
+                    quantity,
+                    created_at,
+                    from_location,
+                    to_location,
+                    server_id,
+                    reason,
+                    branches (
+                        name
+                    ),
+                    products (
+                        name,
+                        unit
+                    ),
+                    servers (
+                        full_name
+                    )
+                `)
+                .eq(
+                    "movement_type",
+                    "issue_to_server"
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(30);
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            tbody.innerHTML =
+                `
+                <tr>
+                    <td
+                        colspan="7"
+                        class="empty"
+                    >
+                        ${escapeHtml(
+                            t.noHistory
+                        )}
+                    </td>
+                </tr>
+                `;
+
+            return;
+
+        }
+
+
+        tbody.innerHTML =
+            "";
+
+
+        data.forEach(
+            movement => {
+
+                const date =
+                    new Date(
+                        movement.created_at
+                    );
+
+
+                const formattedDate =
+                    date.toLocaleString(
+                        currentLanguage === "rw"
+                            ? "rw-RW"
+                            : "en-GB",
+                        {
+                            dateStyle:
+                                "short",
+
+                            timeStyle:
+                                "short"
+                        }
+                    );
+
+
+                const branchName =
+                    movement.branches?.name ||
+                    "-";
+
+
+                const serverName =
+                    movement.servers?.full_name ||
+                    "-";
+
+
+                const productName =
+                    movement.products?.name ||
+                    "-";
+
+
+                const unit =
+                    movement.products?.unit ||
+                    "";
+
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML =
+                    `
+                    <td>
+                        ${escapeHtml(
+                            formattedDate
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            branchName
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            serverName
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            productName
+                        )}
+                    </td>
+
+                    <td class="issue-value">
+                        ${formatQuantity(
+                            movement.quantity
+                        )}
+                        ${unit
+                            ? " " +
+                              escapeHtml(unit)
+                            : ""}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            movement.from_location ||
+                            "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHtml(
+                            movement.to_location ||
+                            "-"
+                        )}
+                    </td>
+                    `;
+
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+    }
+    catch (error) {
+
+        console.error(
+            "LOAD ISSUE HISTORY ERROR:",
+            error
+        );
+
+
+        tbody.innerHTML =
+            `
+            <tr>
+                <td
+                    colspan="7"
+                    class="empty"
+                >
+                    ${escapeHtml(
+                        t.failedHistory
+                    )}
+                </td>
+            </tr>
+            `;
+
+    }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(
+    value
+) {
+
+    return String(
+        value ?? ""
+    )
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =========================================================
+   BUTTON EVENTS
+========================================================= */
+
+document
+    .getElementById("issueBtn")
+    .addEventListener(
+        "click",
+        issueStock
+    );
+
+
+document
+    .getElementById("clearBtn")
+    .addEventListener(
+        "click",
+        () => clearForm()
+    );
+
+</script>
+
+</body>
+
+</html>

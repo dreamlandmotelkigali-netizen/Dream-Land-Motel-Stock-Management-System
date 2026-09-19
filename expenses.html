@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Dream Land Motel | Expenses</title>
+
+    <meta
+        name="description"
+        content="Dream Land Motel business expenses management."
+    >
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <header class="app-header">
+
+        <div class="header-inner">
+
+            <a href="dashboard.html" class="brand">
+
+                <img
+                    src="logo.png"
+                    alt="Dream Land Motel"
+                    class="brand-logo"
+                    onerror="this.style.display='none'"
+                >
+
+                <div class="brand-text">
+                    <div class="brand-title">
+                        Dream Land Motel
+                    </div>
+
+                    <div class="brand-subtitle">
+                        Business Control System
+                    </div>
+                </div>
+
+            </a>
+
+            <div class="header-actions">
+
+                <div
+                    id="languageSwitcher"
+                    class="language-switcher"
+                ></div>
+
+                <button
+                    type="button"
+                    class="btn btn-light btn-sm"
+                    onclick="goDashboard()"
+                >
+                    🏠
+                    <span data-i18n="dashboard">Dashboard</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="btn btn-danger btn-sm"
+                    onclick="logout()"
+                >
+                    🚪
+                    <span data-i18n="logout">Logout</span>
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <!-- =====================================================
+         MAIN
+         ===================================================== -->
+
+    <main class="page-container">
+
+        <!-- PAGE TITLE -->
+
+        <div class="page-title-row">
+
+            <div class="page-heading">
+
+                <h1>
+                    💸
+                    <span data-i18n="expenses">
+                        Expenses
+                    </span>
+                </h1>
+
+                <p>
+                    <span data-i18n="expensesDescription">
+                        Record and monitor business expenses.
+                    </span>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ALERT AREA
+             ================================================= -->
+
+        <div
+            id="alertContainer"
+            aria-live="polite"
+        ></div>
+
+
+        <!-- =================================================
+             SUMMARY
+             ================================================= -->
+
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <div class="stat-label">
+                    <span data-i18n="totalExpenses">
+                        Total Expenses
+                    </span>
+                </div>
+
+                <div
+                    id="totalExpenses"
+                    class="stat-value"
+                >
+                    0 FRW
+                </div>
+
+                <div class="stat-help">
+                    <span data-i18n="currentFilter">
+                        Current filter
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card danger">
+
+                <div class="stat-label">
+                    <span data-i18n="records">
+                        Records
+                    </span>
+                </div>
+
+                <div
+                    id="expenseCount"
+                    class="stat-value"
+                >
+                    0
+                </div>
+
+                <div class="stat-help">
+                    <span data-i18n="expenseRecords">
+                        Expense records
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card warning">
+
+                <div class="stat-label">
+                    <span data-i18n="averageExpense">
+                        Average Expense
+                    </span>
+                </div>
+
+                <div
+                    id="averageExpense"
+                    class="stat-value"
+                >
+                    0 FRW
+                </div>
+
+                <div class="stat-help">
+                    <span data-i18n="perRecord">
+                        Per record
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card info">
+
+                <div class="stat-label">
+                    <span data-i18n="selectedBranch">
+                        Selected Branch
+                    </span>
+                </div>
+
+                <div
+                    id="selectedBranchName"
+                    class="stat-value"
+                    style="font-size:18px;"
+                >
+                    —
+                </div>
+
+                <div class="stat-help">
+                    <span data-i18n="branchFilter">
+                        Branch filter
+                    </span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             ADD EXPENSE
+             ================================================= -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>
+                        ➕
+                        <span data-i18n="addExpense">
+                            Add Expense
+                        </span>
+                    </h2>
+
+                    <div class="card-subtitle">
+                        <span data-i18n="addExpenseDescription">
+                            Record money spent by the motel.
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <form id="expenseForm">
+
+                <div class="form-grid">
+
+                    <!-- BRANCH -->
+
+                    <div class="form-group">
+
+                        <label for="expenseBranch">
+                            <span data-i18n="branch">
+                                Branch
+                            </span>
+
+                            <span class="required">*</span>
+                        </label>
+
+                        <select
+                            id="expenseBranch"
+                            required
+                        >
+                            <option value="">
+                                Select branch
+                            </option>
+                        </select>
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group">
+
+                        <label for="expenseDate">
+
+                            <span data-i18n="expenseDate">
+                                Expense Date
+                            </span>
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <input
+                            type="datetime-local"
+                            id="expenseDate"
+                            required
+                        >
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+
+                    <div class="form-group">
+
+                        <label for="expenseCategory">
+
+                            <span data-i18n="category">
+                                Category
+                            </span>
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <select
+                            id="expenseCategory"
+                            required
+                        >
+
+                            <option value="">
+                                Select category
+                            </option>
+
+                            <option value="Utilities">
+                                Utilities
+                            </option>
+
+                            <option value="Transport">
+                                Transport
+                            </option>
+
+                            <option value="Maintenance">
+                                Maintenance
+                            </option>
+
+                            <option value="Salaries">
+                                Salaries
+                            </option>
+
+                            <option value="Rent">
+                                Rent
+                            </option>
+
+                            <option value="Communication">
+                                Communication
+                            </option>
+
+                            <option value="Marketing">
+                                Marketing
+                            </option>
+
+                            <option value="Cleaning">
+                                Cleaning
+                            </option>
+
+                            <option value="Security">
+                                Security
+                            </option>
+
+                            <option value="Bank Charges">
+                                Bank Charges
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- AMOUNT -->
+
+                    <div class="form-group">
+
+                        <label for="expenseAmount">
+
+                            <span data-i18n="amount">
+                                Amount
+                            </span>
+
+                            <span class="required">*</span>
+
+                        </label>
+
+                        <div class="input-group">
+
+                            <input
+                                type="number"
+                                id="expenseAmount"
+                                min="1"
+                                step="1"
+                                placeholder="0"
+                                required
+                            >
+
+                            <span class="input-addon">
+                                FRW
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PAID TO -->
+
+                    <div class="form-group">
+
+                        <label for="paidTo">
+                            <span data-i18n="paidTo">
+                                Paid To
+                            </span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="paidTo"
+                            maxlength="150"
+                            placeholder="Person / company / supplier"
+                            data-i18n-placeholder="paidToPlaceholder"
+                        >
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div class="form-group">
+
+                        <label for="expenseDescription">
+
+                            <span data-i18n="description">
+                                Description
+                            </span>
+
+                        </label>
+
+                        <input
+                            type="text"
+                            id="expenseDescription"
+                            maxlength="250"
+                            placeholder="Describe the expense"
+                            data-i18n-placeholder="expenseDescriptionPlaceholder"
+                        >
+
+                    </div>
+
+                </div>
+
+
+                <!-- FORM ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="submit"
+                        id="saveExpenseBtn"
+                        class="btn btn-primary"
+                    >
+                        💾
+                        <span data-i18n="saveExpense">
+                            Save Expense
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        id="resetExpenseBtn"
+                        class="btn btn-light"
+                    >
+                        ↺
+                        <span data-i18n="clear">
+                            Clear
+                        </span>
+                    </button>
+
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- =================================================
+             FILTERS
+             ================================================= -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>
+                        🔎
+                        <span data-i18n="filterExpenses">
+                            Filter Expenses
+                        </span>
+                    </h2>
+                </div>
+
+            </div>
+
+
+            <div class="filter-bar">
+
+                <!-- BRANCH FILTER -->
+
+                <div class="filter-item">
+
+                    <label for="filterBranch">
+                        <span data-i18n="branch">
+                            Branch
+                        </span>
+                    </label>
+
+                    <select id="filterBranch">
+                        <option value="">
+                            All branches
+                        </option>
+                    </select>
+
+                </div>
+
+
+                <!-- CATEGORY FILTER -->
+
+                <div class="filter-item">
+
+                    <label for="filterCategory">
+                        <span data-i18n="category">
+                            Category
+                        </span>
+                    </label>
+
+                    <select id="filterCategory">
+
+                        <option value="">
+                            All categories
+                        </option>
+
+                        <option value="Utilities">
+                            Utilities
+                        </option>
+
+                        <option value="Transport">
+                            Transport
+                        </option>
+
+                        <option value="Maintenance">
+                            Maintenance
+                        </option>
+
+                        <option value="Salaries">
+                            Salaries
+                        </option>
+
+                        <option value="Rent">
+                            Rent
+                        </option>
+
+                        <option value="Communication">
+                            Communication
+                        </option>
+
+                        <option value="Marketing">
+                            Marketing
+                        </option>
+
+                        <option value="Cleaning">
+                            Cleaning
+                        </option>
+
+                        <option value="Security">
+                            Security
+                        </option>
+
+                        <option value="Bank Charges">
+                            Bank Charges
+                        </option>
+
+                        <option value="Other">
+                            Other
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- FROM DATE -->
+
+                <div class="filter-item">
+
+                    <label for="filterFrom">
+                        <span data-i18n="from">
+                            From
+                        </span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="filterFrom"
+                    >
+
+                </div>
+
+
+                <!-- TO DATE -->
+
+                <div class="filter-item">
+
+                    <label for="filterTo">
+                        <span data-i18n="to">
+                            To
+                        </span>
+                    </label>
+
+                    <input
+                        type="date"
+                        id="filterTo"
+                    >
+
+                </div>
+
+
+                <!-- SEARCH -->
+
+                <div class="filter-item">
+
+                    <label for="filterSearch">
+                        <span data-i18n="search">
+                            Search
+                        </span>
+                    </label>
+
+                    <input
+                        type="search"
+                        id="filterSearch"
+                        placeholder="Description / paid to"
+                        data-i18n-placeholder="expenseSearchPlaceholder"
+                    >
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="filter-actions">
+
+                    <button
+                        type="button"
+                        id="applyFiltersBtn"
+                        class="btn btn-primary"
+                    >
+                        🔎
+                        <span data-i18n="apply">
+                            Apply
+                        </span>
+                    </button>
+
+                    <button
+                        type="button"
+                        id="clearFiltersBtn"
+                        class="btn btn-light"
+                    >
+                        ↺
+                        <span data-i18n="reset">
+                            Reset
+                        </span>
+                    </button>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             EXPENSE HISTORY
+             ================================================= -->
+
+        <section class="card">
+
+            <div class="card-header">
+
+                <div>
+                    <h2>
+                        📋
+                        <span data-i18n="expenseHistory">
+                            Expense History
+                        </span>
+                    </h2>
+
+                    <div class="card-subtitle">
+                        <span data-i18n="expenseHistoryDescription">
+                            Recorded expenses for the selected filters.
+                        </span>
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    id="refreshBtn"
+                    class="btn btn-light btn-sm"
+                >
+                    ↻
+                    <span data-i18n="refresh">
+                        Refresh
+                    </span>
+                </button>
+
+            </div>
+
+
+            <div
+                id="tableLoading"
+                class="loading hidden"
+            >
+                <span class="spinner"></span>
+
+                <span data-i18n="loading">
+                    Loading...
+                </span>
+            </div>
+
+
+            <div class="table-wrapper">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                <span data-i18n="date">
+                                    Date
+                                </span>
+                            </th>
+
+                            <th>
+                                <span data-i18n="branch">
+                                    Branch
+                                </span>
+                            </th>
+
+                            <th>
+                                <span data-i18n="category">
+                                    Category
+                                </span>
+                            </th>
+
+                            <th>
+                                <span data-i18n="description">
+                                    Description
+                                </span>
+                            </th>
+
+                            <th>
+                                <span data-i18n="paidTo">
+                                    Paid To
+                                </span>
+                            </th>
+
+                            <th class="text-right">
+                                <span data-i18n="amount">
+                                    Amount
+                                </span>
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="expenseTableBody">
+
+                        <tr>
+
+                            <td
+                                colspan="6"
+                                class="text-center"
+                            >
+                                <span data-i18n="loading">
+                                    Loading...
+                                </span>
+                            </td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <div class="table-total">
+
+                <span class="total-label">
+                    <span data-i18n="filteredTotal">
+                        Filtered Total
+                    </span>
+                </span>
+
+                <span
+                    id="tableTotal"
+                    class="total-value"
+                >
+                    0 FRW
+                </span>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer class="app-footer">
+
+        <strong>
+            Dream Land Motel
+        </strong>
+
+        <span>
+            •
+        </span>
+
+        <span data-i18n="businessControlSystem">
+            Business Control System
+        </span>
+
+    </footer>
+
+
+    <!-- =====================================================
+         SUPABASE
+         ===================================================== -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="supabase.js"></script>
+
+    <script src="auth.js"></script>
+
+    <script src="i18n.js"></script>
+
+
+    <!-- =====================================================
+         PAGE SCRIPT
+         ===================================================== -->
+
+    <script>
+
+        let authResult = null;
+        let currentProfile = null;
+        let currentUser = null;
+
+        let branches = [];
+        let expenses = [];
+
+
+        /* =================================================
+           HELPERS
+           ================================================= */
+
+        const $ = (id) => document.getElementById(id);
+
+
+        function formatMoney(value) {
+
+            const amount = Number(value || 0);
+
+            return new Intl.NumberFormat("en-RW", {
+                maximumFractionDigits: 0
+            }).format(amount) + " FRW";
+        }
+
+
+        function escapeHtml(value) {
+
+            if (value === null || value === undefined) {
+                return "";
+            }
+
+            return String(value)
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+
+        function showAlert(message, type = "info") {
+
+            const container = $("alertContainer");
+
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${escapeHtml(message)}
+                </div>
+            `;
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+            setTimeout(() => {
+
+                container.innerHTML = "";
+
+            }, 5000);
+        }
+
+
+        function getTranslation(key, fallback) {
+
+            try {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n.t === "function"
+                ) {
+
+                    const translated =
+                        window.DreamLandI18n.t(key);
+
+                    if (translated && translated !== key) {
+                        return translated;
+                    }
+                }
+
+            } catch (error) {
+                console.warn("Translation error:", error);
+            }
+
+            return fallback || key;
+        }
+
+
+        function formatDate(dateValue) {
+
+            if (!dateValue) {
+                return "—";
+            }
+
+            const date = new Date(dateValue);
+
+            if (Number.isNaN(date.getTime())) {
+                return "—";
+            }
+
+            return new Intl.DateTimeFormat("en-GB", {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }).format(date);
+
+        }
+
+
+        function localDateTimeValue() {
+
+            const now = new Date();
+
+            const offset =
+                now.getTimezoneOffset() * 60000;
+
+            return new Date(
+                now.getTime() - offset
+            )
+                .toISOString()
+                .slice(0, 16);
+        }
+
+
+        /* =================================================
+           AUTH
+           ================================================= */
+
+        async function initAuth() {
+
+            authResult =
+                await DreamLandAuth.requireAuth();
+
+            if (!authResult) {
+                return false;
+            }
+
+            currentProfile = authResult.profile;
+            currentUser = authResult.user;
+
+            return true;
+        }
+
+
+        /* =================================================
+           BRANCH ACCESS
+           ================================================= */
+
+        function isAdmin() {
+
+            return (
+                currentProfile &&
+                String(currentProfile.role).toLowerCase() === "admin"
+            );
+
+        }
+
+
+        function canUseBranch(branchId) {
+
+            if (isAdmin()) {
+                return true;
+            }
+
+            return (
+                currentProfile &&
+                currentProfile.branch_id === branchId
+            );
+
+        }
+
+
+        /* =================================================
+           LOAD BRANCHES
+           ================================================= */
+
+        async function loadBranches() {
+
+            const { data, error } = await db
+                .from("branches")
+                .select("id,name,location,active")
+                .eq("active", true)
+                .order("name");
+
+            if (error) {
+
+                console.error("Branch load error:", error);
+
+                showAlert(
+                    "Failed to load branches: " + error.message,
+                    "danger"
+                );
+
+                return false;
+            }
+
+            branches = data || [];
+
+            populateBranchSelectors();
+
+            return true;
+        }
+
+
+        function populateBranchSelectors() {
+
+            const formSelect =
+                $("expenseBranch");
+
+            const filterSelect =
+                $("filterBranch");
+
+            formSelect.innerHTML = "";
+
+            filterSelect.innerHTML = "";
+
+
+            /* ---------------------------------------------
+               FORM BRANCH
+               --------------------------------------------- */
+
+            if (isAdmin()) {
+
+                formSelect.innerHTML = `
+                    <option value="">
+                        Select branch
+                    </option>
+                `;
+
+                branches.forEach(branch => {
+
+                    formSelect.insertAdjacentHTML(
+                        "beforeend",
+                        `
+                        <option value="${branch.id}">
+                            ${escapeHtml(branch.name)}
+                        </option>
+                        `
+                    );
+
+                });
+
+            } else {
+
+                const ownBranch =
+                    branches.find(
+                        branch =>
+                            branch.id === currentProfile.branch_id
+                    );
+
+                if (ownBranch) {
+
+                    formSelect.innerHTML = `
+                        <option value="${ownBranch.id}">
+                            ${escapeHtml(ownBranch.name)}
+                        </option>
+                    `;
+
+                    formSelect.value =
+                        ownBranch.id;
+
+                    formSelect.disabled = true;
+
+                } else {
+
+                    formSelect.innerHTML = `
+                        <option value="">
+                            Branch not available
+                        </option>
+                    `;
+
+                    formSelect.disabled = true;
+
+                }
+
+            }
+
+
+            /* ---------------------------------------------
+               FILTER BRANCH
+               --------------------------------------------- */
+
+            if (isAdmin()) {
+
+                filterSelect.innerHTML = `
+                    <option value="">
+                        All branches
+                    </option>
+                `;
+
+                branches.forEach(branch => {
+
+                    filterSelect.insertAdjacentHTML(
+                        "beforeend",
+                        `
+                        <option value="${branch.id}">
+                            ${escapeHtml(branch.name)}
+                        </option>
+                        `
+                    );
+
+                });
+
+            } else {
+
+                const ownBranch =
+                    branches.find(
+                        branch =>
+                            branch.id === currentProfile.branch_id
+                    );
+
+                if (ownBranch) {
+
+                    filterSelect.innerHTML = `
+                        <option value="${ownBranch.id}">
+                            ${escapeHtml(ownBranch.name)}
+                        </option>
+                    `;
+
+                    filterSelect.value =
+                        ownBranch.id;
+
+                    filterSelect.disabled = true;
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================================
+           LOAD EXPENSES
+           ================================================= */
+
+        async function loadExpenses() {
+
+            const loading =
+                $("tableLoading");
+
+            const tbody =
+                $("expenseTableBody");
+
+            loading.classList.remove("hidden");
+
+            tbody.innerHTML = "";
+
+            let query = db
+                .from("expenses")
+                .select(`
+                    id,
+                    branch_id,
+                    category,
+                    description,
+                    amount,
+                    expense_date,
+                    paid_to,
+                    created_by,
+                    created_at,
+                    branches (
+                        name
+                    )
+                `)
+                .order("expense_date", {
+                    ascending: false
+                });
+
+
+            /* ---------------------------------------------
+               BRANCH ACCESS
+               --------------------------------------------- */
+
+            if (!isAdmin()) {
+
+                if (!currentProfile.branch_id) {
+
+                    loading.classList.add("hidden");
+
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="6">
+                                <div class="empty-state">
+                                    <div class="empty-state-icon">
+                                        ⚠️
+                                    </div>
+
+                                    <h3>
+                                        Branch not assigned
+                                    </h3>
+
+                                    <p>
+                                        Your account has no branch assigned.
+                                    </p>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+
+                    updateSummary([]);
+
+                    return;
+                }
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        currentProfile.branch_id
+                    );
+
+            }
+
+
+            /* ---------------------------------------------
+               FILTER BRANCH
+               --------------------------------------------- */
+
+            const branchFilter =
+                $("filterBranch").value;
+
+            if (
+                isAdmin() &&
+                branchFilter
+            ) {
+
+                query =
+                    query.eq(
+                        "branch_id",
+                        branchFilter
+                    );
+
+            }
+
+
+            /* ---------------------------------------------
+               CATEGORY
+               --------------------------------------------- */
+
+            const category =
+                $("filterCategory").value;
+
+            if (category) {
+
+                query =
+                    query.eq(
+                        "category",
+                        category
+                    );
+
+            }
+
+
+            /* ---------------------------------------------
+               DATE FILTER
+               --------------------------------------------- */
+
+            const from =
+                $("filterFrom").value;
+
+            const to =
+                $("filterTo").value;
+
+
+            if (from) {
+
+                query =
+                    query.gte(
+                        "expense_date",
+                        `${from}T00:00:00`
+                    );
+
+            }
+
+
+            if (to) {
+
+                query =
+                    query.lt(
+                        "expense_date",
+                        `${to}T23:59:59.999`
+                    );
+
+            }
+
+
+            const {
+                data,
+                error
+            } = await query;
+
+
+            loading.classList.add("hidden");
+
+
+            if (error) {
+
+                console.error(
+                    "Expense load error:",
+                    error
+                );
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <div class="empty-state-icon">
+                                    ⚠️
+                                </div>
+
+                                <h3>
+                                    Failed to load expenses
+                                </h3>
+
+                                <p>
+                                    ${escapeHtml(error.message)}
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+
+                showAlert(
+                    "Failed to load expenses: " +
+                    error.message,
+                    "danger"
+                );
+
+                updateSummary([]);
+
+                return;
+            }
+
+
+            expenses = data || [];
+
+
+            /* ---------------------------------------------
+               TEXT SEARCH
+               --------------------------------------------- */
+
+            const search =
+                $("filterSearch")
+                    .value
+                    .trim()
+                    .toLowerCase();
+
+
+            if (search) {
+
+                expenses =
+                    expenses.filter(expense => {
+
+                        const description =
+                            String(
+                                expense.description || ""
+                            ).toLowerCase();
+
+                        const paidTo =
+                            String(
+                                expense.paid_to || ""
+                            ).toLowerCase();
+
+                        const category =
+                            String(
+                                expense.category || ""
+                            ).toLowerCase();
+
+                        return (
+                            description.includes(search) ||
+                            paidTo.includes(search) ||
+                            category.includes(search)
+                        );
+
+                    });
+
+            }
+
+
+            renderExpenses(expenses);
+
+            updateSummary(expenses);
+
+        }
+
+
+        /* =================================================
+           RENDER EXPENSES
+           ================================================= */
+
+        function renderExpenses(rows) {
+
+            const tbody =
+                $("expenseTableBody");
+
+            if (!rows.length) {
+
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+
+                            <div class="empty-state">
+
+                                <div class="empty-state-icon">
+                                    💸
+                                </div>
+
+                                <h3>
+                                    No expenses found
+                                </h3>
+
+                                <p>
+                                    There are no expense records
+                                    matching the current filters.
+                                </p>
+
+                            </div>
+
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            tbody.innerHTML =
+                rows.map(expense => {
+
+                    const branchName =
+                        expense.branches?.name ||
+                        "—";
+
+                    return `
+                        <tr>
+
+                            <td>
+                                ${escapeHtml(
+                                    formatDate(
+                                        expense.expense_date
+                                    )
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    branchName
+                                )}
+                            </td>
+
+                            <td>
+                                <span class="badge badge-primary">
+                                    ${escapeHtml(
+                                        expense.category
+                                    )}
+                                </span>
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    expense.description || "—"
+                                )}
+                            </td>
+
+                            <td>
+                                ${escapeHtml(
+                                    expense.paid_to || "—"
+                                )}
+                            </td>
+
+                            <td class="text-right">
+                                <span class="money money-negative">
+                                    ${formatMoney(
+                                        expense.amount
+                                    )}
+                                </span>
+                            </td>
+
+                        </tr>
+                    `;
+
+                }).join("");
+
+        }
+
+
+        /* =================================================
+           SUMMARY
+           ================================================= */
+
+        function updateSummary(rows) {
+
+            const total =
+                rows.reduce(
+                    (sum, expense) =>
+                        sum + Number(
+                            expense.amount || 0
+                        ),
+                    0
+                );
+
+            const count =
+                rows.length;
+
+            const average =
+                count > 0
+                    ? total / count
+                    : 0;
+
+
+            $("totalExpenses").textContent =
+                formatMoney(total);
+
+            $("expenseCount").textContent =
+                count.toLocaleString("en-RW");
+
+            $("averageExpense").textContent =
+                formatMoney(average);
+
+            $("tableTotal").textContent =
+                formatMoney(total);
+
+
+            const branchFilter =
+                $("filterBranch").value;
+
+            if (!branchFilter) {
+
+                $("selectedBranchName")
+                    .textContent =
+                    isAdmin()
+                        ? "All"
+                        : "—";
+
+            } else {
+
+                const branch =
+                    branches.find(
+                        item =>
+                            item.id === branchFilter
+                    );
+
+                $("selectedBranchName")
+                    .textContent =
+                    branch
+                        ? branch.name
+                        : "—";
+
+            }
+
+        }
+
+
+        /* =================================================
+           SAVE EXPENSE
+           ================================================= */
+
+        async function saveExpense(event) {
+
+            event.preventDefault();
+
+
+            const button =
+                $("saveExpenseBtn");
+
+
+            const branchId =
+                $("expenseBranch").value;
+
+            const category =
+                $("expenseCategory").value.trim();
+
+            const description =
+                $("expenseDescription")
+                    .value
+                    .trim();
+
+            const amount =
+                Number(
+                    $("expenseAmount").value
+                );
+
+            const expenseDate =
+                $("expenseDate").value;
+
+            const paidTo =
+                $("paidTo")
+                    .value
+                    .trim();
+
+
+            /* ---------------------------------------------
+               VALIDATION
+               --------------------------------------------- */
+
+            if (!branchId) {
+
+                showAlert(
+                    "Please select a branch.",
+                    "warning"
+                );
+
+                return;
+            }
+
+
+            if (!canUseBranch(branchId)) {
+
+                showAlert(
+                    "You are not allowed to use this branch.",
+                    "danger"
+                );
+
+                return;
+            }
+
+
+            if (!category) {
+
+                showAlert(
+                    "Please select an expense category.",
+                    "warning"
+                );
+
+                return;
+            }
+
+
+            if (
+                !Number.isFinite(amount) ||
+                amount <= 0
+            ) {
+
+                showAlert(
+                    "Please enter a valid expense amount.",
+                    "warning"
+                );
+
+                return;
+            }
+
+
+            if (!expenseDate) {
+
+                showAlert(
+                    "Please select the expense date.",
+                    "warning"
+                );
+
+                return;
+            }
+
+
+            /* ---------------------------------------------
+               BUTTON STATE
+               --------------------------------------------- */
+
+            button.disabled = true;
+
+            button.innerHTML = `
+                <span class="spinner"></span>
+                Saving...
+            `;
+
+
+            try {
+
+                const {
+                    data,
+                    error
+                } = await db.rpc(
+                    "create_expense_transaction",
+                    {
+                        p_branch_id:
+                            branchId,
+
+                        p_category:
+                            category,
+
+                        p_description:
+                            description || null,
+
+                        p_amount:
+                            amount,
+
+                        p_expense_date:
+                            new Date(
+                                expenseDate
+                            ).toISOString(),
+
+                        p_paid_to:
+                            paidTo || null
+                    }
+                );
+
+
+                if (error) {
+
+                    console.error(
+                        "Expense RPC error:",
+                        error
+                    );
+
+                    throw error;
+                }
+
+
+                console.log(
+                    "Expense created:",
+                    data
+                );
+
+
+                showAlert(
+                    "Expense saved successfully.",
+                    "success"
+                );
+
+
+                resetExpenseForm();
+
+                await loadExpenses();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Save expense error:",
+                    error
+                );
+
+                showAlert(
+                    "Failed to save expense: " +
+                    (error.message || "Unknown error"),
+                    "danger"
+                );
+
+            } finally {
+
+                button.disabled = false;
+
+                button.innerHTML = `
+                    💾
+                    <span data-i18n="saveExpense">
+                        Save Expense
+                    </span>
+                `;
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n.applyTranslations === "function"
+                ) {
+
+                    window.DreamLandI18n.applyTranslations();
+
+                }
+
+            }
+
+        }
+
+
+        /* =================================================
+           RESET FORM
+           ================================================= */
+
+        function resetExpenseForm() {
+
+            $("expenseForm").reset();
+
+            $("expenseDate").value =
+                localDateTimeValue();
+
+
+            if (!isAdmin()) {
+
+                $("expenseBranch").value =
+                    currentProfile.branch_id;
+
+            }
+
+        }
+
+
+        /* =================================================
+           RESET FILTERS
+           ================================================= */
+
+        function resetFilters() {
+
+            $("filterCategory").value = "";
+
+            $("filterFrom").value = "";
+
+            $("filterTo").value = "";
+
+            $("filterSearch").value = "";
+
+
+            if (isAdmin()) {
+
+                $("filterBranch").value = "";
+
+            } else {
+
+                $("filterBranch").value =
+                    currentProfile.branch_id;
+
+            }
+
+
+            loadExpenses();
+
+        }
+
+
+        /* =================================================
+           LOGOUT
+           ================================================= */
+
+        async function logout() {
+
+            await DreamLandAuth.signOut();
+
+        }
+
+
+        /* =================================================
+           DASHBOARD
+           ================================================= */
+
+        function goDashboard() {
+
+            window.location.href =
+                "dashboard.html";
+
+        }
+
+
+        /* =================================================
+           LANGUAGE
+           ================================================= */
+
+        function initLanguageSwitcher() {
+
+            try {
+
+                if (
+                    window.DreamLandI18n &&
+                    typeof window.DreamLandI18n.createLanguageSwitcher === "function"
+                ) {
+
+                    window.DreamLandI18n.createLanguageSwitcher(
+                        $("languageSwitcher")
+                    );
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Language switcher error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           EVENT LISTENERS
+           ================================================= */
+
+        function setupEvents() {
+
+            $("expenseForm")
+                .addEventListener(
+                    "submit",
+                    saveExpense
+                );
+
+
+            $("resetExpenseBtn")
+                .addEventListener(
+                    "click",
+                    resetExpenseForm
+                );
+
+
+            $("applyFiltersBtn")
+                .addEventListener(
+                    "click",
+                    loadExpenses
+                );
+
+
+            $("clearFiltersBtn")
+                .addEventListener(
+                    "click",
+                    resetFilters
+                );
+
+
+            $("refreshBtn")
+                .addEventListener(
+                    "click",
+                    loadExpenses
+                );
+
+
+            $("filterSearch")
+                .addEventListener(
+                    "keydown",
+                    event => {
+
+                        if (
+                            event.key === "Enter"
+                        ) {
+
+                            event.preventDefault();
+
+                            loadExpenses();
+
+                        }
+
+                    }
+                );
+
+
+            if (
+                window.DreamLandI18n &&
+                typeof window.DreamLandI18n.applyTranslations === "function"
+            ) {
+
+                window.addEventListener(
+                    "languageChanged",
+                    () => {
+
+                        window.DreamLandI18n
+                            .applyTranslations();
+
+                    }
+                );
+
+            }
+
+        }
+
+
+        /* =================================================
+           INITIALIZATION
+           ================================================= */
+
+        async function init() {
+
+            const authenticated =
+                await initAuth();
+
+            if (!authenticated) {
+                return;
+            }
+
+
+            initLanguageSwitcher();
+
+            setupEvents();
+
+
+            $("expenseDate").value =
+                localDateTimeValue();
+
+
+            const branchesLoaded =
+                await loadBranches();
+
+            if (!branchesLoaded) {
+                return;
+            }
+
+
+            await loadExpenses();
+
+        }
+
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            init
+        );
+
+    </script>
+
+</body>
+
+</html>
